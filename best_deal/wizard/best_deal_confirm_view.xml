@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_best_deal_confirm" model="ir.ui.view">
+            <field name="name">Deal Confirmation</field>
+            <field name="model">best.deal.confirm</field>
+            <field name="arch" type="xml">
+              <form string="Deal Confirmation">
+                  <label string="Warning: This Deal has not reached its Minimum Booking Limit. Are you sure you want to confirm it?"/>
+                  <footer>
+                      <button name="confirm" string="Confirm Anyway" type="object" class="btn-primary"/>
+                      <button string="Cancel" class="btn-default" special="cancel" />
+                  </footer>
+            </form>
+            </field>
+        </record>
+
+        <record id="action_best_deal_confirm" model="ir.actions.act_window">
+            <field name="name">Deal Confirmation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">best.deal.confirm</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_best_deal_confirm"/>
+            <field name="context">{'record_id' : active_id}</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</openerp>

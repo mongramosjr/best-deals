@@ -1,0 +1,473 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <!-- Main menu items -->
+        <menuitem name="Deals" id="best_deal_main_menu" sequence="65" groups="best_deal.group_best_deal_user" web_icon="best_deal,static/description/icon.png"/>
+        <menuitem parent="best_deal_main_menu" id="menu_reporting_best_deals" sequence="99" groups="best_deal.group_best_deal_manager" name="Reports"/>
+
+        <!-- best.deal.type views -->
+        <record model="ir.ui.view" id="best_deal_type_form">
+            <field name="name">best.deal.type.form</field>
+            <field name="model">best.deal.type</field>
+            <field name="arch" type="xml">
+                <form string="Deal Type">
+                    <group>
+                        <field name="name"/>
+                        <field name="default_reply_to"/>
+                        <field name="default_booking_min"/>
+                        <field name="default_booking_max"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="best_deal_type_tree">
+            <field name="name">best.deal.type.tree</field>
+            <field name="model">best.deal.type</field>
+            <field name="arch" type="xml">
+                <tree string="Deal Type">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_best_deal_type">
+            <field name="name">Deal Types</field>
+            <field name="res_model">best.deal.type</field>
+            <field name="view_type">form</field>
+        </record>
+
+        <menuitem id="menu_best_deal_configuration" name="Configuration" parent="best_deal_main_menu"
+            sequence="100" groups="base.group_configuration"/>
+        <menuitem name="Deals Types" id="menu_best_deal_type" action="action_best_deal_type" parent="menu_best_deal_configuration"/>
+
+        <!-- best.deal.booking actions -->
+        <record id="act_best_deal_booking_from_best_deal" model="ir.actions.act_window">
+            <field name="res_model">best.deal.booking</field>
+            <field name="view_type">form</field>
+            <field name="name">Customers</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="context">{'search_default_best_deal_id': active_id, 'default_best_deal_id': active_id, 'search_default_expected': True}</field>
+        </record>
+
+        <!-- best.deal views -->
+        <record model="ir.ui.view" id="best_deal_form">
+            <field name="name">best.deal.form</field>
+            <field name="model">best.deal</field>
+            <field name="arch" type="xml">
+                <form string="Deals">
+                    <header>
+                        <button string="Confirm Deal" name="button_confirm" states="draft" type="object" class="oe_highlight" groups="base.group_user"/>
+                        <button string="Finish Deal" name="button_done" states="confirm" type="object" class="oe_highlight" groups="base.group_user"/>
+                        <button string="Set To Draft" name="button_draft" states="cancel,done" type="object" groups="base.group_user"/>
+                        <button string="Cancel Deal" name="button_cancel" states="draft,confirm" type="object" groups="base.group_user"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box" groups="base.group_user">
+                            <button name="toggle_active" type="object"
+                                    class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button"
+                                    options='{"terminology": "archive"}'/>
+                            </button>
+                            <button name="%(best_deal.act_best_deal_booking_from_best_deal)d"
+                                type="action"
+                                class="oe_stat_button oe_best_deal_customer_button"
+                                icon="fa-users"
+                                help="Book with this deal">
+                                <field name="coupons_expected" widget="statinfo" string="Coupons"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="Deal Name"/></h1>
+                        </div>
+                        <group name="main_field_group">
+                            <group>
+                                <field name="address_id" context="{'show_address': 1}" options='{"always_reload": True}'/>
+                                <field name="partner_id"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                            <group>
+                                <field name="user_id"/>
+                                <field name="best_deal_type_id"/>
+                                <field name="date_begin"/>
+                                <field name="date_end"/>
+                                <field name="date_tz" />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="bookings" string="Bookings">
+                                <group>
+                                    <group>
+                                        <field name="coupons_min"/>
+                                        <label for="coupons_availability"/>
+                                        <div>
+                                            <field name="coupons_availability" widget='radio'/>
+                                            <span  attrs="{'invisible': [('coupons_availability', '=', 'unlimited')]}" class="oe_read_only">
+                                                to 
+                                            </span>
+                                            <field name="coupons_max" attrs="{'invisible': [('coupons_availability', '=', 'unlimited')], 'required': [('coupons_availability', '=', 'limited')]}"/>
+                                        </div>
+                                    </group>
+                                    <group>
+                                        <field name="auto_confirm" groups="base.group_no_one"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Email Schedule" groups="best_deal.group_email_scheduling">
+                                <group>
+                                    <field name="reply_to"/>
+                                </group>
+                                <field name="best_deal_mail_ids">
+                                    <tree string="Email Schedule" editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="template_id" />
+                                        <field name="interval_nbr" attrs="{'readonly':[('interval_unit','=','now')]}"/>
+                                        <field name="interval_unit"/>
+                                        <field name="interval_type"/>
+                                        <field name="done"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="best_deal_tree">
+            <field name="name">best.deal.tree</field>
+            <field name="model">best.deal</field>
+            <field name="arch" type="xml">
+                <tree string="Deals" decoration-bf="message_needaction==True" decoration-danger="(coupons_min and coupons_min&gt;coupons_reserved) or (coupons_max and coupons_max&lt;coupons_reserved)" decoration-muted="state=='cancel'">
+                    <field name="name"/>
+                    <field name="best_deal_type_id"/>
+                    <field name="date_begin"/>
+                    <field name="date_end"/>
+                    <field name="coupons_reserved"/>
+                    <field name="coupons_min"/>
+                    <field name="coupons_max" invisible="1"/>
+                    <field name="user_id"/>
+                    <field name="state"/>
+                    <field name="message_needaction" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="best_deal_kanban">
+            <field name="name">best.deal.kanban</field>
+            <field name="model">best.deal</field>
+            <field name="arch" type="xml">
+                <kanban class="o_best_deal_kanban_view">
+                    <field name="user_id"/>
+                    <field name="country_id"/>
+                    <field name="date_begin"/>
+                    <field name="date_end"/>
+                    <field name="coupons_unconfirmed"/>
+                    <field name="coupons_reserved"/>
+                    <field name="coupons_used"/>
+                    <field name="coupons_expected"/>
+                    <field name="color"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
+                                <div class="o_dropdown_kanban dropdown">
+
+                                    <a class="dropdown-toggle btn" data-toggle="dropdown" href="#" >
+                                        <span class="fa fa-bars fa-lg"/>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                        <t t-if="widget.deletable">
+                                            <li><a type="delete">Delete</a></li>
+                                        </t>
+                                        <li><ul class="oe_kanban_colorpicker" data-field="color"/></li>
+                                    </ul>
+                                </div>
+                                <div class="o_best_deal_left">
+                                    <div class="o_day"><t t-esc="record.date_begin.raw_value.getDate()"/></div>
+                                    <div>
+                                        <t t-esc="moment(record.date_begin.raw_value).format('MMM')"/>
+                                        <t t-esc="record.date_begin.raw_value.getFullYear()"/>
+                                    </div>
+                                    <div><t t-esc="moment(record.date_begin.raw_value).format('LT')"/></div>
+                                </div>
+                                <div class="o_best_deal_right">
+                                    <h4><field name="name"/></h4>
+                                    <div>
+                                        <t t-if="record.country_id.raw_value"> <b> <field name="country_id"/> </b> <br/> </t>
+                                        <i class="fa fa-clock-o"/>
+                                        <b>To</b> <t t-esc="moment(record.date_end.raw_value).format('lll')"/>
+                                    </div>
+                                    <h4>
+                                        <a name="%(act_best_deal_booking_from_best_deal)d" type="action">
+                                            <t t-esc="record.coupons_expected.raw_value"> Expected Coupons </t>
+                                        </a>
+                                        <t t-if="(record.coupons_reserved.raw_value + record.coupons_used.raw_value) > 0 "><br/>
+                                             <t t-esc="record.coupons_reserved.raw_value + record.coupons_used.raw_value"/> Confirmed attendees
+                                        <a name="action_best_deal_booking_report" type="object" >&#40;stats&#41;</a>
+                                        </t>
+                                    </h4>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="best_deal_calendar">
+            <field name="name">best.deal.calendar</field>
+            <field name="model">best.deal</field>
+            <field eval="2" name="priority"/>
+            <field name="arch" type="xml">
+                <calendar color="best_deal_type_id" date_start="date_begin" date_stop="date_end" string="Deal Organization">
+                    <field name="name"/>
+                    <field name="best_deal_type_id"/>
+                </calendar>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_best_deal_search">
+            <field name="name">best.deal.search</field>
+            <field name="model">best.deal</field>
+            <field name="arch" type="xml">
+                <search string="Deals">
+                    <field name="name" string="Deals"/>
+                    <filter string="Unread Messages" name="message_needaction" domain="[('message_needaction','=',True)]"/>
+                    <separator/>
+                    <filter string="Unconfirmed" name="draft" domain="[('state','=','draft')]" help="Deals in New state"/>
+                    <filter string="Confirmed" domain="[('state','=','confirm')]" help="Confirmed deals"/>
+                    <separator/>
+                    <filter string="My Deals" help="My Deals" domain="[('user_id','=',uid)]"/>
+                    <separator/>
+                    <filter string="Upcoming" name="upcoming"
+                        domain="['&amp;', ('state', '!=', 'cancel'), ('date_begin','&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0)))]" help="Upcoming deals from today" />
+                    <field name="best_deal_type_id"/>
+                    <field name="user_id"/>
+                    <separator/>
+                    <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Responsible" context="{'group_by': 'user_id'}"/>
+                        <filter string="Deal Type" context="{'group_by':'best_deal_type_id'}"/>
+                        <filter string="Status" context="{'group_by':'state'}"/>
+                        <filter string="Start Month" domain="[]" context="{'group_by':'date_begin'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_best_deal_view">
+           <field name="name">Deals</field>
+           <field name="type">ir.actions.act_window</field>
+           <field name="res_model">best.deal</field>
+           <field name="view_type">form</field>
+           <field name="view_mode">kanban,calendar,tree,form</field>
+           <field name="context">{"search_default_upcoming":1}</field>
+           <field name="search_view_id" ref="view_best_deal_search"/>
+           <field name="help" type="html"><p class="oe_view_nocontent_create">
+    Click to add a new deal.
+</p><p>
+    Odoo helps you schedule and efficiently organize your deals:
+    track subscriptions and participations, automate the confirmation emails,
+    sell tickets, etc.
+</p></field>
+        </record>
+
+        <act_window
+            id="act_book_best_deal_partner"
+            name="Book"
+            res_model="best.deal.booking"
+            src_model="res.partner"
+            view_mode="tree,form,calendar,graph"
+            context="{'search_default_partner_id': [active_id], 'default_partner_id': active_id}"
+            view_type="form"/>
+
+        <menuitem name="Deals" id="menu_best_deal" action="action_best_deal_view" parent="best_deal.best_deal_main_menu" />
+
+        <!-- best.deal.booking views -->
+        <record model="ir.ui.view" id="view_best_deal_booking_tree">
+            <field name="name">best.deal.booking.tree</field>
+            <field name="model">best.deal.booking</field>
+            <field name="arch" type="xml">
+                <tree string="Booking" decoration-bf="message_needaction==True">
+                    <field name="create_date"/>
+                    <field name="partner_id"/>
+                    <field name="name"/>
+                    <field name="email"/>
+                    <field name="best_deal_id" />
+                    <field name="state"/>
+                    <field name="message_needaction" invisible="1"/>
+                    <button name="confirm_booking" string="Confirm Booking" states="draft" type="object" icon="gtk-apply"/>
+                    <button name="button_booking_close" string="Consumed Coupon" states="open" type="object" icon="gtk-jump-to"/>
+                    <button name="button_booking_cancel" string="Cancel Booking" states="draft,open" type="object" icon="gtk-cancel"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_best_deal_booking_form">
+            <field name="name">best.deal.booking.form</field>
+            <field name="model">best.deal.booking</field>
+            <field name="arch" type="xml">
+                <form string="Deal Booking">
+                    <header>
+                        <button name="action_send_badge_email" string="Send by Email" type="object" states="open,done" class="oe_highlight"/>
+                        <button name="confirm_booking" string="Confirm" states="draft" type="object" class="oe_highlight"/>
+                        <button name="button_booking_close" string="Used" states="open" type="object" class="oe_highlight"/>
+                        <button string="Set To Unconfirmed" name="do_draft" states="cancel,done" type="object" />
+                        <button name="button_booking_cancel" string="Cancel Booking" states="draft,open" type="object"/>
+                        <field name="state" nolabel="1" colspan="2" widget="statusbar" statusbar_visible="draft,open,done"/>
+                    </header>
+                    <sheet string="Booking">
+                        <group>
+                            <group string="Customer" name="customer">
+                                <field name="name"/>
+                                <field name="phone"/>
+                                <field name="email"/>
+                                <field name="partner_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                            </group>
+                            <group string="Deal Information" name="deal">
+                                <field name="best_deal_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="date_open" groups="base.group_no_one"/>
+                                <field name="date_closed" groups="base.group_no_one"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_best_deal_booking_calendar" model="ir.ui.view">
+            <field name="name">best.deal.booking.calendar</field>
+            <field name="model">best.deal.booking</field>
+            <field eval="2" name="priority"/>
+            <field name="arch" type="xml">
+                <calendar color="best_deal_id" date_start="best_deal_begin_date" date_stop="best_deal_end_date" string="Deal Booking">
+                    <field name="best_deal_id"/>
+                    <field name="name"/>
+                </calendar>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_best_deal_booking_pivot">
+            <field name="name">best.deal.booking.pivot</field>
+            <field name="model">best.deal.booking</field>
+            <field name="arch" type="xml">
+                <pivot string="Booking" display_quantity="True">
+                    <field name="best_deal_id" type="row"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_best_deal_booking_graph">
+            <field name="name">best.deal.booking.graph</field>
+            <field name="model">best.deal.booking</field>
+            <field name="arch" type="xml">
+                <graph string="Booking">
+                    <field name="best_deal_id"/>
+                </graph>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_booking_search">
+            <field name="name">best.deal.booking.search</field>
+            <field name="model">best.deal.booking</field>
+            <field name="arch" type="xml">
+                <search string="Deal Booking">
+                    <field name="id" string="Booking ID"/>
+                    <field name="name" string="Customer" filter_domain="['|', '|', ('name', 'ilike', self), ('email', 'ilike', self), ('origin', 'ilike', self)]"/>
+                    <filter string="Unread Messages" name="message_needaction" domain="[('message_needaction','=',True)]"/>
+                    <filter string="Expected" name="expected" domain="[('state', 'in', ['draft', 'open', 'done'])]"/>
+                    <separator/>
+                    <field name="best_deal_id"/>
+                    <field name="partner_id"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Partner" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter string="Deal" name="group_deal" domain="[]" context="{'group_by':'best_deal_id'}"/>
+                        <filter string="Status" domain="[]" context="{'group_by':'state'}"/>
+                        <filter string="Booking Day" domain="[]" context="{'group_by': 'create_date:day'}"/>
+                        <filter string="Booking Month" domain="[]" context="{'group_by': 'create_date:month'}"/>
+                   </group>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_booking">
+          <field name="name">Coupons</field>
+          <field name="res_model">best.deal.booking</field>
+          <field name="view_type">form</field>
+          <field name="domain"></field>
+          <field name="view_mode">tree,form,calendar,pivot,graph</field>
+          <field name="context">{}</field>
+          <field name="search_view_id" ref="view_booking_search"/>
+        </record>
+
+        <menuitem name="Coupons"
+            id="menu_action_booking" parent="best_deal.best_deal_main_menu"
+            action="action_booking" groups="base.group_no_one"/>
+
+        <!-- BEST.DEAL.MAIL VIEWS -->
+        <record model="ir.ui.view" id="view_best_deal_mail_form">
+            <field name="name">best.deal.mail.form</field>
+            <field name="model">best.deal.mail</field>
+            <field name="arch" type="xml">
+                <form string="Deal Mail Scheduler">
+                    <group>
+                        <field name="best_deal_id"/>
+                        <field name="template_id"/>
+                        <field name="mail_sent"/>
+                    </group>
+                    <group>
+                        <field name="interval_nbr" attrs="{'readonly':[('interval_unit', '=', 'now')]}"/>
+                        <field name="interval_unit"/>
+                        <field name="interval_type"/>
+                        <field name="scheduled_date"/>
+                    </group>
+                    <notebook>
+                        <page string="Booking Mails">
+                            <field name="mail_booking_ids">
+                                <tree string="Booking mail" editable="bottom">
+                                    <field name="booking_id"/>
+                                    <field name="scheduled_date"/>
+                                    <field name="mail_sent"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_best_deal_mail_tree">
+            <field name="name">best.deal.mail.tree</field>
+            <field name="model">best.deal.mail</field>
+            <field name="arch" type="xml">
+                <tree string="Deal Mail Schedulers">
+                    <field name="best_deal_id"/>
+                    <field name="template_id"/>
+                    <field name="scheduled_date"/>
+                    <field name="mail_sent"/>
+                    <field name="done"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_best_deal_mail">
+            <field name="name">Deal Mail Schedulers</field>
+            <field name="res_model">best.deal.mail</field>
+            <field name="view_type">form</field>
+        </record>
+
+        <menuitem name="Mail Schedulers" id="menu_best_deal_type" action="action_best_deal_mail" parent="menu_best_deal_configuration" groups="base.group_no_one"/>
+
+    </data>
+</openerp>

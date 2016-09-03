@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <!-- After installation of the module, open the related menu -->
+        <record id="action_client_best_deal_menu" model="ir.actions.client">
+            <field name="name">Open Deal Menu</field>
+            <field name="tag">reload</field>
+            <field name="params" eval="{'menu_id': ref('best_deal.menu_best_deal')}"/>
+        </record>
+        <record id="base.open_menu" model="ir.actions.todo">
+            <field name="action_id" ref="action_client_best_deal_menu"/>
+            <field name="state">open</field>
+        </record>
+
+        <!-- notify all employees of module installation -->
+        <function model="mail.channel" name="message_post">
+            <value eval="[ref('mail.channel_all_employees')]"/>
+            <value>From the top menu Deals, you can organize deals, manage bookings, automate communication around your deals and sell deals through your quotations.</value>
+            <value>Module Best Deals has been installed</value>
+        </function>
+
+        <!-- Automatic confirmation of deals by default -->
+        <function id="default_auto_confirmation" model="ir.values" name="set_default" eval="('best.deal.config.settings', 'auto_confirmation', True)"/>
+
+        <!-- Deal Mail Scheduler-->
+        <record model="ir.cron" forcecreate="True" id="best_deal_mail_scheduler">
+            <field name="name">[best_deal] mail scheduler</field>
+            <field name="active">True</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False" />
+            <field eval="'(True,)'" name="args"/>
+            <field name="model">best.deal.mail</field>
+            <field name="function">run</field>
+        </record>
+
+    </data>
+</openerp>

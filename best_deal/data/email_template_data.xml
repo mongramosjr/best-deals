@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<openerp>
+    <data noupdate="1">
+
+        <record id="best_deal_booking_mail_template_badge" model="mail.template">
+            <field name="name">Deal: Booking Badge</field>
+            <field name="model_id" ref="best_deal.model_best_deal_booking"/>
+            <field name="email_from">${(object.best_deal_id.partner_id.email or object.best_deal_id.user_id.email or '')|safe}</field>
+            <field name="email_to" >${object.email|safe}</field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="subject">Your badge for ${object.best_deal_id.name}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="report_template" ref="report_best_deal_booking_badge"/>
+            <field name="report_name">badge_of_${(object.best_deal_id.name or '').replace('/','_')}</field>
+            <field name="body_html"><![CDATA[<p>Hello ${object.name},</p>
+<p>We confirm that your booking to the deal ${object.best_deal_id.name} has been recorded.
+Please, Find your <b>Deal Badge</b> attached with this mail.</p>
+<p>Thank you for your patronage!</p>
+<p>Best regards</p>]]></field>
+        </record>
+
+        <record id="best_deal_booking" model="mail.template">
+            <field name="name">Deal booking</field>
+            <field name="model_id" ref="best_deal.model_best_deal_booking"/>
+            <field name="email_from">${(object.best_deal_id.partner_id.email or object.best_deal_id.user_id.email or '')|safe}</field>
+            <field name="email_to" >${object.email|safe}</field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="reply_to">${object.best_deal_id.reply_to|safe}</field>
+            <field name="subject">Your booking at ${object.best_deal_id.name}</field>
+            <field name="body_html"><![CDATA[<p>Hello ${object.name},</p>
+<p>We confirm that your booking to the deal ${object.best_deal_id.name} has been recorded.
+You will automatically receive an email providing you more practical information as soon as the coupon of the deal is confirmed.</p>
+<p>Thank you for your patronage!</p>
+<p>Best regards</p>]]></field>
+        </record>
+
+        <record id="best_deal_reminder" model="mail.template">
+            <field name="name">Deal: reminder</field>
+            <field name="model_id" ref="best_deal.model_best_deal_booking"/>
+            <field name="email_from">${(object.best_deal_id.partner_id.email or object.best_deal_id.user_id.email or '')|safe}</field>
+            <field name="email_to" >${object.partner_id.email or object.email|safe}</field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="reply_to">${object.best_deal_id.reply_to|safe}</field>
+            <field name="subject">Reminder of deal ${object.best_deal_id.name}</field>
+            <field name="body_html"><![CDATA[<p>Hello ${object.name},</p>
+<p>This is a reminder for ${object.best_deal_id.name} that you booked for is confirmed and will be held from ${object.best_deal_id.date_begin_located} to ${object.best_deal_id.date_end_located}.
+For any further information please contact our customer service department.</p>
+<p>Thank you for your patronage!</p>
+<p>Best regards</p>]]></field>
+        </record>
+
+        <record id="best_deal_thanks" model="mail.template">
+            <field name="name">Deal: thanks for patronage</field>
+            <field name="model_id" ref="best_deal.model_best_deal_booking"/>
+            <field name="email_from">${(object.best_deal_id.partner_id.email or object.best_deal_id.user_id.email or '')|safe}</field>
+            <field name="email_to" >${object.partner_id.email or object.email|safe}</field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="reply_to">${object.best_deal_id.reply_to|safe}</field>
+            <field name="subject">Thanks for attending ${object.best_deal_id.name}</field>
+            <field name="body_html"><![CDATA[<p>Hello ${object.name},</p>
+<p>We would like to thank you for your patronage at our deal ${object.best_deal_id.name}.
+<br/><br/>
+    % if object.best_deal_id.partner_id and object.best_deal_id.partner_id.is_company:
+        <strong>The ${object.best_deal_id.partner_id.name} Team</strong>
+    % elif object.best_deal_id.partner_id:
+        <strong>${object.best_deal_id.partner_id.name}</strong>
+    % endif
+</p>]]></field>
+        </record>
+
+    </data>
+</openerp>

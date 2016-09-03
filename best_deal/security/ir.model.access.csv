@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_best_deal_type,best.deal.type,model_best_deal_type,best_deal.group_best_deal_user,1,0,0,0
+access_best_deal_type_manager,best.deal.type manager,model_best_deal_type,best_deal.group_best_deal_manager,1,1,1,1
+access_best_deal,best.deal,model_best_deal,best_deal.group_best_deal_user,1,1,1,1
+access_best_deal_booking,best.deal.booking,model_best_deal_booking,best_deal.group_best_deal_user,1,1,1,1
+access_report_best_deal_booking,report.best.deal.booking,model_report_best_deal_booking,best_deal.group_best_deal_user,1,1,1,1
+access_best_deal_portal,best.deal,model_best_deal,,1,0,0,0
+access_best_deal_booking_portal,best.deal.booking,model_best_deal_booking,,1,0,0,0
+access_best_deal_mail,best.deal.mail,model_best_deal_mail,best_deal.group_best_deal_user,1,0,0,0
+access_best_deal_mail_manager,best.deal.mail manager,model_best_deal_mail,best_deal.group_best_deal_manager,1,1,1,1
+access_best_deal_mail_booking,best.deal.mail.booking,model_best_deal_mail_booking,best_deal.group_best_deal_user,1,0,0,0
+access_best_deal_mail_booking_manager,best.deal.mail.booking.manager,model_best_deal_mail_booking,best_deal.group_best_deal_manager,1,1,1,1

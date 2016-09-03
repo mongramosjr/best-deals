@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <record model ="ir.ui.view" id="report_best_deal_booking_pivot">
+            <field name="name">report.best.deal.booking.pivot</field>
+            <field name="model">report.best.deal.booking</field>
+            <field name="arch" type="xml">
+                <pivot string="Deal on Booking" disable_linking="True">
+                    <field name="best_deal_id" type="row"/>
+                    <field name="best_deal_date" interval="month" type="col"/>
+                    <field name="confirm_state" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record model ="ir.ui.view" id="report_best_deal_booking_graph">
+            <field name="name">report.best.deal.booking.graph</field>
+            <field name="model">report.best.deal.booking</field>
+            <field name="arch" type="xml">
+                <graph string="Deal on Booking">
+                    <field name="best_deal_id"/>
+                    <field name="best_deal_date" interval="month"/>
+                    <field name="confirm_state" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <!-- Deal on Booking search view -->
+        <record model="ir.ui.view" id="view_report_best_deal_booking_search">
+            <field name="name">report.best.deal.booking.search</field>
+            <field name="model">report.best.deal.booking</field>
+            <field name="arch" type="xml">
+                <search string="Deal on Booking">
+                    <filter string="New" domain="[('best_deal_state','=','draft')]" help="Deals which are in New state"/>
+                    <filter string="Confirm" domain="[('best_deal_state','=','confirm')]" help="Deals which are in confirm state"/>
+                    <separator/>
+                    <field name="best_deal_id" string="Deal"/>
+                    <field name="user_id"/>
+                    <group expand="0" string="Extended Filters...">
+                        <field name="best_deal_type_id" widget="selection"/>
+                        <field name="best_deal_date"/>
+                    </group>
+                    <newline/>
+                    <group expand="1" string="Group By">
+                        <filter string="Customer / Contact" context="{'group_by':'name_booking'}" help="Customer contact"/>
+                        <filter string="Deal Type" context="{'group_by':'best_deal_type_id'}"/>
+                        <filter string="Deal" name="deal" context="{'group_by':'best_deal_id', 'max_booking_best_deal_visible':0}"/>
+                        <filter string="Deal State" context="{'group_by':'best_deal_state'}"/>
+                        <filter string="Company" context="{'group_by':'company_id'}" groups="base.group_multi_company"/>
+                        <separator/>
+                        <filter string="Deal Month" context="{'group_by':'best_deal_date:month'}" help="Deal Beginning Date"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_report_best_deal_booking">
+            <field name="name">Deals Analysis</field>
+            <field name="res_model">report.best.deal.booking</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">pivot,graph</field>
+            <field name="search_view_id" ref="view_report_best_deal_booking_search"/>
+            <field name="context">{}</field>  <!-- force empty -->
+        </record>
+
+        <menuitem name="Deals" parent="best_deal.menu_reporting_best_deals" action="action_report_best_deal_booking" id="menu_report_best_deal_booking" sequence="3" groups="best_deal.group_best_deal_manager"/>
+
+    </data>
+</openerp>
