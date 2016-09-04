@@ -44,7 +44,7 @@ Key Features
 
     ],
     'demo': [
-        #'data/best_deal_demo.xml',
+        'data/best_deal_demo.xml',
     ],
     'installable': True,
     'auto_install': False,
