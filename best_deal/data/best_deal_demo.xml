@@ -206,6 +206,7 @@
 </div>
 ]]></field>
     </record>
+    
     <function model="best.deal" name="button_confirm" eval="[ref('best_deal_0')]"/>
     <function model="best.deal" name="button_confirm" eval="[ref('best_deal_1')]"/>
     <function model="best.deal" name="button_confirm" eval="[ref('best_deal_2')]"/>
@@ -215,8 +216,8 @@
         <field name="name">Agrolait</field>
         <field name="email">s.l@agrolait.be</field>
         <field name="phone">003281588558</field>
-        <field name="best_deal_id" ref="best_deal_1"/>
         <field name="partner_id" ref="base.res_partner_2"/>
+        <field name="best_deal_id" ref="best_deal_1"/>
     </record>
 
     <record id="booking_1_2" model="best.deal.booking">
@@ -239,8 +240,8 @@
         <field name="name">Camptocamp</field>
         <field name="email">openerp@camptocamp.com</field>
         <field name="phone">+41 21 619 10 04 </field>
-        <field name="best_deal_id" ref="best_deal_2"/>
         <field name="partner_id" ref="base.res_partner_12"/>
+        <field name="best_deal_id" ref="best_deal_2"/>
     </record>
 
     </data>
