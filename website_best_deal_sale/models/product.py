@@ -8,8 +8,10 @@
 #    the BSD 3-Clause License: https://opensource.org/licenses/BSD-3-Clause
 ##############################################################################
 
-import models
-import controllers
+from openerp import models, fields, api, _
 
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+# defined for access rules
+class Product(models.Model):
+    _inherit = 'product.product'
+    best_deal_coupon_ids = fields.One2many('best.deal.coupon', 'product_id', 'Deal Coupon')
+    

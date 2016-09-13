@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+<template id="assets_editor" inherit_id="website.assets_frontend" name="Coupon Sale">
+  <xpath expr="." position="inside">
+    <script type="text/javascript" src="/website_best_deal_sale/static/src/js/website.tour.best_deal_sale.js"></script>
+  </xpath>
+</template>
+
+<template id="index" inherit_id="website_best_deal.index" name="Deal's Coupon">
+    <xpath expr="//li[@t-foreach='best_deal_ids']/div/h4" position="before">
+        <t t-if="best_deal.state in ['draft', 'confirm'] and best_deal.best_deal_coupon_ids">
+            <span t-if="best_deal.coupons_availability == 'limited' and not best_deal.coupons_available" class="label label-danger pull-right">Sold Out</span>
+            <span t-if="best_deal.coupons_availability ==  'limited' and best_deal.coupons_available and best_deal.coupons_available &lt;= ((best_deal.coupons_max or 0) / 4)" class="label pull-right label-info">
+                Only <t t-esc="best_deal.coupons_available"/> Remaining
+            </span>
+        </t>
+    </xpath>
+</template>
+
+<template id="booking_template" inherit_id="website_best_deal.booking_template">
+    <xpath expr="//tbody" position="replace">
+        <tbody>
+            <t t-foreach="best_deal.best_deal_coupon_ids" t-as="coupon">
+                <tr itemscope="itemscope" itemtype="http://data-vocabulary.org/Offer" t-if="not coupon.is_expired">
+                    <td itemscope="itemscope" itemtype="http://data-vocabulary.org/Product">
+                        <div itemprop="name" t-field="coupon.name"/>
+                        <div><small itemprop="description" t-field="coupon.product_id.description_sale"/></div>
+                    </td>
+                    <td>
+                        <t t-if="coupon.deadline">
+                            <span itemprop="priceValidUntil" t-field="coupon.deadline"/>
+                        </t>
+                        <t t-if="not coupon.deadline">
+                            <span>Unlimited</span>
+                        </t>
+                    </td>
+                    <td>
+                            <t t-if="coupon.price or editable">
+                              <t t-if="(coupon.price-coupon.price_reduce) &gt; 1">
+                                <del class="text-danger mr4" style="white-space: nowrap;" t-field="coupon.price" t-field-options='{
+                                  "widget": "monetary",
+                                  "from_currency": "website.currency_id",
+                                  "display_currency": "user_id.partner_id.property_product_pricelist.currency_id"
+                                }'/>
+                              </t>
+                              <span t-field="coupon.price_reduce" t-field-options='{
+                               "widget": "monetary",
+                               "display_currency": "website.pricelist_id.currency_id"
+                          }'/>
+                            <span itemprop="price" style="display:none;" t-esc="coupon.price"/>
+                            <span itemprop="priceCurrency" style="display:none;" t-esc="website.pricelist_id.currency_id.name"/>
+                        </t>
+                        <t t-if="not coupon.price and not editable">
+                            <span>Free</span>
+                        </t>
+                    </td>
+                    <td>
+                        <span t-if="coupon.coupons_max and ((coupon.coupons_reserved or 0)*100 / coupon.coupons_max)&gt;75" class="text-muted">
+                            <t t-esc="coupon.coupons_max - coupon.coupons_reserved"/> <span>left</span>
+                        </span>
+                    </td>
+                    <td>
+                        <select t-if="(best_deal.coupons_available or best_deal.coupons_availability == 'unlimited') and (coupon.coupons_available or coupon.coupons_availability == 'unlimited')" t-attf-name="nb_register-#{coupon.id}" class="form-control">
+                            <t t-set="coupon_max_coupon" t-value="(coupon.coupons_availability == 'unlimited' or coupon.coupons_available > 9) and 10 or coupon.coupons_available + 1"/>
+                            <t t-set="coupon_max_best_deal" t-value="(best_deal.coupons_availability == 'unlimited' or best_deal.coupons_available > 9) and 10 or best_deal.coupons_available + 1"/>
+                            <t t-set="coupon_max" t-value="min(coupon_max_coupon, coupon_max_best_deal)"/>
+                            <t t-foreach="range(0, coupon_max)" t-as="nb">
+                                <option t-esc="nb"/>
+                            </t>
+                        </select>
+                        <span t-if="(not best_deal.coupons_available and best_deal.coupons_availability == 'limited') or (coupon.coupons_availability == 'limited' and not coupon.coupons_available)">Sold Out</span>
+                    </td>
+                </tr>
+            </t>
+        </tbody>
+    </xpath>
+    <xpath expr="//button[@type='submit']" position="replace">
+        <button type="submit" t-if="best_deal.state == 'confirm' and (best_deal.coupons_available or best_deal.coupons_availability == 'unlimited')"
+            class="btn btn-primary btn-lg pull-right a-submit" t-attf-id="#{best_deal.id}">Order Now</button>
+    </xpath>
+    <xpath expr="//form[@id='booking_form']" position="attributes">
+        <attribute name="t-if">best_deal.best_deal_coupon_ids</attribute>
+    </xpath>
+</template>
+
+<template id="cart" inherit_id="website_sale.cart_lines" name="Hide product reduction for deal coupons">
+    <xpath expr="//del" position="attributes">
+        <attribute name="t-attf-class" separator=" " add="#{line.best_deal_id and 'hidden' or ''}"/>
+    </xpath>
+</template>
+
+</data>
+</openerp>

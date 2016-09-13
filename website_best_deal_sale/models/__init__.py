@@ -8,8 +8,6 @@
 #    the BSD 3-Clause License: https://opensource.org/licenses/BSD-3-Clause
 ##############################################################################
 
-import models
-import controllers
-
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+import product
+import website
+import sale_order

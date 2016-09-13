@@ -8,8 +8,12 @@
 #    the BSD 3-Clause License: https://opensource.org/licenses/BSD-3-Clause
 ##############################################################################
 
-import models
-import controllers
+from openerp import models, fields, api, _
 
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+class Website(models.Model):
+    _inherit = 'website'
+
+    def sale_product_domain(self):
+        # remove product deal from the website content grid and list view (not removed in detail view)
+        return ['&'] + super(Website, self).sale_product_domain() + [('best_deal_ok', '=', False)]

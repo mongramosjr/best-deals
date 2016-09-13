@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_best_deal_public,best_deal.public,best_deal.model_best_deal,base.group_public,1,0,0,0
+access_best_deal_portal,best_deal.portal,best_deal.model_best_deal,base.group_portal,1,0,0,0
+access_best_deal_type_public,best_deal.public,best_deal.model_best_deal_type,,1,0,0,0
