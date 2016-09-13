@@ -32,13 +32,13 @@ Key Features
         'security/ir.model.access.csv',
         
         'wizard/best_deal_confirm_view.xml',
-        'views/best_deal_views.xml',
+        'views/best_deal_view.xml',
         'report/report_best_deal_booking_view.xml',
         'report/best_deal_templates.xml',
         'report/best_deal_reports.xml',
         'data/best_deal_data.xml',
         'data/best_deal_data_tip.xml',
-        'views/best_deal_config_settings_views.xml',
+        'views/best_deal_config_settings_view.xml',
         'views/best_deal_templates.xml',
         'data/email_template_data.xml',
 
