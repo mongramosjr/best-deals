@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="best_deal_booking_report_template_badge" inherit_id="best_deal.best_deal_booking_report_template_badge">
+        <xpath expr="//div[@id='o_best_deal_name']" position="after">
+            <div t-if="o.best_deal_coupon_id" class="col-xs-12 mt32 text-center" style="background: lightgrey; height: 65px">
+                <h3><span t-field="o.best_deal_coupon_id"/></h3>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="best_deal_report_template_badge" inherit_id="best_deal.best_deal_report_template_badge">
+        <xpath expr="//div[@id='o_best_deal_customer_name']" position="after">
+            <div t-if="bool(len(best_deal.best_deal_coupon_ids))" class="col-xs-12 mt16 text-center" style="background: lightgrey; height: 65px;" t-ignore="true">
+                <h3>Ticket Type</h3>
+            </div>
+        </xpath>
+    </template>
+
+</odoo>

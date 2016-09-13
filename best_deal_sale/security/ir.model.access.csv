@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_best_deal_coupon_user,best_deal.coupon.user,best_deal_sale.model_best_deal_coupon,best_deal.group_best_deal_user,1,0,0,0
+access_best_deal_coupon_admin,best.deal.coupon.admin,best_deal_sale.model_best_deal_coupon,best_deal.group_best_deal_manager,1,1,1,1

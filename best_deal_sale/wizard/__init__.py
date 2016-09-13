@@ -8,8 +8,7 @@
 #    the BSD 3-Clause License: https://opensource.org/licenses/BSD-3-Clause
 ##############################################################################
 
-import models
-import wizard
+import best_deal_edit_booking
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="view_best_deal_booking_coupon_search">
+            <field name="name">best.deal.booking.coupon.search</field>
+            <field name="model">best.deal.booking</field>
+            <field name="inherit_id" ref="best_deal.view_booking_search" />
+            <field name="arch" type="xml">
+                <filter name="group_deal" position="after">
+                    <filter string="Coupon Type" domain="[]" context="{'group_by':'best_deal_coupon_id'}"/>
+                </filter>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_best_deal_booking_coupon_tree">
+            <field name="name">best.deal.booking.coupon.tree</field>
+            <field name="model">best.deal.booking</field>
+            <field name="inherit_id" ref="best_deal.view_best_deal_booking_tree" />
+            <field name="arch" type="xml">
+                <field name="best_deal_id" position="after">
+                    <field name="best_deal_coupon_id"/>
+                    <field name="origin"/>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_best_deal_booking_coupon_form">
+            <field name="name">best.deal.booking.coupon.form</field>
+            <field name="model">best.deal.booking</field>
+            <field name="inherit_id" ref="best_deal.view_best_deal_booking_form" />
+            <field name="arch" type="xml">
+                <field name="best_deal_id" position="after">
+                    <field name="best_deal_coupon_id" domain="[('best_deal_id', '=', best_deal_id)]"/>
+                </field>
+                <group name="deal" position="after">
+                    <group string="Origin">
+                        <field name="sale_order_id"/>
+                        <field name="origin" attrs="{'invisible': [('sale_order_id', '!=', False)]}"/>
+                        <field name="sale_order_line_id" readonly="1" attrs="{'invisible': [('sale_order_id', '=', False)]}"/>
+                    </group>
+                </group>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_best_deal_form_inherit_coupon">
+            <field name="name">view_best_deal_form_inherit_tichet</field>
+            <field name="model">best.deal</field>
+            <field name="inherit_id" ref="best_deal.best_deal_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//page[@name='bookings']" position="replace">
+                        <page string="Coupons">
+                            <group>
+                                <group>
+                                    <field name="auto_confirm" invisible="1"/>
+                                    <field name="coupons_min"/>
+                                    <field name="coupons_availability" widget='radio'/>
+                                    <field name="coupons_max" attrs="{'invisible': [('coupons_availability', '=', 'unlimited')], 'required': [('coupons_availability', '=', 'limited')]}"/>
+                                </group>
+                            </group>
+                            <field name="best_deal_coupon_ids" context="{'default_name': name}">
+                                <tree string="Coupons" editable="bottom">
+                                    <field name="name"/>
+                                    <field name="product_id" context="{'default_best_deal_ok':1}"/>
+                                    <field name="deadline"/>
+                                    <field name="price"/>
+                                    <field name="coupons_max"/>
+                                    <field name="coupons_reserved" readonly="1"/>
+                                    <field name="coupons_unconfirmed" readonly="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </xpath>
+               </data>
+            </field>
+        </record>
+    </data>
+</openerp>

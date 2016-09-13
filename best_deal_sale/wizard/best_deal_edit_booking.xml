@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_best_deal_booking_editor_form" model="ir.ui.view">
+            <field name="name">best.deal.booking.editor.form</field>
+            <field name="model">best.deal.booking.editor</field>
+            <field name="arch" type="xml">
+                <form string="Registration">
+                    <p>Before confirming <field name="sale_order_id" readonly="1" class="oe_inline"/>
+                    please give details about the booking</p>
+                    <field name="best_deal_booking_ids">
+                        <tree string="Booking" editable="top" create="false" delete="false">
+                            <field name="best_deal_id" readonly='1'/>
+                            <field name="booking_id" readonly='1'/>
+                            <field name="best_deal_coupon_id" domain="[('best_deal_id', '=', best_deal_id)]" readonly='1'/>
+                            <field name="name"/>
+                            <field name="email"/>
+                            <field name="phone"/>
+                        </tree>
+                    </field>
+                    <footer>
+                        <button string="Apply" name="action_make_booking" type="object" class="btn-primary"/>
+                        <button string="Skip" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_sale_order_best_deal_booking" model="ir.actions.act_window">
+            <field name="name">Deal Booking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">best.deal.booking.editor</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_best_deal_booking_editor_form"/>
+            <field name="target">new</field>
+            <field name="context">{}</field>
+        </record>
+    </data>
+</openerp>

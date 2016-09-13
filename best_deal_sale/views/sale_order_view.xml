@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="best_deal_order_line">
+             <field name="name">best.deal.sale.order</field>
+             <field name="model">sale.order</field>
+             <field name="inherit_id" ref="sale.view_order_form" />
+             <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']//form//field[@name='product_id']" position="after">
+                    <field name="best_deal_id" domain="['|', ('best_deal_type_id','=', False),('best_deal_type_id', '=', best_deal_type_id),('date_end','&gt;=',time.strftime('%Y-%m-%d 00:00:00'))]" attrs="{'invisible': [('best_deal_ok', '=', False)],'required': [('best_deal_ok', '!=', False)]}"/>
+                    <field name="best_deal_coupon_id" domain="[('best_deal_id', '=', best_deal_id), '|', ('coupons_available', '>', 0), ('coupons_availability', '=', 'unlimited')]" attrs="{'invisible': [('best_deal_id', '=', False)], 'required': [('best_deal_id', '!=', False)]}"/>
+                    <field name="best_deal_type_id" invisible="1"/>
+                    <field name="best_deal_ok" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']//tree//field[@name='product_id']" position="after">
+                    <field name="best_deal_type_id" invisible="1"/>
+                    <field name="best_deal_ok" invisible="1"/>
+                </xpath>
+             </field>
+        </record>
+        
+        <!-- the presence of 'best_deal user' makes the order lines non-editable -->
+        <record id="sale.view_order_form_editable_list" model="ir.ui.view">
+            <field name="groups_id" eval="[(4, ref('best_deal.group_best_deal_user'))]"/>
+        </record>        
+    </data>
+</openerp>
