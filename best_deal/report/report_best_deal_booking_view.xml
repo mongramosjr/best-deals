@@ -2,7 +2,7 @@
 <openerp>
     <data>
 
-        <record model ="ir.ui.view" id="report_best_deal_booking_pivot">
+        <record model ="ir.ui.view" id="view_report_best_deal_booking_pivot">
             <field name="name">report.best.deal.booking.pivot</field>
             <field name="model">report.best.deal.booking</field>
             <field name="arch" type="xml">
@@ -14,7 +14,7 @@
             </field>
         </record>
 
-        <record model ="ir.ui.view" id="report_best_deal_booking_graph">
+        <record model ="ir.ui.view" id="view_report_best_deal_booking_graph">
             <field name="name">report.best.deal.booking.graph</field>
             <field name="model">report.best.deal.booking</field>
             <field name="arch" type="xml">

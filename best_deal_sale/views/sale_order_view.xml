@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
-        <record model="ir.ui.view" id="best_deal_order_line">
+        <record model="ir.ui.view" id="view_best_deal_order_line">
              <field name="name">best.deal.sale.order</field>
              <field name="model">sale.order</field>
              <field name="inherit_id" ref="sale.view_order_form" />
@@ -20,7 +20,7 @@
         </record>
         
         <!-- the presence of 'best_deal user' makes the order lines non-editable -->
-        <record id="sale.view_order_form_editable_list" model="ir.ui.view">
+        <record model="ir.ui.view"  id="sale.view_order_form_editable_list">
             <field name="groups_id" eval="[(4, ref('best_deal.group_best_deal_user'))]"/>
         </record>        
     </data>

@@ -2,7 +2,7 @@
 <openerp>
     <data>
 
-        <record id="view_best_deal_confirm" model="ir.ui.view">
+        <record model="ir.ui.view" id="view_best_deal_confirm">
             <field name="name">Deal Confirmation</field>
             <field name="model">best.deal.confirm</field>
             <field name="arch" type="xml">

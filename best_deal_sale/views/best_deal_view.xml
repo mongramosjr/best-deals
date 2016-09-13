@@ -5,7 +5,7 @@
         <record model="ir.ui.view" id="view_best_deal_booking_coupon_search">
             <field name="name">best.deal.booking.coupon.search</field>
             <field name="model">best.deal.booking</field>
-            <field name="inherit_id" ref="best_deal.view_booking_search" />
+            <field name="inherit_id" ref="best_deal.view_best_deal_booking_search" />
             <field name="arch" type="xml">
                 <filter name="group_deal" position="after">
                     <filter string="Coupon Type" domain="[]" context="{'group_by':'best_deal_coupon_id'}"/>
@@ -46,7 +46,7 @@
         <record model="ir.ui.view" id="view_best_deal_form_inherit_coupon">
             <field name="name">view_best_deal_form_inherit_tichet</field>
             <field name="model">best.deal</field>
-            <field name="inherit_id" ref="best_deal.best_deal_form"/>
+            <field name="inherit_id" ref="best_deal.view_best_deal_form"/>
             <field name="arch" type="xml">
                 <data>
                     <xpath expr="//page[@name='bookings']" position="replace">

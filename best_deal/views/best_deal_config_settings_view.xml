@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-        <record id="view_best_deal_configuration" model="ir.ui.view">
+        <record model="ir.ui.view" id="view_best_deal_configuration">
             <field name="name">Configure Deal</field>
             <field name="model">best.deal.config.settings</field>
             <field name="inherit_id" eval="False"/>

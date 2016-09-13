@@ -2,7 +2,7 @@
 <openerp>
     <data>
 
-        <record id="view_best_deal_booking_editor_form" model="ir.ui.view">
+        <record model="ir.ui.view" id="view_best_deal_booking_editor_form">
             <field name="name">best.deal.booking.editor.form</field>
             <field name="model">best.deal.booking.editor</field>
             <field name="arch" type="xml">
@@ -27,7 +27,7 @@
             </field>
         </record>
 
-        <record id="action_sale_order_best_deal_booking" model="ir.actions.act_window">
+        <record model="ir.actions.act_window" id="action_sale_order_best_deal_booking">
             <field name="name">Deal Booking</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">best.deal.booking.editor</field>

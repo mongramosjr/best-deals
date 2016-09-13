@@ -7,7 +7,7 @@
         <menuitem parent="best_deal_main_menu" id="menu_reporting_best_deals" sequence="99" groups="best_deal.group_best_deal_manager" name="Reports"/>
 
         <!-- best.deal.type views -->
-        <record model="ir.ui.view" id="best_deal_type_form">
+        <record model="ir.ui.view" id="view_best_deal_type_form">
             <field name="name">best.deal.type.form</field>
             <field name="model">best.deal.type</field>
             <field name="arch" type="xml">
@@ -22,7 +22,7 @@
             </field>
         </record>
 
-        <record model="ir.ui.view" id="best_deal_type_tree">
+        <record model="ir.ui.view" id="view_best_deal_type_tree">
             <field name="name">best.deal.type.tree</field>
             <field name="model">best.deal.type</field>
             <field name="arch" type="xml">
@@ -52,7 +52,7 @@
         </record>
 
         <!-- best.deal views -->
-        <record model="ir.ui.view" id="best_deal_form">
+        <record model="ir.ui.view" id="view_best_deal_form">
             <field name="name">best.deal.form</field>
             <field name="model">best.deal</field>
             <field name="arch" type="xml">
@@ -141,7 +141,7 @@
             </field>
         </record>
 
-        <record model="ir.ui.view" id="best_deal_tree">
+        <record model="ir.ui.view" id="view_best_deal_tree">
             <field name="name">best.deal.tree</field>
             <field name="model">best.deal</field>
             <field name="arch" type="xml">
@@ -160,7 +160,7 @@
             </field>
         </record>
 
-        <record model="ir.ui.view" id="best_deal_kanban">
+        <record model="ir.ui.view" id="view_best_deal_kanban">
             <field name="name">best.deal.kanban</field>
             <field name="model">best.deal</field>
             <field name="arch" type="xml">
@@ -221,7 +221,7 @@
             </field>
         </record>
 
-        <record model="ir.ui.view" id="best_deal_calendar">
+        <record model="ir.ui.view" id="view_best_deal_calendar">
             <field name="name">best.deal.calendar</field>
             <field name="model">best.deal</field>
             <field eval="2" name="priority"/>
@@ -346,7 +346,7 @@
             </field>
         </record>
 
-        <record id="view_best_deal_booking_calendar" model="ir.ui.view">
+        <record model="ir.ui.view" id="view_best_deal_booking_calendar">
             <field name="name">best.deal.booking.calendar</field>
             <field name="model">best.deal.booking</field>
             <field eval="2" name="priority"/>
@@ -378,7 +378,7 @@
             </field>
         </record>
 
-        <record model="ir.ui.view" id="view_booking_search">
+        <record model="ir.ui.view" id="view_best_deal_booking_search">
             <field name="name">best.deal.booking.search</field>
             <field name="model">best.deal.booking</field>
             <field name="arch" type="xml">
@@ -408,7 +408,7 @@
           <field name="domain"></field>
           <field name="view_mode">tree,form,calendar,pivot,graph</field>
           <field name="context">{}</field>
-          <field name="search_view_id" ref="view_booking_search"/>
+          <field name="search_view_id" ref="view_best_deal_booking_search"/>
         </record>
 
         <menuitem name="Coupons"
