@@ -42,7 +42,7 @@ class BestDeal(models.Model):
         return re.sub("[- \\.\\(\\)\\@\\#\\&]+", "", self.env.user.company_id.name).lower()
 
     show_menu = fields.Boolean('Dedicated Menu', compute='_get_show_menu', inverse='_set_show_menu',
-                               help="Creates menus Introduction, Location and Register on the page "
+                               help="Creates menus Introduction, Location and Book on the page "
                                     " of the deal on the website.", store=True)
     menu_id = fields.Many2one('website.menu', 'Deal Menu', copy=False)
 
@@ -58,7 +58,7 @@ class BestDeal(models.Model):
             newpath = self.env['website'].new_page(complete_name, path, ispage=False)
             url = "/bestdeal/" + slug(self) + "/page/" + newpath
             result.append((name, url))
-        result.append((_('Register'), '/bestdeal/%s/register' % slug(self)))
+        result.append((_('Booking'), '/bestdeal/%s/booking' % slug(self)))
         return result
 
     @api.one

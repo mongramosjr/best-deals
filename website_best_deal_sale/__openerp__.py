@@ -26,7 +26,7 @@ Online Discount Coupons
         'security/website_best_deal_sale.xml',
     ],
     'qweb': [
-        #'static/src/xml/*.xml'
+        'static/src/xml/*.xml'
     ],
     'installable': True,
     'auto_install': True

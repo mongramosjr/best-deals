@@ -26,10 +26,10 @@ Online Discounts and Coupons
         'security/website_best_deal.xml',
     ],
     'qweb': [
-        #'static/src/xml/*.xml'
+        'static/src/xml/*.xml'
     ],
     'demo': [
-        #'data/best_deal_demo.xml'
+        'data/best_deal_demo.xml'
     ],
     'installable': True,
     'application': True,

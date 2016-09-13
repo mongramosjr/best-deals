@@ -62,7 +62,7 @@
                         </span>
                     </td>
                     <td>
-                        <select t-if="(best_deal.coupons_available or best_deal.coupons_availability == 'unlimited') and (coupon.coupons_available or coupon.coupons_availability == 'unlimited')" t-attf-name="nb_register-#{coupon.id}" class="form-control">
+                        <select t-if="(best_deal.coupons_available or best_deal.coupons_availability == 'unlimited') and (coupon.coupons_available or coupon.coupons_availability == 'unlimited')" t-attf-name="nb_booking-#{coupon.id}" class="form-control">
                             <t t-set="coupon_max_coupon" t-value="(coupon.coupons_availability == 'unlimited' or coupon.coupons_available > 9) and 10 or coupon.coupons_available + 1"/>
                             <t t-set="coupon_max_best_deal" t-value="(best_deal.coupons_availability == 'unlimited' or best_deal.coupons_available > 9) and 10 or best_deal.coupons_available + 1"/>
                             <t t-set="coupon_max" t-value="min(coupon_max_coupon, coupon_max_best_deal)"/>

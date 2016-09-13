@@ -57,7 +57,7 @@
                         <li t-foreach="best_deal_ids" t-as="best_deal" class="media">
                             <div itemscope="itemscope" itemtype="http://schema.org/Deal" class="media-body">
                                 <h4 class="media-heading">
-                                    <a itemprop="url" t-att-class="best_deal.state == 'done' and 'text-success'" t-attf-href="/bestdeal/#{ slug(best_deal) }/#{(not best_deal.menu_id) and 'register' or ''}"><span itemprop="name" t-field="best_deal.name"> </span></a>
+                                    <a itemprop="url" t-att-class="best_deal.state == 'done' and 'text-success'" t-attf-href="/bestdeal/#{ slug(best_deal) }/#{(not best_deal.menu_id) and 'booking' or ''}"><span itemprop="name" t-field="best_deal.name"> </span></a>
                                     <small t-if="not best_deal.address_id" class="label label-info">Online</small>
                                     <small t-if="not best_deal.website_published" class="label label-danger">not published</small>
                                 </h4>
@@ -411,7 +411,7 @@
                     <td>Free</td>
                     <td></td>
                     <td>
-                        <select t-if="best_deal.coupons_available or best_deal.coupons_availability == 'unlimited'" name="nb_register-0" class="form-control">
+                        <select t-if="best_deal.coupons_available or best_deal.coupons_availability == 'unlimited'" name="nb_booking-0" class="form-control">
                             <t t-foreach="range(0, (best_deal.coupons_availability == 'unlimited' or best_deal.coupons_available > 9) and 10 or best_deal.coupons_available+1)" t-as="nb">
                                 <option t-esc="nb"/>
                             </t>
@@ -422,7 +422,7 @@
             </tbody>
         </table>
         <button type="submit" t-if="best_deal.state == 'confirm' and (best_deal.coupons_availability == 'unlimited' or best_deal.coupons_available)"
-            class="btn btn-primary btn-lg pull-right a-submit" t-attf-id="#{best_deal.id}">Register Now</button>
+            class="btn btn-primary btn-lg pull-right a-submit" t-attf-id="#{best_deal.id}">Book Now</button>
         <div t-if="not best_deal.state == 'confirm'" class="alert alert-info">
             Deal booking not yet started. 
             <t t-if="uid">
