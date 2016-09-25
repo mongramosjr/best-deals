@@ -202,7 +202,7 @@ class website_best_deal(http.Controller):
 
     @http.route('/bestdeal/add_bestdeal', type='http', auth="user", methods=['POST'], website=True)
     def add_bestdeal(self, best_deal_name="New Deal", **kwargs):
-        return self._add_best_deal(best_deal_name, request.context, **kwargs)
+        return self._add_bestdeal(best_deal_name, request.context, **kwargs)
 
     def _add_bestdeal(self, best_deal_name=None, context={}, **kwargs):
         if not best_deal_name:

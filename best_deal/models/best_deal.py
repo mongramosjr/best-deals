@@ -65,7 +65,7 @@ class BestDeal(models.Model):
             'template_id': self.env.ref('best_deal.best_deal_booking')
         })]
 
-    # Seats and computation
+    # Coupons and computation
     coupons_max = fields.Integer(
         string='Maximum Coupons',
         readonly=True, states={'draft': [('readonly', False)], 'confirm': [('readonly', False)]},
@@ -178,9 +178,11 @@ class BestDeal(models.Model):
         'res.partner', string='Location', default=lambda self: self.env.user.company_id.partner_id,
         readonly=False, states={'done': [('readonly', True)]})
     country_id = fields.Many2one('res.country', 'Country',  related='address_id.country_id', store=True)
+    state_id = fields.Many2one('res.country.state', 'State',  related='address_id.state_id', store=True)
     description = fields.Html(
-        string='Description', oldname='note', translate=True,
+        string='Description', translate=True,
         readonly=False, states={'done': [('readonly', True)]})
+        
     # badge fields
     badge_front = fields.Html(string='Badge Front')
     badge_back = fields.Html(string='Badge Back')

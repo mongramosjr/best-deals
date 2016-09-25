@@ -14,7 +14,7 @@ contentMenu.TopBar.include({
             window_title: _t("New Deal"),
             input: "Deal Name",
         }).then(function (best_deal_name) {
-            website.form('/bestdeal/add_best_deal', 'POST', {
+            website.form('/bestdeal/add_bestdeal', 'POST', {
                 best_deal_name: best_deal_name
             });
         });
