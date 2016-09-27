@@ -31,15 +31,11 @@
         <div class="container">
             <div class="row mt8">
                 <div class="col-sm-5">
-                    <ol class="breadcrumb mb0">
-                        <li>
-                            <a href="/bestdeal">Our Deals</a>
-                        </li>
-                        <li t-if="current_date"><t t-esc="current_date"/></li>
-                        <li t-if="current_type"><t t-esc="current_type.name"/></li>
-                        <li t-if="current_country"><t t-esc="current_country.name"/></li>
-                    </ol>
-                </div><div class="col-sm-7">
+                    <t t-call="website_best_deal.index_breadcrumb">
+                        <t t-set="index_breadcrumb_class">mb0</t>
+                    </t>
+                </div>
+                <div class="col-sm-7">
                     <t t-call="website.pager" >
                         <t t-set="classname">pull-right</t>
                     </t>
@@ -87,6 +83,27 @@
         <div class="oe_structure"/>
       </div>
     </t>
+</template>
+
+<template id="index_breadcrumb" name="Deal Breadcrumb">
+    <ol t-attf-class="breadcrumb #{index_breadcrumb_class or ''}">
+        <li>
+            <a href="/bestdeal">Our Deals</a>
+        </li>
+        <li t-if="current_date">
+            <a t-attf-href="/bestdeal?date=#{current_date}" t-esc="current_date"/>
+        </li>
+        <li t-if="current_type">
+            <a t-attf-href="/bestdeal?type=#{current_type.id}" t-esc="current_type.name"/>
+        </li>
+        <li t-if="current_country">
+            <a t-attf-href="/bestdeal?country=#{current_country.id}" t-esc="current_country.name"/>
+        </li>
+        <li t-if="current_country_state">
+            <a t-attf-href="/bestdeal?country_state=#{current_country_state.id}" t-esc="current_country_state.name"/>
+        </li>
+    
+    </ol>
 </template>
 
 <template id="best_deal_right_photos" inherit_id="website_best_deal.index" active="False" customize_show="True" name="Photos">
@@ -196,29 +213,32 @@
     </xpath>
 </template>
 
+<template id="best_deal_location_state" inherit_id="website_best_deal.best_deal_left_column" active="False" customize_show="True" name="Filter by State/Province">
+    <xpath expr="//div[@id='left_column']" position="inside">
+        <ul class="nav nav-pills nav-stacked mt32">
+            <t t-foreach="country_states" t-as="country_state">
+                <li t-if="country_state['state_id']" t-att-class="searches.get('country_state') == str(country_state['state_id'] and country_state['state_id'][0]) and 'active' or ''">
+                    <a t-attf-href="/bestdeal?{{ keep_query('type', 'date', country,  country_state=country_state['state_id_id'][0]) }}"><t t-esc="country_state['state_id'][1]"/>
+                        <span class="badge pull-right"><t t-esc="country_state['country_state_id_count']"/></span>
+                    </a>
+                </li>
+            </t>
+        </ul>
+    </xpath>
+</template>
+
 <template id="layout">
     <t t-call="website.layout">
-      <div id="wrap" class="js_best_deal o_website_best_deal">
-        <div class="container">
+        <div id="wrap" class="js_best_deal o_website_best_deal">
+        <section class="container">
             <div class="row mt8">
                 <div class="col-sm-7" id="best_deal_menu">
-                    <ol class="breadcrumb mb0" t-if="not best_deal.menu_id">
-                        <li><a href="/bestdeal">All Deals</a></li>
-                        <li t-if="best_deal.best_deal_type_id">
-                            <a t-attf-href="/bestdeal?type=#{best_deal.best_deal_type_id.id}" t-esc="best_deal.best_deal_type_id.name"/>
-                        </li>
-                        <li t-if="best_deal.country_id">
-                            <a t-attf-href="/bestdeal?country=#{best_deal.country_id.id}" t-esc="best_deal.country_id.name"/>
-                        </li>
-                        <li class="active">
-                            <span t-field="best_deal.name"/>
-                        </li>
-                    </ol>
-                    <ol name="Deal Menu" class="breadcrumb mb0" id="best_deal_menu" t-if="best_deal.menu_id" t-att-data-content_menu_id="editable and best_deal.menu_id.id">
-                        <t t-foreach="best_deal.menu_id.child_id" t-as="submenu">
-                            <t t-call="website.submenu"/>
-                        </t>
-                    </ol>
+                    <t t-call="website_best_deal.deal_breadcrumb">
+                        <t t-set="breadcrumb_class">mb0</t>
+                    </t>
+                    <t t-call="website_best_deal.deal_submenu">
+                        <t t-set="deal_submenu_class">mb0</t>
+                    </t>
                 </div>
                 <div class="col-sm-5" groups="best_deal.group_best_deal_manager">
                     <t t-call="website.publish_management">
@@ -228,11 +248,37 @@
                     </t>
                 </div>
             </div>
-        </div>
+        </section>
         <t t-raw="0"/>
         <div class="oe_structure"/>
-      </div>
+        </div>
     </t>
+</template>
+
+<template id="deal_breadcrumb" name="Deal Breadcrumb">
+    <ol t-if="not best_deal.menu_id" t-attf-class="breadcrumb #{ breadcrumb_class or '' }">
+        <li><a href="/bestdeal">Our Deals</a></li>
+        <li t-if="best_deal.best_deal_type_id">
+            <a t-attf-href="/bestdeal?type=#{best_deal.best_deal_type_id.id}" t-esc="best_deal.best_deal_type_id.name"/>
+        </li>
+        <li t-if="best_deal.country_id">
+            <a t-attf-href="/bestdeal?country=#{best_deal.country_id.id}" t-esc="best_deal.country_id.name"/>
+        </li>
+        <li t-if="best_deal.country_id">
+            <a t-attf-href="/bestdeal?country_state=#{best_deal.state_id.id}" t-esc="best_deal.state_id.name"/>
+        </li>
+        <li class="active">
+            <span t-field="best_deal.name"/>
+        </li>
+    </ol>
+</template>
+
+<template id="deal_submenu" name="Submenu of Deal">
+    <ol name="Deal Menu" t-attf-class="breadcrumb #{ deal_submenu_class or '' }" id="best_deal_menu" t-if="best_deal.menu_id" t-att-data-content_menu_id="editable and best_deal.menu_id.id">
+        <t t-foreach="best_deal.menu_id.child_id" t-as="submenu">
+        <t t-call="website.submenu"/>
+        </t>
+    </ol>
 </template>
 
 <template id="template_location">
@@ -266,7 +312,7 @@
 
 <template id="best_deal_details">
     <t t-call="website_best_deal.layout">
-        <div itemscope="itemscope" itemtype="http://schema.org/Deal" class="container">
+        <div itemscope="itemscope" itemtype="http://schema.org/Deal">
             <h1 itemprop="name" class="text-center" t-field="best_deal.name"></h1>
             <h4 class="text-center text-muted">
                 <i class="fa fa-clock-o"></i> <span itemprop="startDate" t-field="best_deal.with_context(tz=best_deal.date_tz).date_begin" t-field-options='{"hide_seconds":"True"}'/> to
@@ -276,81 +322,53 @@
             <h4 class="text-center text-muted"
                 t-field="best_deal.address_id" t-field-options='{
                 "widget": "contact",
-                "fields": ["city"]
+                "fields": ["city", "state_name", "state_id", "state"]
                 }'/>
-            <div class="row mt32 mb32">
-                <t t-raw="0"/>
-            </div>
-        </div>
-    </t>
-</template>
-
-<template id="404">
-    <t t-call="website.layout">
-        <div id="wrap">
-            <div class="oe_structure oe_empty">
-                <div class="container">
-                    <h1 class="mt32">Deal not found!</h1>
-                    <p>Sorry, the requested deal is not available anymore.</p>
-                    <p><a t-attf-href="/bestdeal">Return to the deal list.</a></p>
-                </div>
-            </div>
-        </div>
-    </t>
-</template>
-
-<template id="best_deal_description_full">
-    <t t-call="website_best_deal.best_deal_details">
-        <div class="col-md-8">
-            <t t-call="website_best_deal.booking_template"/>
-            <div class="clearfix"/>
-            <hr/>
+            
+            <t t-raw="0"/>
+            
+            
+            
             <div itemprop="description" t-field="best_deal.description"></div>
-            <div class="clearfix"/>
-            <ul class="media-list" id="comment">
-                <li t-foreach="best_deal.website_message_ids" t-as="comment" class="media">
-                    <div class="media-body">
-                        <t t-call="website.publish_management">
-                            <t t-set="object" t-value="comment"/>
-                            <t t-set="publish_edit" t-value="True"/>
-                        </t>
-                        <t t-raw="comment.body"/>
-                        <small class="pull-right muted text-right">
-                            <div t-field="comment.author_id"/>
-                            <div t-field="comment.date" t-field-options='{"hide_seconds":"True"}'/>
-                        </small>
-                    </div>
-                </li>
-            </ul>
+            
+            <t t-call="website_best_deal.best_deal_partner_social_stream"/>
+            
+            <t t-call="website_best_deal.best_deal_comments"/>
+            
         </div>
-        <div class="col-md-4 css_noprint">
+    </t>
+</template>
+
+<template id="best_deal_comments">
+    <section class="container">
+        <div class="row mt32 mb32">
+            <div class="col-md-12">
+                
+                <ul class="media-list" id="comment">
+                    <li t-foreach="best_deal.website_message_ids" t-as="comment" class="media">
+                        <div class="media-body">
+                            <t t-call="website.publish_management">
+                                <t t-set="object" t-value="comment"/>
+                                <t t-set="publish_edit" t-value="True"/>
+                            </t>
+                            <t t-raw="comment.body"/>
+                            <small class="pull-right muted text-right">
+                                <div t-field="comment.author_id"/>
+                                <div t-field="comment.date" t-field-options='{"hide_seconds":"True"}'/>
+                            </small>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+</template>
+
+<template id="best_deal_partner_social_stream">
+    <section class="container">
+    <div class="row mt32 mb32">
+        <div class="col-md-12 css_noprint">
             <div class="clearfix"/>
-
-            <div class="panel panel-default" t-if="best_deal.address_id">
-                <div class="panel-heading">
-                    <h4>Where</h4>
-                </div>
-                <div class="panel-body">
-                    <a t-att-href="best_deal.google_map_link()" target="_BLANK">
-                        <img t-att-src="best_deal.google_map_img()" width="100%%"/>
-                    </a>
-                    <div itemprop="location" class="mt16 mb8" t-field="best_deal.address_id" t-field-options='{
-                        "widget": "contact",
-                        "fields": ["address", "phone", "mobile", "fax", "email"]
-                        }'/>
-                </div>
-            </div>
-
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4>When</h4>
-                </div>
-                <div class="panel-body">
-                    <i class="fa fa-clock-o"></i> From <span t-field="best_deal.with_context(tz=best_deal.date_tz).date_begin" t-field-options='{"hide_seconds":"True"}'> </span><br/>
-                    <i class="fa fa-clock-o"></i> To <span t-field="best_deal.with_context(tz=best_deal.date_tz).date_end" t-field-options='{"hide_seconds":"True"}'> </span>
-                </div>
-            </div>
-
             <div class="panel panel-default" t-if="best_deal.partner_id">
                 <div class="panel-heading">
                     <h4>Partner</h4>
@@ -380,6 +398,67 @@
                 </div>
             </div>
         </div>
+    </div>
+    </section>
+</template>
+
+<template id="404">
+    <t t-call="website.layout">
+        <div id="wrap">
+            <div class="oe_structure oe_empty">
+                <div class="container">
+                    <h1 class="mt32">Deal not found!</h1>
+                    <p>Sorry, the requested deal is not available anymore.</p>
+                    <p><a t-attf-href="/bestdeal">Return to the deal list.</a></p>
+                </div>
+            </div>
+        </div>
+    </t>
+</template>
+
+<template id="best_deal_description_full">
+    <t t-call="website_best_deal.best_deal_details">
+    <section class="container">
+    <div class="row mt32 mb32">
+        <div class="col-md-8">
+            <t t-call="website_best_deal.booking_template"/>
+            <div class="clearfix"/>
+            <hr/>
+            <!--<span itemprop="image" t-field="best_deal.image" t-field-options='{"widget": "image", "class": "product_detail_img", "alt-field": "name"}'/>-->
+        </div>
+        <div class="col-md-4 css_noprint">
+            <div class="clearfix"/>
+
+            <div class="panel panel-default" t-if="best_deal.address_id">
+                <div class="panel-heading">
+                    <h4>Where</h4>
+                </div>
+                <div class="panel-body">
+                    <a t-att-href="best_deal.google_map_link()" target="_BLANK">
+                        <img t-att-src="best_deal.google_map_img()" width="100%%"/>
+                    </a>
+                    <div itemprop="location" class="mt16 mb8" t-field="best_deal.address_id" t-field-options='{
+                        "widget": "contact",
+                        "fields": ["address", "phone", "mobile", "fax", "email"]
+                        }'/>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>When</h4>
+                </div>
+                <div class="panel-body">
+                    <i class="fa fa-clock-o"></i> From <span t-field="best_deal.with_context(tz=best_deal.date_tz).date_begin" t-field-options='{"hide_seconds":"True"}'> </span><br/>
+                    <i class="fa fa-clock-o"></i> To <span t-field="best_deal.with_context(tz=best_deal.date_tz).date_end" t-field-options='{"hide_seconds":"True"}'> </span>
+                </div>
+            </div>
+
+            
+        </div>
+    </div>
+    </section>
+    
     </t>
 </template>
 

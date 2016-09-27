@@ -49,7 +49,7 @@
             <field name="inherit_id" ref="best_deal.view_best_deal_form"/>
             <field name="arch" type="xml">
                 <data>
-                    <xpath expr="//page[@name='bookings']" position="replace">
+                    <xpath expr="//page[@name='coupons']" position="replace">
                         <page string="Coupons">
                             <group>
                                 <group>
