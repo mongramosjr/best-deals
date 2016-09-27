@@ -42,10 +42,13 @@ class website_best_deal(http.Controller):
         best_deal_obj = request.registry['best.deal']
         best_deal_type_obj = request.registry['best.deal.type']
         country_obj = request.registry['res.country']
+        country_state_obj = request.registry['res.country.state']
+        
 
         searches.setdefault('date', 'all')
         searches.setdefault('type', 'all')
         searches.setdefault('country', 'all')
+        searches.setdefault('country_state', 'all')
 
         domain_search = {}
 
@@ -87,6 +90,8 @@ class website_best_deal(http.Controller):
         current_date = None
         current_type = None
         current_country = None
+        current_country_state = None
+        
         for date in dates:
             if searches["date"] == date[0]:
                 domain_search["date"] = date[2]
@@ -96,12 +101,16 @@ class website_best_deal(http.Controller):
             current_type = best_deal_type_obj.browse(cr, uid, int(searches['type']), context=context)
             domain_search["type"] = [("best_deal_type_id", "=", int(searches["type"]))]
 
+        if searches["country_state"] != 'all':
+            current_country_state = country_state_obj.browse(cr, uid, int(searches['country_state']), context=context)
+            domain_search["country_state"] = [("state_id", "=", int(searches["country_state"]))]
+            
         if searches["country"] != 'all' and searches["country"] != 'online':
             current_country = country_obj.browse(cr, uid, int(searches['country']), context=context)
             domain_search["country"] = ['|', ("country_id", "=", int(searches["country"])), ("country_id", "=", False)]
         elif searches["country"] == 'online':
             domain_search["country"] = [("country_id", "=", False)]
-
+            
         def dom_without(without):
             domain = [('state', "in", ['draft', 'confirm', 'done'])]
             for key, search in domain_search.items():
@@ -127,6 +136,7 @@ class website_best_deal(http.Controller):
             'best_deal_type_id': ("all", _("All Categories"))
         })
 
+        #country
         domain = dom_without('country')
         countries = best_deal_obj.read_group(
             request.cr, request.uid, domain, ["id", "country_id"],
@@ -137,14 +147,31 @@ class website_best_deal(http.Controller):
             'country_id_count': country_id_count,
             'country_id': ("all", _("All Countries"))
         })
+        
+        #state
+        domain = dom_without('country_state')
+        country_states = best_deal_obj.read_group(
+            request.cr, request.uid, domain, ["id", "state_id"],
+            groupby="state_id", orderby="state_id", context=request.context)
+        country_state_id_count = best_deal_obj.search(request.cr, request.uid, domain,
+                                            count=True, context=request.context)
+        country_states.insert(0, {
+            'country_state_id_count': country_state_id_count,
+            'country_state_id': ("all", _("All States/Provinces"))
+        })
 
-        step = 10  # Number of deals per page
+        step = 8  # Number of deals per page
         best_deal_count = best_deal_obj.search(
             request.cr, request.uid, dom_without("none"), count=True,
             context=request.context)
         pager = request.website.pager(
             url="/bestdeal",
-            url_args={'date': searches.get('date'), 'type': searches.get('type'), 'country': searches.get('country')},
+            url_args={
+                'date': searches.get('date'), 
+                'type': searches.get('type'), 
+                'country': searches.get('country'),
+                'country_state': searches.get('country_state')
+                },
             total=best_deal_count,
             page=page,
             step=step,
@@ -162,11 +189,13 @@ class website_best_deal(http.Controller):
         values = {
             'current_date': current_date,
             'current_country': current_country,
+            'current_country_state': current_country_state,
             'current_type': current_type,
             'best_deal_ids': best_deal_ids,
             'dates': dates,
             'types': types,
             'countries': countries,
+            'country_states': country_states,
             'pager': pager,
             'searches': searches,
             'search_path': "?%s" % werkzeug.url_encode(searches),

@@ -191,6 +191,10 @@ class BestDeal(models.Model):
         readonly=False, states={'done': [('readonly', True)]})
     country_id = fields.Many2one('res.country', 'Country',  related='address_id.country_id', store=True)
     state_id = fields.Many2one('res.country.state', 'State',  related='address_id.state_id', store=True)
+    
+    country_name = fields.Char('Country Name',  related='address_id.country_id.name', store=True)
+    state_name = fields.Char('State Name',  related='address_id.state_id.name', store=True)
+    
     description = fields.Html(
         string='Description', translate=True,
         readonly=False, states={'done': [('readonly', True)]})
