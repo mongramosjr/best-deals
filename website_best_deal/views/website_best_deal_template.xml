@@ -4,6 +4,7 @@
 
 <template id="best_deal_script" inherit_id="website.assets_frontend" name="Country Deals Snippet Script">
     <xpath expr="/t" position="inside">
+        <link rel="stylesheet" href="/website_best_deal/static/src/css/website_best_deal.css"/>
         <script type="text/javascript" src="/website_best_deal/static/src/js/website_geolocation.js"></script>
         <script type="text/javascript" src="/website_best_deal/static/src/js/website_best_deal.js"></script>
     </xpath>
@@ -37,7 +38,7 @@
                 </div>
                 <div class="col-sm-7">
                     <t t-call="website.pager" >
-                        <t t-set="classname">pull-right</t>
+                        <t t-set="classname">pull-right pagination_best_deal</t>
                     </t>
                 </div>
             </div>
