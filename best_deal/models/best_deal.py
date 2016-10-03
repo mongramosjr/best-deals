@@ -22,8 +22,10 @@
 
 import pytz
 
-from openerp import _, api, fields, models
+from openerp import tools, models, fields, api,  _
 from openerp.exceptions import AccessError, UserError
+
+from . import best_deal_image
 
 class BestDealType(models.Model):
     """ Best Deal Type """
@@ -195,6 +197,38 @@ class BestDeal(models.Model):
     country_name = fields.Char('Country Name',  related='address_id.country_id.name', store=True)
     state_name = fields.Char('State Name',  related='address_id.state_id.name', store=True)
     
+    
+    #image
+    image = fields.Binary("Image", attachment=True,
+        help="This field holds the image used as image for the deal, limited to 1440x1080px.")
+        
+    image_icon = fields.Binary("Icon image", attachment=True,
+        help="Medium-sized image of the deal. It is automatically "\
+             "resized as a 128x128px image, with aspect ratio preserved, "\
+             "only when the image exceeds one of those sizes. Use this field in form views or some kanban views.")
+ 
+    image_wide = fields.Binary("Icon image", attachment=True,
+        help="Medium-sized image of the deal. It is automatically "\
+             "resized as a 1280 × 720 image, with aspect ratio preserved, "\
+             "only when the image exceeds one of those sizes. Use this field in slides, banner or full background")
+ 
+    @api.model
+    def _get_default_image(self, colorize=False):
+        if getattr(threading.currentThread(), 'testing', False) or self.env.context.get('install_mode'):
+            return False
+
+        img_path = openerp.modules.get_module_resource(
+            'best_deal', 'static/src/img', 'best_deal.png')
+        
+        with open(img_path, 'rb') as f:
+            image = f.read()
+
+        # colorize deal
+        if colorize:
+            image = tools.image_colorize(image)
+
+        return best_deal_image.deal_image_resize_image_banner(image.encode('base64'))
+    
     description = fields.Html(
         string='Description', translate=True,
         readonly=False, states={'done': [('readonly', True)]})
@@ -232,7 +266,15 @@ class BestDeal(models.Model):
 
     @api.model
     def create(self, vals):
+        
+        #if not vals.get('image'):
+            ## force no colorize for images with no transparency
+            #vals['image'] = self._get_default_image(False)
+        
+        best_deal_image.deal_image_resize_images(vals)
+        
         res = super(BestDeal, self).create(vals)
+        
         if res.partner_id:
             res.message_subscribe([res.partner_id.id])
         if res.auto_confirm:
@@ -241,7 +283,11 @@ class BestDeal(models.Model):
 
     @api.multi
     def write(self, vals):
+        
+        best_deal_image.deal_image_resize_images(vals)
+        
         res = super(BestDeal, self).write(vals)
+        
         if vals.get('partner_id'):
             self.message_subscribe([vals['partner_id']])
         return res

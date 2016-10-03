@@ -21,6 +21,7 @@
 ##############################################################################
 
 import best_deal
+import best_deal_image
 import best_deal_mail
 import best_deal_config_settings
 
