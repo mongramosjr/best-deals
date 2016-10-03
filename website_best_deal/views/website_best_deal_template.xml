@@ -316,7 +316,7 @@
         <div itemscope="itemscope" itemtype="http://schema.org/Deal">
             <h1 itemprop="name" class="text-center" t-field="best_deal.name"></h1>
             <h4 class="text-center text-muted">
-                <i class="fa fa-clock-o"></i> <span itemprop="startDate" t-field="best_deal.with_context(tz=best_deal.date_tz).date_begin" t-field-options='{"hide_seconds":"True"}'/> to
+                <i class="fa fa-clock-o"></i> Stay Period: <span itemprop="startDate" t-field="best_deal.with_context(tz=best_deal.date_tz).date_begin" t-field-options='{"hide_seconds":"True"}'/> to
                 <span itemprop="endDate" t-field="best_deal.with_context(tz=best_deal.date_tz).date_end" t-field-options='{"hide_seconds":"True"}'/>
                 <t t-if="best_deal.date_tz">(<span t-field="best_deal.date_tz"/>)</t>
             </h4>
@@ -327,8 +327,6 @@
                 }'/>
             
             <t t-raw="0"/>
-            
-            
             
             <div itemprop="description" t-field="best_deal.description"></div>
             
@@ -420,12 +418,13 @@
 <template id="best_deal_description_full">
     <t t-call="website_best_deal.best_deal_details">
     <section class="container">
-    <div class="row mt32 mb32">
+    <div class="row mt32">
         <div class="col-md-8">
             <t t-call="website_best_deal.booking_template"/>
             <div class="clearfix"/>
-            <hr/>
-            <!--<span itemprop="image" t-field="best_deal.image" t-field-options='{"widget": "image", "class": "product_detail_img", "alt-field": "name"}'/>-->
+            <div id="deal_banner">
+            <span itemprop="image" t-field="best_deal.image_wide" t-field-options='{"widget": "image", "class": "deal_detail_img", "alt-field": "name"}'/>
+            </div>
         </div>
         <div class="col-md-4 css_noprint">
             <div class="clearfix"/>
@@ -471,7 +470,7 @@
             <thead>
                 <tr>
                     <th>Coupon Type</th>
-                    <th style="min-width: 100px">End of Subscription</th>
+                    <th style="min-width: 100px">End of Booking</th>
                     <th style="min-width: 100px">Price</th>
                     <th></th>
                     <th>Quantity</th>
@@ -479,7 +478,7 @@
             </thead>
             <tbody>
                 <tr t-if="best_deal.state == 'confirm'">
-                    <td>Deal Subscription</td>
+                    <td>Promo</td>
                     <td>
                         <t t-if="best_deal.date_begin">
                             <span t-esc="best_deal.date_begin_located[:-3]"/>
@@ -509,6 +508,7 @@
                 <i class="fa fa-plus-circle"><a t-attf-href="/web#id=#{best_deal.id}&amp;view_type=form&amp;model=best.deal"> <em>Configure and Launch Deal Booking</em></a></i>
             </t>
         </div>
+        
     </form>
 </template>
 
@@ -571,21 +571,21 @@
 <template id="booking_complete" name="Booking Completed">
     <t t-call="website.layout">
         <div class="container">
-            <h3>We are glad to confirm your subscription to our deal</h3>
+            <h3>We are glad to confirm your booking to our deal</h3>
             <div class="row">
                 <div class="col-md-3 mt16">
-                    <h4>Deal Details</h4>
+                    <h4>Booking Details</h4>
                 </div>
                 <div class="col-md-9 mt16">
                     <h4><a t-attf-href="/bestdeal/#{slug(best_deal)}"><t t-esc="best_deal.name"/></a></h4>
-                    <i class="fa fa-clock-o"/> <span itemprop="startDate" t-esc="best_deal.date_begin_located[:-3]"> </span> <i>to</i> <span itemprop="endDate" t-esc="best_deal.date_end_located[:-3]"> </span>
+                    <i class="fa fa-clock-o"/> Stay Period: <span itemprop="startDate" t-esc="best_deal.date_begin_located[:-3]"> </span> <i>to</i> <span itemprop="endDate" t-esc="best_deal.date_end_located[:-3]"> </span>
                     <div itemprop="location" class="mt16 mb8" t-field="best_deal.address_id" t-field-options='{
                             "widget": "contact",
                             "fields": ["address", "phone", "mobile", "fax", "email"]
                             }'/>
                 </div>
                 <div class="col-md-3 mt16">
-                    <h4>Your subscription</h4>
+                    <h4>Contact Details</h4>
                 </div>
                 <div class="col-md-9 mt16">
                     <table class='table table-bordered table-striped'>

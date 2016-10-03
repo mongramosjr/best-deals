@@ -79,6 +79,7 @@
                                 <field name="coupons_expected" widget="statinfo" string="Coupons"/>
                             </button>
                         </div>
+                        <field name="image_icon" widget="image" class="oe_avatar"/>
                         <div class="oe_title">
                             <label for="name" class="oe_edit_only"/>
                             <h1><field name="name" placeholder="Deal Name"/></h1>

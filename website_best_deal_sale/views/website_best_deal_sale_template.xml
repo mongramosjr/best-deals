@@ -85,6 +85,12 @@
     </xpath>
 </template>
 
+<template id="best_deal_description_full" inherit_id="website_best_deal.best_deal_description_full">
+    <xpath expr="//div[@id='deal_banner']" position="attributes">
+        <attribute name="t-att-class">best_deal.best_deal_coupon_ids and 'mb16 mt16' or 'mb16'</attribute>
+    </xpath>
+</template>
+
 <template id="cart" inherit_id="website_sale.cart_lines" name="Hide product reduction for deal coupons">
     <xpath expr="//del" position="attributes">
         <attribute name="t-attf-class" separator=" " add="#{line.best_deal_id and 'hidden' or ''}"/>
