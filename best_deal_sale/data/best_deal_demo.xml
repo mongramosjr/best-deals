@@ -3,20 +3,7 @@
     <data>
 
     <record id="best_deal_0_product" model="product.product">
-        <field name="name">Deal - Open Days in Los Angeles</field>
-        <field name="best_deal_ok">True</field>
-        <field name="best_deal_type_id" ref="best_deal.best_deal_type_1"/>
-        <field name="categ_id" ref="product.product_category_1"/>
-        <field name="type">service</field>
-        <field name="list_price">2500.0</field>
-        <field name="standard_price">1000.0</field>
-        <field name="uom_id" ref="product.product_uom_unit"/>
-        <field name="uom_po_id" ref="product.product_uom_unit"/>
-        <field name="image" type="base64" file="best_deal_sale/static/img/best_deal_product-image.jpg"/>
-    </record>
-
-    <record id="best_deal_1_product" model="product.product">
-        <field name="name">Deal - Functional Webinar</field>
+        <field name="name">Deal - Summer Hurrah!</field>
         <field name="best_deal_ok">True</field>
         <field name="best_deal_type_id" ref="best_deal.best_deal_type_0"/>
         <field name="categ_id" ref="product.product_category_1"/>
@@ -28,8 +15,21 @@
         <field name="image" type="base64" file="best_deal_sale/static/img/best_deal_product-image.jpg"/>
     </record>
 
+    <record id="best_deal_1_product" model="product.product">
+        <field name="name">Deal - Tour Package</field>
+        <field name="best_deal_ok">True</field>
+        <field name="best_deal_type_id" ref="best_deal.best_deal_type_1"/>
+        <field name="categ_id" ref="product.product_category_1"/>
+        <field name="type">service</field>
+        <field name="list_price">2500.0</field>
+        <field name="standard_price">1000.0</field>
+        <field name="uom_id" ref="product.product_uom_unit"/>
+        <field name="uom_po_id" ref="product.product_uom_unit"/>
+        <field name="image" type="base64" file="best_deal_sale/static/img/best_deal_product-image.jpg"/>
+    </record>
+
     <record id="best_deal_2_product" model="product.product">
-        <field name="name">Deal - Conference on Business Applications</field>
+        <field name="name">Deal - Staycation</field>
         <field name="best_deal_ok">True</field>
         <field name="best_deal_type_id" ref="best_deal.best_deal_type_2"/>
         <field name="categ_id" ref="product.product_category_1"/>
@@ -42,11 +42,24 @@
     </record>
 
     <record id="best_deal.best_deal_3" model="best.deal">
-        <field name="partner_id" ref="base.res_partner_address_4"/>
+        <field name="partner_id" ref="best_deal.resort_partner_1"/>
     </record>
 
     <record id="best_deal_3_product" model="product.product">
-        <field name="name">Deal - Technical Training</field>
+        <field name="name">Deal - Holiday Getaway</field>
+        <field name="best_deal_ok">True</field>
+        <field name="best_deal_type_id" ref="best_deal.best_deal_type_3"/>
+        <field name="categ_id" ref="product.product_category_1"/>
+        <field name="type">service</field>
+        <field name="list_price">2500.0</field>
+        <field name="standard_price">1000.0</field>
+        <field name="uom_id" ref="product.product_uom_unit"/>
+        <field name="uom_po_id" ref="product.product_uom_unit"/>
+        <field name="image" type="base64" file="best_deal_sale/static/img/best_deal_product-image.jpg"/>
+    </record>
+    
+    <record id="best_deal_4_product" model="product.product">
+        <field name="name">Deal - Island Adventure</field>
         <field name="best_deal_ok">True</field>
         <field name="best_deal_type_id" ref="best_deal.best_deal_type_4"/>
         <field name="categ_id" ref="product.product_category_1"/>
@@ -81,7 +94,7 @@
         <field name="name">Standard</field>
         <field name="best_deal_id" ref="best_deal.best_deal_1"/>
         <field name="product_id" ref="best_deal_1_product"/>
-        <field name="deadline" eval="(DateTime.today() + timedelta(90)).strftime('%Y-%m-%d')"/>
+        <field name="deadline" eval="(DateTime.today() + timedelta(60)).strftime('%Y-%m-%d')"/>
         <field name="price">1000.0</field>
         <field name="coupons_max">60</field>
     </record>
@@ -91,7 +104,7 @@
         <field name="name">Standard</field>
         <field name="best_deal_id" ref="best_deal.best_deal_2"/>
         <field name="product_id" ref="best_deal_2_product"/>
-        <field name="deadline" eval="(DateTime.today() + timedelta(90)).strftime('%Y-%m-%d')"/>
+        <field name="deadline" eval="(DateTime.today() + timedelta(65)).strftime('%Y-%m-%d')"/>
         <field name="price">1000.0</field>
         <field name="coupons_max">50</field>
     </record>
@@ -100,7 +113,7 @@
         <field name="name">VIP</field>
         <field name="best_deal_id" ref="best_deal.best_deal_2"/>
         <field name="product_id" ref="best_deal_2_product"/>
-        <field name="deadline" eval="(DateTime.today() + timedelta(60)).strftime('%Y-%m-%d')"/>
+        <field name="deadline" eval="(DateTime.today() + timedelta(70)).strftime('%Y-%m-%d')"/>
         <field name="price">1500.0</field>
         <field name="coupons_max">5</field>
     </record>
@@ -109,7 +122,7 @@
         <field name="name">Standard</field>
         <field name="best_deal_id" ref="best_deal.best_deal_3"/>
         <field name="product_id" ref="best_deal_3_product"/>
-        <field name="deadline" eval="(DateTime.today() + timedelta(90)).strftime('%Y-%m-%d')"/>
+        <field name="deadline" eval="(DateTime.today() + timedelta(75)).strftime('%Y-%m-%d')"/>
         <field name="price">1000.0</field>
         <field name="coupons_max">20</field>
     </record>
@@ -118,9 +131,54 @@
         <field name="name">VIP</field>
         <field name="best_deal_id" ref="best_deal.best_deal_3"/>
         <field name="product_id" ref="best_deal_3_product"/>
-        <field name="deadline" eval="(DateTime.today() + timedelta(60)).strftime('%Y-%m-%d')"/>
+        <field name="deadline" eval="(DateTime.today() + timedelta(80)).strftime('%Y-%m-%d')"/>
         <field name="price">1500.0</field>
         <field name="coupons_max">5</field>
+    </record>
+    
+    <record id="best_deal_4_coupon_1" model="best.deal.coupon">
+        <field name="name">Executive</field>
+        <field name="best_deal_id" ref="best_deal.best_deal_4"/>
+        <field name="product_id" ref="best_deal_4_product"/>
+        <field name="deadline" eval="(DateTime.today() + timedelta(90)).strftime('%Y-%m-%d')"/>
+        <field name="price">1000.0</field>
+        <field name="coupons_max">20</field>
+    </record>
+    
+    <record id="best_deal_5_coupon_1" model="best.deal.coupon">
+        <field name="name">Executive</field>
+        <field name="best_deal_id" ref="best_deal.best_deal_5"/>
+        <field name="product_id" ref="best_deal_0_product"/>
+        <field name="deadline" eval="(DateTime.today() + timedelta(60)).strftime('%Y-%m-%d')"/>
+        <field name="price">1000.0</field>
+        <field name="coupons_max">20</field>
+    </record>
+    
+    <record id="best_deal_6_coupon_1" model="best.deal.coupon">
+        <field name="name">Presidential</field>
+        <field name="best_deal_id" ref="best_deal.best_deal_6"/>
+        <field name="product_id" ref="best_deal_1_product"/>
+        <field name="deadline" eval="(DateTime.today() + timedelta(68)).strftime('%Y-%m-%d')"/>
+        <field name="price">1000.0</field>
+        <field name="coupons_max">20</field>
+    </record>
+    
+    <record id="best_deal_7_coupon_1" model="best.deal.coupon">
+        <field name="name">Superior</field>
+        <field name="best_deal_id" ref="best_deal.best_deal_7"/>
+        <field name="product_id" ref="best_deal_2_product"/>
+        <field name="deadline" eval="(DateTime.today() + timedelta(76)).strftime('%Y-%m-%d')"/>
+        <field name="price">1000.0</field>
+        <field name="coupons_max">20</field>
+    </record>
+    
+    <record id="best_deal_8_coupon_1" model="best.deal.coupon">
+        <field name="name">Premier</field>
+        <field name="best_deal_id" ref="best_deal.best_deal_8"/>
+        <field name="product_id" ref="best_deal_3_product"/>
+        <field name="deadline" eval="(DateTime.today() + timedelta(84)).strftime('%Y-%m-%d')"/>
+        <field name="price">1000.0</field>
+        <field name="coupons_max">20</field>
     </record>
 
 

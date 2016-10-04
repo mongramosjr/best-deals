@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="false">
+        
+        <record id="best_deal.best_deal_0" model="best.deal">
+            <field name="image" type="base64" file="website_best_deal/static/src/img/boracay_regency/deluxe_northwing.jpg"/>
+        </record>
+
+        <record id="best_deal.best_deal_1" model="best.deal">
+            <field name="image" type="base64" file="website_best_deal/static/src/img/boracay_regency/eastwing_poolbar.jpg"/>
+        </record>
+
+        <record id="best_deal.best_deal_2" model="best.deal">
+            <field name="image" type="base64" file="website_best_deal/static/src/img/boracay_regency/exec_suite.jpg"/>
+        </record>
+
+        <record id="best_deal.best_deal_3" model="best.deal">
+            <field name="image" type="base64" file="website_best_deal/static/src/img/boracay_regency/family_room.jpg"/>
+        </record>
+
+        <record id="best_deal.best_deal_4" model="best.deal">
+            <field name="image" type="base64" file="website_best_deal/static/src/img/boracay_regency/gym.jpg"/>
+        </record>
+
+        <record id="best_deal.best_deal_5" model="best.deal">
+            <field name="image" type="base64" file="website_best_deal/static/src/img/boracay_regency/h_suite.jpg"/>
+        </record>
+
+        <record id="best_deal.best_deal_6" model="best.deal">
+            <field name="image" type="base64" file="website_best_deal/static/src/img/boracay_regency/premier_wdpa.jpg"/>
+        </record>
+
+        <record id="best_deal.best_deal_7" model="best.deal">
+            <field name="image" type="base64" file="website_best_deal/static/src/img/boracay_regency/pres_suite_1.jpg"/>
+        </record>
+
+        <record id="best_deal.best_deal_8" model="best.deal">
+            <field name="image" type="base64" file="website_best_deal/static/src/img/boracay_regency/superior.jpg"/>
+        </record>
+    </data>
+</openerp>

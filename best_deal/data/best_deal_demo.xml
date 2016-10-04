@@ -167,10 +167,11 @@
         <field name="name">Island Adventure</field>
     </record>
     
+    <!-- Demo Data for Deal -->
     <record id="best_deal_0" model="best.deal">
         <field name="name">Misibis Bay Beach Resort</field>
         <field eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d 8:00:00')" name="date_begin"/>
-        <field eval="(DateTime.now() + timedelta(days=5)).strftime('%Y-%m-%d 18:00:00')" name="date_end"/>
+        <field eval="(DateTime.now() + timedelta(days=120)).strftime('%Y-%m-%d 18:00:00')" name="date_end"/>
         <field name="coupons_availability">limited</field>
         <field name="coupons_max">500</field>
         <field name="address_id" ref="best_deal.resort_partner_4"/>
@@ -180,7 +181,7 @@
     <record id="best_deal_1" model="best.deal">
         <field name="name">Ocean Suites Boutique Hotel</field>
         <field eval="(DateTime.now() + timedelta(days=3)).strftime('%Y-%m-%d 7:00:00')" name="date_begin"/>
-        <field eval="(DateTime.now() + timedelta(days=3)).strftime('%Y-%m-%d 11:00:00')" name="date_end"/>
+        <field eval="(DateTime.now() + timedelta(days=115)).strftime('%Y-%m-%d 11:00:00')" name="date_end"/>
         <field name="best_deal_type_id" ref="best_deal_type_1"/>
         <field name="address_id" ref="best_deal.resort_partner_3"/>
         <field name="coupons_availability">limited</field>
@@ -190,7 +191,7 @@
     <record id="best_deal_2" model="best.deal">
         <field name="name">Hennan Lagoon Resort</field>
         <field eval="(DateTime.today()+ timedelta(days=5)).strftime('%Y-%m-%d 7:00:00')" name="date_begin"/>
-        <field eval="(DateTime.today()+ timedelta(days=5)).strftime('%Y-%m-%d 16:30:00')" name="date_end"/>
+        <field eval="(DateTime.today()+ timedelta(days=118)).strftime('%Y-%m-%d 16:30:00')" name="date_end"/>
         <field name="best_deal_type_id" ref="best_deal_type_2"/>
         <field name="address_id" ref="best_deal.resort_partner_2"/>
         <field name="coupons_availability">limited</field>
@@ -200,7 +201,7 @@
     <record id="best_deal_3" model="best.deal">
         <field name="name">Boracay Regency Beach Resort.</field>
         <field eval="(DateTime.now() + timedelta(15)).strftime('%Y-%m-%d 7:00:00')" name="date_begin"/>
-        <field eval="(DateTime.now() + timedelta(20)).strftime('%Y-%m-%d 16:00:00')" name="date_end"/>
+        <field eval="(DateTime.now() + timedelta(124)).strftime('%Y-%m-%d 16:00:00')" name="date_end"/>
         <field name="best_deal_type_id" ref="best_deal_type_3"/>
         <field name="user_id" ref="base.user_root"/>
         <field name="address_id" ref="best_deal.resort_partner_1"/>
@@ -210,8 +211,8 @@
     <record id="best_deal_4" model="best.deal">
         <field name="name">El Nido Lagen Island</field>
         <field eval="(DateTime.now() + timedelta(15)).strftime('%Y-%m-%d 7:00:00')" name="date_begin"/>
-        <field eval="(DateTime.now() + timedelta(20)).strftime('%Y-%m-%d 16:00:00')" name="date_end"/>
-        <field name="best_deal_type_id" ref="best_deal_type_3"/>
+        <field eval="(DateTime.now() + timedelta(130)).strftime('%Y-%m-%d 16:00:00')" name="date_end"/>
+        <field name="best_deal_type_id" ref="best_deal_type_4"/>
         <field name="user_id" ref="base.user_root"/>
         <field name="address_id" ref="best_deal.resort_partner_5"/>
         <field name="coupons_availability">unlimited</field>
@@ -220,18 +221,18 @@
     <record id="best_deal_5" model="best.deal">
         <field name="name">Shangri-La's Mactan Resort and Spa</field>
         <field eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d 8:00:00')" name="date_begin"/>
-        <field eval="(DateTime.now() + timedelta(days=5)).strftime('%Y-%m-%d 18:00:00')" name="date_end"/>
+        <field eval="(DateTime.now() + timedelta(days=145)).strftime('%Y-%m-%d 18:00:00')" name="date_end"/>
         <field name="coupons_availability">limited</field>
         <field name="coupons_max">500</field>
         <field name="address_id" ref="best_deal.resort_partner_6"/>
-        <field name="best_deal_type_id" ref="best_deal_type_1"/>
+        <field name="best_deal_type_id" ref="best_deal_type_0"/>
     </record>
 
     <record id="best_deal_6" model="best.deal">
         <field name="name">Plantation Bay Resort and Spa</field>
         <field eval="(DateTime.now() + timedelta(days=3)).strftime('%Y-%m-%d 7:00:00')" name="date_begin"/>
-        <field eval="(DateTime.now() + timedelta(days=3)).strftime('%Y-%m-%d 11:00:00')" name="date_end"/>
-        <field name="best_deal_type_id" ref="best_deal_type_0"/>
+        <field eval="(DateTime.now() + timedelta(days=133)).strftime('%Y-%m-%d 11:00:00')" name="date_end"/>
+        <field name="best_deal_type_id" ref="best_deal_type_1"/>
         <field name="address_id" ref="best_deal.resort_partner_7"/>
         <field name="coupons_availability">limited</field>
         <field name="coupons_max">350</field>
@@ -240,7 +241,7 @@
     <record id="best_deal_7" model="best.deal">
         <field name="name">Pearl Farm Beach Resort</field>
         <field eval="(DateTime.today()+ timedelta(days=5)).strftime('%Y-%m-%d 7:00:00')" name="date_begin"/>
-        <field eval="(DateTime.today()+ timedelta(days=5)).strftime('%Y-%m-%d 16:30:00')" name="date_end"/>
+        <field eval="(DateTime.today()+ timedelta(days=115)).strftime('%Y-%m-%d 16:30:00')" name="date_end"/>
         <field name="best_deal_type_id" ref="best_deal_type_2"/>
         <field name="address_id" ref="best_deal.resort_partner_8"/>
         <field name="coupons_availability">limited</field>
@@ -250,14 +251,22 @@
     <record id="best_deal_8" model="best.deal">
         <field name="name">Amanpulo</field>
         <field eval="(DateTime.now() + timedelta(15)).strftime('%Y-%m-%d 7:00:00')" name="date_begin"/>
-        <field eval="(DateTime.now() + timedelta(20)).strftime('%Y-%m-%d 16:00:00')" name="date_end"/>
-        <field name="best_deal_type_id" ref="best_deal_type_4"/>
+        <field eval="(DateTime.now() + timedelta(120)).strftime('%Y-%m-%d 16:00:00')" name="date_end"/>
+        <field name="best_deal_type_id" ref="best_deal_type_3"/>
         <field name="user_id" ref="base.user_root"/>
         <field name="address_id" ref="best_deal.resort_partner_9"/>
         <field name="coupons_availability">unlimited</field>
     </record>
     
+    <function model="best.deal" name="button_confirm" eval="[ref('best_deal_0')]"/>
+    <function model="best.deal" name="button_confirm" eval="[ref('best_deal_1')]"/>
+    <function model="best.deal" name="button_confirm" eval="[ref('best_deal_2')]"/>
+    <function model="best.deal" name="button_confirm" eval="[ref('best_deal_3')]"/>
+    <function model="best.deal" name="button_confirm" eval="[ref('best_deal_4')]"/>
+    <function model="best.deal" name="button_confirm" eval="[ref('best_deal_5')]"/>
     <function model="best.deal" name="button_confirm" eval="[ref('best_deal_6')]"/>
+    <function model="best.deal" name="button_confirm" eval="[ref('best_deal_7')]"/>
+    <function model="best.deal" name="button_confirm" eval="[ref('best_deal_8')]"/>
 
 
 <!-- Demo data for Deal Booking-->

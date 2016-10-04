@@ -526,15 +526,15 @@
                         <div class="container">
                             <t t-set="counter_type" t-value="1"/>
                             <t t-set="counter" t-value="0"/>
-                            <t t-foreach="tickets" t-as="ticket">
+                            <t t-foreach="coupons" t-as="coupon">
                                 <h4 class="page-header mt16">
                                     <strong>
-                                        Coupon Type #<t t-raw="counter_type"/>: <t t-esc="ticket['name']"/> (
-                                        <t t-if="ticket['price'] > 0">
-                                            <t t-esc="ticket['price']"/>
+                                        Coupon Type #<t t-raw="counter_type"/>: <t t-esc="coupon['name']"/> (
+                                        <t t-if="coupon['price'] > 0">
+                                            <t t-esc="coupon['price']"/>
                                             <t t-esc="website.pricelist_id.currency_id.symbol"/>
                                         </t>
-                                        <t t-if="ticket['price'] == 0">Free</t>)
+                                        <t t-if="coupon['price'] == 0">Free</t>)
                                     </strong>
                                 </h4>
                                 <div class="row">
@@ -542,14 +542,14 @@
                                     <div class="col-md-5"><strong>Email</strong></div>
                                     <div class="col-md-3"><strong>Phone</strong> <span class="text-muted">(Optional)</span></div>
                                 </div>
-                                <t t-foreach="range(1, ticket['quantity'] + 1)" t-as="att_counter" name="customer_loop">
+                                <t t-foreach="range(1, coupon['quantity'] + 1)" t-as="att_counter" name="customer_loop">
                                     <t t-set="counter" t-value="counter + 1"/>
                                     <div class="row mb4">
                                         <t t-set="customer_placeholder">Customer #%s</t>
                                         <div class="col-md-4"><input class='form-control' type='text' t-attf-name="#{counter}-name" required="This field is required" t-att-placeholder="customer_placeholder %counter"/></div>
                                         <div class="col-md-5"><input class='form-control' type='email' t-attf-name="#{counter}-email" required="This field is required"/></div>
                                         <div class="col-md-3"><input class='form-control' type='tel' t-attf-name="#{counter}-phone"/></div>
-                                        <input class='hidden' type='text' t-attf-name="#{counter}-ticket_id" t-attf-value="#{ticket['id']}"/>
+                                        <input class='hidden' type='text' t-attf-name="#{counter}-coupon_id" t-attf-value="#{coupon['id']}"/>
                                     </div>
                                 </t>
                                 <t t-set="counter_type" t-value="counter_type + 1"/>

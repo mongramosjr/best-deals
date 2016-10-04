@@ -43,7 +43,8 @@ Online Discounts and Coupons
         'static/src/xml/*.xml'
     ],
     'demo': [
-        'data/best_deal_demo.xml'
+        'data/best_deal_demo.xml',
+        'data/best_deal_image_demo.xml'
     ],
     'installable': True,
     'application': True,
