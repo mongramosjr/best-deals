@@ -11,7 +11,7 @@
             <field name="city">Malay</field>
             <field name="zip">5608</field>
             <field name="country_id" ref="base.ph"/>
-            <field model="res.country.state" name="state_id" search="[('name','ilike','Aklan')]"/>
+            <field model="res.country.state" name="state_id" search="[('name','ilike','aklan')]"/>
             <field name="street">Station 2 Balabag Boracay Island</field>
             <field name="email">reservations@hennan.com</field>
             <field name="phone">(+63) (36) 288 6111</field>
@@ -24,7 +24,7 @@
             <field name="city">Malay</field>
             <field name="zip">5608</field>
             <field name="country_id" ref="base.ph"/>
-            <field model="res.country.state" name="state_id" search="[('name','ilike','Aklan')]"/>
+            <field model="res.country.state" name="state_id" search="[('name','ilike','aklan')]"/>
             <field name="street">Station 2 Balabag Boracay Island</field>
             <field name="email">reservations@hennan.com</field>
             <field name="phone">+63 36 288 2828</field>
@@ -38,7 +38,7 @@
             <field name="city">Tagbiliran</field>
             <field name="zip">6308</field>
             <field name="country_id" ref="base.ph"/>
-            <field model="res.country.state" name="state_id" search="[('name','ilike','Bohol')]"/>
+            <field model="res.country.state" name="state_id" search="[('name','ilike','bohol')]"/>
             <field name="street">Blood Compact Shrine, East Tagbiliran Road, Brgy. Bool</field>
             <field name="email">oceansuitesbohol@gmail.com</field>
             <field name="phone">+63 38 411 1031</field>
@@ -54,7 +54,7 @@
             <field name="city">Bacacay</field>
             <field name="zip">4509</field>
             <field name="country_id" ref="base.ph"/>
-            <field model="res.country.state" name="state_id" search="[('name','ilike','Albay')]"/>
+            <field model="res.country.state" name="state_id" search="[('name','ilike','albay')]"/>
             <field name="street">Misibis, Cagraray Island</field>
             <field name="email">reservations@misibisbay.com</field>
             <field name="phone">+63 917 599 1606</field>
@@ -70,7 +70,7 @@
             <field name="city">El Nido</field>
             <field name="zip">5313</field>
             <field name="country_id" ref="base.ph"/>
-            <field model="res.country.state" name="state_id" search="[('name','ilike','Palawan')]"/>
+            <field model="res.country.state" name="state_id" search="[('name','ilike','palawan')]"/>
             <field name="street">Lagen Island</field>
             <field name="email">inquiry@elnidoresorts.com</field>
             <field name="phone">(+63) (02) 902 5980</field>
@@ -83,7 +83,7 @@
             <field name="city">Lapu-Lapu</field>
             <field name="zip">6015</field>
             <field name="country_id" ref="base.ph"/>
-            <field model="res.country.state" name="state_id" search="[('name','ilike','Cebu')]"/>
+            <field model="res.country.state" name="state_id" search="[('name','ilike','cebu')]"/>
             <field name="street">Punta Engano Road</field>
             <field name="email">inquiry@shangri-la.com</field>
             <field name="phone">+63 32 231 0288</field>
@@ -96,9 +96,8 @@
             <field name="is_company">1</field>
             <field name="city">Lapu-Lapu</field>
             <field name="zip">6015</field>
-            <field model="res.country" name="country_id" search="[('name','=','China')]"/>
             <field name="country_id" ref="base.ph"/>
-            <field model="res.country.state" name="state_id" search="[('code','ilike','ca')]"/>
+            <field model="res.country.state" name="state_id" search="[('name','ilike','cebu')]"/>
             <field name="street">Marigondon, Mactan Island</field>
             <field name="email">inquiry@plantationbay.com</field>
             <field name="phone">+63 32 505 9500</field>
@@ -114,7 +113,7 @@
             <field name="city">Samal Island</field>
             <field name="zip">8116</field>
             <field name="country_id" ref="base.ph"/>
-            <field model="res.country.state" name="state_id" search="[('name','ilike','Davao del Norte')]"/>
+            <field model="res.country.state" name="state_id" search="[('name','ilike','davao del norte')]"/>
             <field name="street">Kaputian Road, Babak</field>
             <field name="email">inquiry@pearlfarmresort.com</field>
             <field name="phone">+63 82 235 1234</field>
@@ -129,7 +128,7 @@
             <field name="city">Cuyo</field>
             <field name="zip">94538</field>
             <field name="country_id" ref="base.ph"/>
-            <field model="res.country.state" name="state_id" search="[('name','ilike','Palawan')]"/>
+            <field model="res.country.state" name="state_id" search="[('name','ilike','palawan')]"/>
             <field name="street">Pamalican Island, Sulu Archipelago</field>
             <field name="email">inquiry@aman.com</field>
             <field name="phone">+63 2 976 5200</field>
