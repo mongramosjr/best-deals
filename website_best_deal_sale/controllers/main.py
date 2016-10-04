@@ -61,17 +61,16 @@ class website_best_deal(website_best_deal):
 
         bookings = self._process_booking_details(post)
         for booking in bookings:
-            request.registry['best.deal.coupon'].uid = SUPERUSER_ID
-            coupon = request.registry['best.deal.coupon'].with_context(context).browse(int(booking['coupon_id']))
+            coupon = request.registry['best.deal.coupon'].browse(cr, SUPERUSER_ID, int(booking['coupon_id']), context=context)
             cart_values = order.with_context(best_deal_coupon_id=coupon.id)._cart_update(product_id=coupon.product_id.id, add_qty=1, booking_data=[booking])
             customer_ids |= set(cart_values.get('customer_ids', []))
 
         # free coupons -> order with amount = 0: auto-confirm, no checkout
         if not order.amount_total:
             order.action_confirm()  # tde notsure: email sending ?
-            customers = request.registry['best.deal.booking'].with_context(context).browse(list(customer_ids))
+            customers = request.registry['best.deal.booking'].browse(cr, uid, list(customer_ids), context=context)
             # clean context and session, then redirect to the confirmation page
-            request.website.with_context(context).sale_reset()
+            request.website.sale_reset(context=context)
             return request.website.render("website_best_deal.booking_complete", {
                 'customers': customers,
                 'best_deal': best_deal,

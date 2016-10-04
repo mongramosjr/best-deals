@@ -20,44 +20,37 @@
 #   limitations under the License.
 ##############################################################################
 
-
 from openerp import models, fields, api, SUPERUSER_ID, _
-from openerp.tools.translate import _
 from openerp.exceptions import UserError
 
 
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
-    def _cart_find_product_line(self, product_id=None, line_id=None, **kwargs):
-        self.env.uid = SUPERUSER_ID
-        line_ids = super(SaleOrder, self)._cart_find_product_line(product_id, line_id)
+    def _cart_find_product_line(self, cr, uid, ids, product_id=None, line_id=None, context=None, **kwargs):
+        line_ids = super(SaleOrder, self)._cart_find_product_line(cr, uid, ids, product_id, line_id, context=context)
         if line_id:
             return line_ids
-        for sale_order in self:
+        for so in self.browse(cr, uid, ids, context=context):
             domain = [('id', 'in', line_ids)]
             if context.get("best_deal_coupon_id"):
                 domain += [('best_deal_coupon_id', '=', context.get("best_deal_coupon_id"))]
-            return self.env['sale.order.line'].search(domain)
+            return self.pool.get('sale.order.line').search(cr, SUPERUSER_ID, domain, context=context)
 
-    def _website_product_id_change(self, order_id, product_id, qty=0):
-        context = self._context or {}
-        self.env.uid = SUPERUSER_ID
-        values = super(SaleOrder, self)._website_product_id_change(order_id, product_id, qty=qty)
+    def _website_product_id_change(self, cr, uid, ids, order_id, product_id, qty=0, context=None):
+        values = super(SaleOrder, self)._website_product_id_change(cr, uid, ids, order_id, product_id, qty=qty, context=None)
 
         best_deal_coupon_id = None
         if context.get("best_deal_coupon_id"):
             best_deal_coupon_id = context.get("best_deal_coupon_id")
         else:
-            product = self.env['product.product'].browse(product_id)
+            product = self.pool.get('product.product').browse(cr, uid, product_id, context=context)
             if product.best_deal_coupon_ids:
                 best_deal_coupon_id = product.best_deal_coupon_ids[0].id
 
         if best_deal_coupon_id:
-            order = self.env['sale.order'].browse(order_id)
-            ctx = dict(self._context or {})
-            ctx['pricelist'] = order.pricelist_id.id
-            coupon = self.env['best.deal.coupon'].with_context(ctx).browse(best_deal_coupon_id)
+            order = self.pool['sale.order'].browse(cr, SUPERUSER_ID, order_id, context=context)
+            coupon = self.pool.get('best.deal.coupon').browse(cr, uid, best_deal_coupon_id, context=dict(context, pricelist=order.pricelist_id.id))
             if product_id != coupon.product_id.id:
                 raise UserError(_("The coupon doesn't match with this product."))
 
@@ -73,22 +66,21 @@ class SaleOrder(models.Model):
 
         return values
 
-    def _cart_update(self, product_id=None, line_id=None, add_qty=0, set_qty=0, **kwargs):
-        context = self._context or {}
-        OrderLine = self.env['sale.order.line']
-        Customer = self.env['best.deal.booking']
-        Coupon = self.env['best.deal.coupon']
+    def _cart_update(self, cr, uid, ids, product_id=None, line_id=None, add_qty=0, set_qty=0, context=None, **kwargs):
+        OrderLine = self.pool['sale.order.line']
+        Customer = self.pool['best.deal.booking']
+        Coupon = self.pool['best.deal.coupon']
 
         if line_id:
-            line = OrderLine.browse(line_id)
+            line = OrderLine.browse(cr, uid, line_id, context=context)
             coupon = line.best_deal_coupon_id
             old_qty = int(line.product_uom_qty)
             context = dict(context, best_deal_coupon_id=coupon.id)
         else:
             line, coupon = None, None
-            coupon_ids = Coupon.search([('product_id', '=', product_id)], limit=1)
+            coupon_ids = Coupon.search(cr, uid, [('product_id', '=', product_id)], limit=1, context=context)
             if coupon_ids:
-                coupon = Coupon.browse(coupon_ids[0])
+                coupon = Coupon.browse(cr, uid, coupon_ids[0], context=context)
             old_qty = 0
         new_qty = set_qty if set_qty else (add_qty or 0 + old_qty)
 
@@ -107,22 +99,23 @@ class SaleOrder(models.Model):
                 'best_deal': coupon.best_deal_id.name}
             new_qty, set_qty, add_qty = coupon.coupons_available, coupon.coupons_available, 0
 
-        values.update(super(SaleOrder, self).with_context(context)._cart_update(product_id, line_id, add_qty, set_qty))
+        values.update(super(SaleOrder, self)._cart_update(
+            cr, uid, ids, product_id, line_id, add_qty, set_qty, context, **kwargs))
 
         # removing customers
         if coupon and new_qty < old_qty:
-            customers = Customer.with_context(context).search([
+            customers = Customer.search(
+                cr, uid, [
                     ('state', '!=', 'cancel'),
                     ('sale_order_id', '=', ids[0]),
                     ('best_deal_coupon_id', '=', coupon.id)
                 ], offset=new_qty, limit=(old_qty-new_qty),
-                order='create_date asc')
-            Customer.with_context(context).button_reg_cancel(customers)
+                order='create_date asc', context=context)
+            Customer.button_reg_cancel(cr, uid, customers, context=context)
         # adding customers
         elif coupon and new_qty > old_qty:
-            line = OrderLine.with_context(context).browse(values['line_id'])
+            line = OrderLine.browse(cr, uid, values['line_id'], context=context)
             line._update_bookings(confirm=False, booking_data=kwargs.get('booking_data', []))
             # add in return values the bookings, to display them on website (or not)
-            values['customer_ids'] = Customer.with_context(context).search(
-                [('sale_order_line_id', '=', line.id), ('state', '!=', 'cancel')])
+            values['customer_ids'] = Customer.search(cr, uid, [('sale_order_line_id', '=', line.id), ('state', '!=', 'cancel')], context=context)
         return values

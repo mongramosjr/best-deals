@@ -6,7 +6,7 @@ var base = require('web_editor.base');
 var website = require('website.website');
 
 base.ready().done(function () {
-    Tour.booking({
+    Tour.register({
         id:   'best_deal_buy_coupons',
         name: "Buy coupons for the Boracay Summer Escapade",
         path: '/bestdeal',

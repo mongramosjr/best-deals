@@ -10,7 +10,7 @@ var website = require('website.website');
 var _t = core._t;
 
 base.ready().done(function () {
-    Tour.booking({
+    Tour.register({
         id:   'best_deal',
         name: _t("Create a deal"),
         steps: [
