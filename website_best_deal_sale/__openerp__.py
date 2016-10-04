@@ -24,6 +24,8 @@
 {
     'name': "Sell Discount Coupons",
     'version': '2016.0',
+    'author': 'Dominador B. Ramos Jr.',
+    'license': 'Other OSI approved licence',
     'website': 'https://www.3d2n.deals',
     'category': 'Marketing',
     'summary': "Sell Your Coupons",
