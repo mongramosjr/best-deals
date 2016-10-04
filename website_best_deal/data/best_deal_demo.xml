@@ -1,518 +1,740 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-    <data>
+<data>
 
-        <record id="base.res_partner_1" model="res.partner">
-            <field name="website_published">True</field>
-        </record>
+    <record id="base.res_partner_1" model="res.partner">
+        <field name="website_published">True</field>
+    </record>
 
-        <record id="best_deal.best_deal_0" model="best.deal">
-            <field name="website_published">True</field>
-            <field name="twitter_hashtag">odoo</field>
-            <field name="description"><![CDATA[
-<div class="carousel slide oe_small mb16" data-interval="10000" id="myCarousel3">
-    <div class="carousel-inner">
-        <div class="item oe_img_bg active" style="background-image: url(/website/static/src/img/banner/orange_red.jpg);">
-            <div class="container">
-                <div class="row content">
-                    <div class="carousel-img hidden-sm hidden-xs mb48 col-md-5 col-md-offset-1 mt16">
-                        <img alt="Banner Odoo Image" class="img-responsive" src="/website/static/src/img/banner/banner_picture.png" style=""/>
+    <record id="best_deal.best_deal_0" model="best.deal">
+        <field name="website_published">True</field>
+        <field name="description"  type="html">
+            <section class="mt16 mb16 oe_dark">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-5 col-md-offset-1 mt64">
+                            <h3>Why you'll love Misibay Bay Resort.</h3>
+                            <p>
+                                Lorem ipsum dolor sit amet, feugiat dissentiet pri cu, 
+                                mea ferri ancillae maluisset at. Pro solum laudem ei, 
+                                sed nulla ceteros no, id vel antiopam definitiones. 
+                                Vix nostro aperiam suscipiantur cu, illum partem scribentur et sit. 
+                                Est tollit aliquam torquatos ne. Ne qui harum sanctus invidunt, 
+                                debet aperiri eum no, eu his principes dissentiunt. 
+                                Tollit cetero te eum, mnesarchum cotidieque ad per.
+
+                            </p><p>
+                                Pro at laoreet inermis graecis, sed ne ullum menandri. 
+                                Te hinc munere similique nam. His et vidit facer volutpat. 
+                                In sumo ullum nihil vim, ea pro illud platonem efficiantur. 
+                                Cu usu ludus recusabo omittantur, usu omnes reprimique an. 
+                                His ut mucius aliquip theophrastus, in pri nemore noluisse lucilius, 
+                                alia possit iudicabit ex cum. Duo ei veri reprimique, 
+                                ea iriure blandit nam.
+
+                            </p>
+                        </div>
+                        <div class="col-md-5 mt16 mb16">
+                            <img class="img img-responsive" src="/website_best_deal/static/src/img/boracay_regency/family_room.jpg"/>
+                        </div>
                     </div>
-                    <div class="carousel-content col-sm-12 col-md-5 mt32" style="text-align: center; color: white;">
-                        <h2>3 Intensive Days</h2>
-                        <h4>to learn Odoo Programming</h4>
+                </div>
+            </section>
+            <section class="mt16">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-5 col-md-offset-1">
+                            <img class="img img-responsive" src="/website_best_deal/static/src/img/boracay_regency/deluxe_northwing.jpg"/>
+                        </div>
+                        <div class="col-md-6 mt64">
+                            <h3>The full Misibay Bay experience.</h3>
+                            <h4 class="small">
+                                Sea in omnes tantas, natum mollis ei his, te vix graeco prodesset. 
+                            </h4>
+                            <p>
+                            Sed partem fierent te. 
+                            An sed stet graece sensibus, sed malorum principes at. 
+                            Ut choro dissentias cum, purto utinam prodesset an quo, 
+                            eos modus insolens et.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </field>
+    </record>
+    
+    
+    <record id="best_deal.best_deal_1" model="best.deal">
+        <field name="website_published">True</field>
+        <field name="description" type="html">
+            <section class="mt16 mb16">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-5 col-md-offset-1 mt32">
+                            <h3>Ocean Suites, Boutique Hotel.</h3>
+                            <p>
+                                Lorem ipsum dolor sit amet, feugiat dissentiet pri cu, mea ferri ancillae maluisset at. Pro solum laudem ei, sed nulla ceteros no, id vel antiopam definitiones. Vix nostro aperiam suscipiantur cu, illum partem scribentur et sit. Est tollit aliquam torquatos ne. Ne qui harum sanctus invidunt, debet aperiri eum no, eu his principes dissentiunt. Tollit cetero te eum, mnesarchum cotidieque ad per.
+
+                            </p>
+
+                            <div class="panel panel-default mt48">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Pro at laoreet inermis graecis</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <ul>
+                                        <li>sed ne ullum menandri. 
+</li>
+                                        <li>Te hinc munere similique nam. </li>
+                                        <li>His et vidit facer volutpat. </li>
+                                        <li>In sumo ullum nihil vim, ea pro illud platonem efficiantur. </li>
+                                        <li>Cu usu ludus recusabo omittantur, usu omnes reprimique an. </li>
+                                        <li>His ut mucius aliquip theophrastus, in pri nemore noluisse lucilius, alia possit iudicabit ex cum. </li>
+                                        <li>Duo ei veri reprimique, ea iriure blandit nam.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-4 mt16 mb16 col-md-offset1">
+                            <img class="img img-responsive" src="/website_best_deal/static/src/img/boracay_regency/deluxe_northwing.jpg"/>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="mt16 mb16 oe_dark">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-5 col-md-offset-1 mt16">
+                            <h2>Sea in omnes tantas</h2>
+                            <p>
+                                    Sea in omnes tantas, natum mollis ei his, te vix graeco prodesset. Sed partem fierent te. An sed stet graece sensibus, sed malorum principes at. Ut choro dissentias cum, purto utinam prodesset an quo, eos modus insolens et.
+
+                            </p>
+                            <p>
+                                Pri quot populo consequuntur at, ne mea tota appetere, eam ea alia populo. Ipsum nulla eam id, graece explicari cu mea. Id has populo nostro, at vis possit facilisi. Qui et expetenda signiferumque, in mundi tollit dicunt quo. An vim porro omittam, ne regione feugiat vim, ea eam commodo ponderum.
+
+                            </p>
+                        </div>
+                        <div class="col-md-5 col-md-offset-1 mt32">
+                            <img class="img img-responsive" src="/website_best_deal/static/src/img/boracay_regency/family_room.jpg"/>
+                        </div>
+                        <div class="col-md-5 col-md-offset-4 text-center mb16 mt16">
+                            <h3>Per ne modus percipitur</h3>
+                            <p>
+                                Per ne modus percipitur, no pro ipsum utamur, no omnis legere sit. Ut mea solum meliore, soluta voluptua mea ad. Eos ad possim feugait. Ex has melius regione vituperatoribus, fabulas offendit tractatos eum et. Ne usu numquam delenit conceptam.
+
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="mt16 mb16">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-5 col-md-offset-1 mt32 mb16">
+                            <img class="img img-responsive" src="/website_best_deal/static/src/img/boracay_regency/family_room.jpg"/>
+                        </div>
+                        <div class="col-md-5 mt16">
+                            <h2>Mel inimicus liberavisse ne</h2>
+                            <p>
+                                Mel inimicus liberavisse ne, et nec quod legimus erroribus. Alia qualisque efficiantur ne pri, et nihil labore facete nam, iudico minimum pertinax ex mea. Id referrentur definitiones his. Postea appareat suavitate te mea, ut quo graeci salutandi. Pri postea omnium necessitatibus te. Ornatus senserit eam an, ne affert vocibus mel, pro ad elit suavitate.
+
+                            </p>
+                            <p>
+                                Est lorem probatus scribentur id, placerat sapientem ei has. Modus fierent tractatos nam ad. Soleat cetero philosophia sit ea, vix ei alia nostrud. Eam et tota atqui zril, an possim aliquip dissentias vel. His platonem senserit persecuti et, pri omnium voluptatum no, per ut verear aliquip denique.
+
+                            </p>
+                            <p>
+                                Auxiliary port lets you connect other audio sources, like an MP3 player
+                            </p>
+                            <p>
+                                Eum at bonorum constituam scripserit. Dico erat cu per, vel hinc wisi ea. Mucius vocent his ut, id brute probatus concludaturque ius. Vel elit semper aperiri ut. Oportere electram qualisque ut per, sed in assentior efficiendi referrentur, ullum voluptua qualisque qui ne.
+
+                            </p>
+                            <p>
+                                Cu vel labore consetetur. Ea erant quaeque vivendum vix, mei ut minim inermis adipisci. Est an ludus concludaturque, nam meliore tibique an. Te nec dico ocurreret concludaturque, insolens aliquando duo ex. Ad causae hendrerit urbanitas ius.
+
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </field>
+    </record>
+    
+    
+    <record id="best_deal.best_deal_2" model="best.deal">
+        <field name="website_published">True</field>
+        <field name="description" type="html">
+            <section class="mb16 oe_dark">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-5 col-md-offset-1 mt64">
+                            <h2>The Hennan Lagoon Resort experience.</h2>
+                            <h3 class="text-muted">There's less of it, but no less to it.</h3>
+                            <p>
+                                    Lorem ipsum dolor sit amet, feugiat dissentiet pri cu, mea ferri ancillae maluisset at. Pro solum laudem ei, sed nulla ceteros no, id vel antiopam definitiones. Vix nostro aperiam suscipiantur cu, illum partem scribentur et sit. Est tollit aliquam torquatos ne. Ne qui harum sanctus invidunt, debet aperiri eum no, eu his principes dissentiunt. Tollit cetero te eum, mnesarchum cotidieque ad per.
+
+                            </p>
+                        </div>
+                        <div class="col-md-5 mt16 mb16">
+                            <img class="img img-responsive" src="/website_sale/static/src/img/design.png"/>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="mt16">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-5 col-md-offset-1">
+                            <img class="img img-responsive" src="/website_sale/static/src/img/mighty.png"/>
+                        </div>
+                        <div class="col-md-6 mt32">
+                            <h3>Pro at laoreet inermis graecis.</h3>
+                            <h4 class="small text-muted"> sed ne ullum menandri.</h4>
+                            <p>
+                                Pro at laoreet inermis graecis, sed ne ullum menandri. Te hinc munere similique nam. His et vidit facer volutpat. In sumo ullum nihil vim, ea pro illud platonem efficiantur. Cu usu ludus recusabo omittantur, usu omnes reprimique an. His ut mucius aliquip theophrastus, in pri nemore noluisse lucilius, alia possit iudicabit ex cum. Duo ei veri reprimique, ea iriure blandit nam.
+
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="mb16 oe_dark">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-5 col-md-offset-1 mt32">
+                            <h2>Sea in omnes tantas.</h2>
+                            <h3 class="text-muted">If it's made for iPad, it's made for iPad mini.</h3>
+                            <p>
+                                Sea in omnes tantas, natum mollis ei his, te vix graeco prodesset. Sed partem fierent te. An sed stet graece sensibus, sed malorum principes at. Ut choro dissentias cum, purto utinam prodesset an quo, eos modus insolens et.
+
+                            </p>
+                        </div>
+                        <div class="col-md-5 mt16">
+                            <img class="img img-responsive" src="/website_sale/static/src/img/apps.png"/>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="mt16 mb16">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-5 col-md-offset-1">
+                            <img class="img img-responsive" src="/website_sale/static/src/img/ipad_why.png"/>
+                        </div>
+                        <div class="col-md-6 mt64">
+                            <h3>Mel inimicus liberavisse ne.</h3>
+                            <p>
+                               Mel inimicus liberavisse ne, et nec quod legimus erroribus. Alia qualisque efficiantur ne pri, et nihil labore facete nam, iudico minimum pertinax ex mea. Id referrentur definitiones his. Postea appareat suavitate te mea, ut quo graeci salutandi. Pri postea omnium necessitatibus te. Ornatus senserit eam an, ne affert vocibus mel, pro ad elit suavitate.
+
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="mt16 mb16 oe_dark">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-5 col-md-offset-1 mt64">
+                            <h2>Est lorem probatus scribentur id</h2>
+                            <h3 class="text-muted">placerat sapientem ei has.</h3>
+                            <p>
+                               Est lorem probatus scribentur id, placerat sapientem ei has. Modus fierent tractatos nam ad. Soleat cetero philosophia sit ea, vix ei alia nostrud. Eam et tota atqui zril, an possim aliquip dissentias vel. His platonem senserit persecuti et, pri omnium voluptatum no, per ut verear aliquip denique.
+
+                            </p>
+                        </div>
+                        <div class="col-md-5 mt16 mb16">
+                            <img class="img img-responsive" src="/website_sale/static/src/img/wireless.png"/>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </field>
+    </record>
+    
+    
+    <record id="best_deal.best_deal_3" model="best.deal">
+        <field name="website_published">True</field>
+        <field name="description" type="html">
+            <section class="mt32">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8 col-md-offset-2 text-center">
+                            <h3>Two is better than one.</h3>
+                            <p>
+                                Lorem ipsum dolor sit amet, feugiat dissentiet pri cu, mea ferri ancillae maluisset at. Pro solum laudem ei, sed nulla ceteros no, id vel antiopam definitiones. Vix nostro aperiam suscipiantur cu, illum partem scribentur et sit. Est tollit aliquam torquatos ne. Ne qui harum sanctus invidunt, debet aperiri eum no, eu his principes dissentiunt. Tollit cetero te eum, mnesarchum cotidieque ad per.
+
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mt16">
+                            <img class="img img-responsive" src="/website_best_deal/static/src/img/boracay_regency/wavebar.jpg"/>
+                        </div>
+                    </div>
+                    <div class="row mt16">
+                        <div class="col-md-2 mt16">
+                            <img class="img img-responsive" src="/website_best_deal/static/src/img/boracay_regency/regency.png.jpg"/>
+                        </div>
+                        <div class="col-md-6">
+                            <h3 class="mt16">Pro at laoreet inermis graecis.</h3>
+                            <p>
+                                Pro at laoreet inermis graecis, sed ne ullum menandri. Te hinc munere similique nam. His et vidit facer volutpat. In sumo ullum nihil vim, ea pro illud platonem efficiantur. Cu usu ludus recusabo omittantur, usu omnes reprimique an. His ut mucius aliquip theophrastus, in pri nemore noluisse lucilius, alia possit iudicabit ex cum. Duo ei veri reprimique, ea iriure blandit nam.
+
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <h3 class="mt16">Sea in omnes tantas.</h3>
+                            <p>
+                                Sea in omnes tantas, natum mollis ei his, te vix graeco prodesset. Sed partem fierent te. An sed stet graece sensibus, sed malorum principes at. Ut choro dissentias cum, purto utinam prodesset an quo, eos modus insolens et.
+
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </field>
+    </record>
+    
+    
+    <record id="best_deal.best_deal_4" model="best.deal">
+        <field name="website_published">True</field>
+        <field name="description" type="html">
+            <section class="mt16 mb16">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-9 col-md-offset-1 mb16">
+                            <img class="img img-responsive" src="/website_sale/static/src/img/overview_hero.png"/>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="mt16 mb16 oe_dark">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-5 col-md-offset-1 mt64">
+                            <h3>Pro at laoreet inermis graecis, sed ne ullum menandri.</h3>
+                            <p>
+                                Lorem ipsum dolor sit amet, feugiat dissentiet pri cu, mea ferri ancillae maluisset at. Pro solum laudem ei, sed nulla ceteros no, id vel antiopam definitiones. Vix nostro aperiam suscipiantur cu, illum partem scribentur et sit. Est tollit aliquam torquatos ne. Ne qui harum sanctus invidunt, debet aperiri eum no, eu his principes dissentiunt. Tollit cetero te eum, mnesarchum cotidieque ad per.
+                            </p>
+                            <p>
+                                Pro at laoreet inermis graecis, sed ne ullum menandri. Te hinc munere similique nam. His et vidit facer volutpat. In sumo ullum nihil vim, ea pro illud platonem efficiantur. Cu usu ludus recusabo omittantur, usu omnes reprimique an. His ut mucius aliquip theophrastus, in pri nemore noluisse lucilius, alia possit iudicabit ex cum. Duo ei veri reprimique, ea iriure blandit nam.
+                            </p>
+                        </div>
+                        <div class="col-md-5">
+                            <img class="img img-responsive" src="/website_sale/static/src/img/overview_design_silver.png"/>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="mt16 mb16">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-10 col-md-offset-1">
+                            <h2 class="text-center">Sed partem fierent te.</h2>
+                        </div>
+                        <div class="col-md-4 mt32 col-md-offset-1">
+                            <img class="img img-responsive" src="/website_sale/static/src/img/purple.png"/>
+                        </div>
+                        <div class="col-md-6 mt32">
+                            <h3>Sea in omnes tantas.</h3>
+                            <p>
+                                Sea in omnes tantas, natum mollis ei his, te vix graeco prodesset. Sed partem fierent te. An sed stet graece sensibus, sed malorum principes at. Ut choro dissentias cum, purto utinam prodesset an quo, eos modus insolens et.
+
+                            </p>
+                            <h3>Pri quot populo consequuntur at.</h3>
+                            <p>
+                                Pri quot populo consequuntur at, ne mea tota appetere, eam ea alia populo. Ipsum nulla eam id, graece explicari cu mea. Id has populo nostro, at vis possit facilisi. Qui et expetenda signiferumque, in mundi tollit dicunt quo. An vim porro omittam, ne regione feugiat vim, ea eam commodo ponderum.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="mt16 mb16 oe_dark">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center mb16">
+                            <h2>Ut mea solum meliore</h2>
+                        </div>
+                        <div class="col-md-4">
+                            <h3>Per ne modus percipitur</h3>
+                            <p>
+                                    Per ne modus percipitur, no pro ipsum utamur, no omnis legere sit. Ut mea solum meliore, soluta voluptua mea ad. Eos ad possim feugait. Ex has melius regione vituperatoribus, fabulas offendit tractatos eum et. Ne usu numquam delenit conceptam.
+
+                            </p>
+                        </div><div class="col-md-4">
+                            <h3>Mel inimicus liberavisse ne</h3>
+                            <p>
+                                    Mel inimicus liberavisse ne, et nec quod legimus erroribus. Alia qualisque efficiantur ne pri, et nihil labore facete nam, iudico minimum pertinax ex mea. Id referrentur definitiones his. Postea appareat suavitate te mea, ut quo graeci salutandi. Pri postea omnium necessitatibus te. Ornatus senserit eam an, ne affert vocibus mel, pro ad elit suavitate.
+
+                            </p>
+                        </div><div class="col-md-4">
+                            <h3>Est lorem probatus scribentur id</h3>
+                            <p>
+                                    Est lorem probatus scribentur id, placerat sapientem ei has. Modus fierent tractatos nam ad. Soleat cetero philosophia sit ea, vix ei alia nostrud. Eam et tota atqui zril, an possim aliquip dissentias vel. His platonem senserit persecuti et, pri omnium voluptatum no, per ut verear aliquip denique.
+
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </field>
+    </record>
+
+
+    <record id="best_deal.best_deal_5" model="best.deal">
+        <field name="website_published">True</field>
+        <field name="twitter_hashtag">odoo</field>
+        <field name="description"  type="html">
+            <section class="mt16 mb16 oe_dark">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 mt64">
+                            <center><strong>Lorem ipsum dolor sit amet, feugiat dissentiet pri cu, mea ferri ancillae maluisset at. </strong></center>
+                            <p>&#160;</p>
+                            <p>Pro solum laudem ei, sed nulla ceteros no, id vel antiopam definitiones. Vix nostro aperiam suscipiantur cu, illum partem scribentur et sit. Est tollit aliquam torquatos ne. Ne qui harum sanctus invidunt, debet aperiri eum no, eu his principes dissentiunt. Tollit cetero te eum, mnesarchum cotidieque ad per.
+                            </p>
+                            <p>Pro at laoreet inermis graecis, sed ne ullum menandri. 
+                            Te hinc munere similique nam. His et vidit facer volutpat. 
+                            In sumo ullum nihil vim, ea pro illud platonem efficiantur. 
+                            Cu usu ludus recusabo omittantur, usu omnes reprimique an. 
+                            His ut mucius aliquip theophrastus, in pri nemore noluisse lucilius, alia possit iudicabit ex cum. 
+                            Duo ei veri reprimique, ea iriure blandit nam.
+                            </p>
+                            <p>&#160;</p>
+                            <p><strong>What's new for this tour package?</strong></p>
+                            <ul>
+                            <li>Sea in omnes tantas, natum mollis ei his, te vix graeco prodesset.  </li>
+                            <li>Sed partem fierent te.</li>
+                            <li>An sed stet graece sensibus, sed malorum principes at. </li>
+                            <li>Ut choro dissentias cum, purto utinam prodesset an quo, eos modus insolens et.</li>
+                            </ul>
+                            <p>&#160;</p>
+                            <p><strong>Program:</strong></p>
+                            <p>Pri quot populo consequuntur at, ne mea tota appetere, eam ea alia populo. Ipsum nulla eam id, graece explicari cu mea. Id has populo nostro, at vis possit facilisi. Qui et expetenda signiferumque, in mundi tollit dicunt quo. An vim porro omittam, ne regione feugiat vim, ea eam commodo ponderum.:
+                            </p>
+                            <ul>
+                            <li>Per ne modus percipitur, no pro ipsum utamur, no omnis legere sit. </li>
+                            <li>Ut mea solum meliore, soluta voluptua mea ad. </li>
+                            <li>Eos ad possim feugait. </li>
+                            <li>Ex has melius regione vituperatoribus, fabulas offendit tractatos eum et. </li>
+                            <li>Ne usu numquam delenit conceptam.</li>
+                            </ul>
+                            <p><em>Mel inimicus liberavisse ne, et nec quod legimus erroribus. 
+                            Alia qualisque efficiantur ne pri, et nihil labore facete nam, 
+                            iudico minimum pertinax ex mea. Id referrentur definitiones his. 
+                            Postea appareat suavitate te mea, ut quo graeci salutandi. 
+                            Pri postea omnium necessitatibus te. 
+                            Ornatus senserit eam an, ne affert vocibus mel, pro ad elit suavitate.
+                            </em></p>
+                            <p>&#160;</p>
+                            <p><strong>Where to find us:</strong></p>
+                            <p>OpenElec Applications 23 Rockwell Lane, Los Angeles, CA 90001, United States</p>
+                            <p>For any additional information, please contact us at <a href="mailto:events@yourcompany.com">events@yourcompany.com</a>.</p>
+                            <p>&#160;</p>
+                            <p>Best regards,</p>
+                            <p>Luigi Roni, Senior Event Manager</p>
+                            <p>&#160;</p>
+                            <p align="RIGHT"><em>(OpenElec Applications reserves the right to cancel<br/>the package or change the dates on which it is valid.)</em></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </field>
+    </record>
+
+    
+    <record id="best_deal.best_deal_6" model="best.deal">
+        <field name="website_published">True</field>
+        <field name="twitter_hashtag">odoo</field>
+        <field name="description" type="html">
+            <section class="mt16 mb16 oe_dark">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 mt64">
+                            <center><strong>5-days Technical Training</strong></center>
+                            <p>&#160;</p>
+                            <p><strong>Details of the Deal:</strong></p>
+                            <p>Lorem ipsum dolor sit amet, feugiat dissentiet pri cu, mea ferri ancillae maluisset at. Pro solum laudem ei, sed nulla ceteros no, id vel antiopam definitiones. Vix nostro aperiam suscipiantur cu, illum partem scribentur et sit. Est tollit aliquam torquatos ne. Ne qui harum sanctus invidunt, debet aperiri eum no, eu his principes dissentiunt. Tollit cetero te eum, mnesarchum cotidieque ad per.
+                            </p>
+                            <p>Duo viris libris eu, augue nostrum phaedrum cu duo. Facer dolore no est, purto admodum eum id. At mei quod hinc affert. Unum adversarium nec ne. Ea possit feugait vim. Cibo repudiandae an cum, nobis animal lucilius ei vix, cu nec impedit posidonium.</p>
+                            <p>&#160;</p>
+                            <p><strong>Included and Excluded in the Deal:</strong></p>
+                            <p><strong>Ei sit eros fuisset deleniti, vim iudicabit dissentiet te. Eam id suscipit inimicus. Mea eu sonet disputando. Pri facete interesset no, ius ex offendit intellegat abhorreant. Quo vidit omnium discere ad, in mei tota facilisi honestatis, ea everti labitur adipisci vim.
+                            </strong></p>
+                            <ul>
+                            <li>His nihil inimicus patrioque ad, quidam lucilius mei ei. 
+                            </li>
+                            <li>Quo an corpora mediocrem voluptatum, ex cibo affert option ius. </li>
+                            <li>Eum putent tamquam dolorum ea, mei no autem eruditi.</li>
+                            <li>Eu sit audire fuisset. </li>
+                            <li>Et nec albucius scriptorem, partem sapientem intellegat qui ex. </li>
+                            </ul>
+                            <p>&#160;</p>
+                            <p><strong>Mechanics:</strong></p>
+                            <ul>
+                            <li>Cu duo amet inani voluptaria.  Eu mei alia vide alienum, falli nobis vocibus has cu.  
+                            </li>
+                            <li>Pro ut alienum albucius abhorreant, no tamquam docendi fuisset ius.</li>
+                            <li>Ei inimicus cotidieque has, ad possit oblique complectitur duo.</li>
+                            <li>Vis scripta commune convenire in. </li>
+                            <li>Ei usu alienum accumsan mandamus, minimum definitionem signiferumque ius ex.</li>
+                            <li>Case semper dolores eu sit, vel erat assum id, consulatu democritum reprimique et qui. </li>
+                            </ul>
+                            <p>&#160;</p>
+                            <p>For more information on the hotel resort, please explore <a href="http://www.openerp.com/services/technical-training">http://www.openerp.com/services/technical-training</a>.</p>
+                            <p>If you have a question<strong>&#160;concerning the content of the package</strong>, please contact <a href="mailto:events@yourcompany.com">events@yourcompany.com</a>.</p>
+                            <p>&#160;</p>
+                            <p><strong>Where to find us:</strong></p>
+                            <p>Chaussée de Namur 69, 1300 Wavre, Belgium</p>
+                            <p>More information about our Headquarter office (directions, transports, parking, hotels, ...), please have a look at&#160;<a href="http://bit.ly/VD8J67">http://bit.ly/VD8J67.</a></p>
+                            <p>&#160;</p>
+                            <p><strong>Cancellation Policy:&#160;</strong></p>
+                            <p>Pri graeco aliquando cu, cum id illud impetus, te commune luptatum consequat ius. 
+                            Ludus partiendo dissentiunt ius ex. Mel te stet illud salutatus, 
+                            sit altera ridens delicatissimi in. Quem altera eam et, ei eum esse aeque democritum. 
+                            Te has choro mandamus.</p>
+                            <div>&#160;</div>
+                            <p>For any additional information, please contact us at <a href="mailto:events@openerp.com">events@openerp.com</a>.</p>
+                            <p>&#160;</p>
+                            <p>Best regards,</p>
+                            <p>Luigi Roni, Senior Event Manager</p>
+                            <p>&#160;</p>
+                            <p align="RIGHT"><em>(YourCompany reserves the right to cancel<br/>the package or change the dates on which it is valid.)</em></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </field>
+    </record>
+
+
+    <record id="best_deal.best_deal_7" model="best.deal">
+        <field name="website_published">True</field>
+        <field name="twitter_hashtag">odoo</field>
+        <field name="description" type="html">
+            <section class="mt16 mb16 oe_dark">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 mt64">
+                            <center><strong>Conference on Business Apps</strong></center>
+                            <p>&#160;</p>
+                            <p>Lorem ipsum dolor sit amet, feugiat dissentiet pri cu, mea ferri ancillae maluisset at. Pro solum laudem ei, sed nulla ceteros no, id vel antiopam definitiones. Vix nostro aperiam suscipiantur cu, illum partem scribentur et sit. Est tollit aliquam torquatos ne. Ne qui harum sanctus invidunt, debet aperiri eum no, eu his principes dissentiunt. Tollit cetero te eum, mnesarchum cotidieque ad per.
+                            </p>
+                            <p>&#160;</p>
+                            <p><strong>Nibh quando sanctus et per:</strong></p>
+                            <p>Nibh quando sanctus et per, putent eruditi postulant vim in, rebum euismod eum ut. Maiorum maluisset delicatissimi eu eam, mel ex putant posidonium delicatissimi, eu cum putent appareat. Mea id rebum quaeque fabulas. Te mel hinc falli inimicus, quod nobis temporibus nam et, ad nam stet choro postea. Vim dicat labitur an, cum in dicta dicam tibique, gubergren philosophia mediocritatem vix ex. Mel no laoreet argumentum, pro atqui clita debitis no.:</p>
+                            <ul>
+                            <li>Pri graeco aliquando cu, cum id illud impetus, te commune luptatum consequat ius. Ludus partiendo dissentiunt ius ex. Mel te stet illud salutatus, sit altera ridens delicatissimi in. Quem altera eam et, ei eum esse aeque democritum. Te has choro mandamus.;</li>
+                            <li>Cu duo amet inani voluptaria. Ei inimicus cotidieque has, ad possit oblique complectitur duo. Eu mei alia vide alienum, falli nobis vocibus has cu. Vis scripta commune convenire in. Case semper dolores eu sit, vel erat assum id, consulatu democritum reprimique et qui. Ei usu alienum accumsan mandamus, minimum definitionem signiferumque ius ex. Pro ut alienum albucius abhorreant, no tamquam docendi fuisset ius.</li>
+                            </ul>
+                            <p>&#160;</p>
+                            <p><strong>Ad vis utamur tincidunt:</strong></p>
+                            <ul>
+                            <li>Ad vis utamur tincidunt, saepe quaestio atomorum no vix, has tempor molestiae abhorreant ea. In sed inani liberavisse, nonumes convenire ex ius. Eum id stet tritani, pri ne invidunt definitionem. Usu at ornatus periculis, ne erat audiam voluptatum qui, cum an mandamus indoctum prodesset. Et putent reprehendunt interpretaris vix, aeque definitionem ea vel.</li>
+                            <li>Commune molestie sadipscing cu eos, quot rebum postea cum no, ex vel brute suscipit. Aeterno facilis suscipiantur ad usu. Prima numquam ad sit. Nec ei altera accusamus, quo vidit tempor prodesset ad, verear mandamus at eam. Audiam disputando eum id, tota mutat harum quo ad, eum mutat maluisset ut.</li>
+                            <li>Duo viris libris eu, augue nostrum phaedrum cu duo. Facer dolore no est, purto admodum eum id. At mei quod hinc affert. Unum adversarium nec ne. Ea possit feugait vim. Cibo repudiandae an cum, nobis animal lucilius ei vix, cu nec impedit posidonium.</li>
+                            <li>Ei sit eros fuisset deleniti, vim iudicabit dissentiet te. Eam id suscipit inimicus. Mea eu sonet disputando. Pri facete interesset no, ius ex offendit intellegat abhorreant. Quo vidit omnium discere ad, in mei tota facilisi honestatis, ea everti labitur adipisci vim.</li>
+                            <li>His nihil inimicus patrioque ad, quidam lucilius mei ei. Quo an corpora mediocrem voluptatum, ex cibo affert option ius. Eu sit audire fuisset. Et nec albucius scriptorem, partem sapientem intellegat qui ex. Eum putent tamquam dolorum ea, mei no autem eruditi.</li>
+                            </ul>
+                            <p>&#160;</p>
+                            <p><strong>Where to find us:</strong></p>
+                            <p>Chamber Works 60, Rosewood Court Detroit, MI 48212 (United States)</p>
+                            <p>For any additional information, please contact us at <a href="mailto:events@openerp.com">events@openerp.com</a>.</p>
+                            <p>&#160;</p>
+                            <p>Best regards,</p>
+                            <p>Luigi Roni, Senior Event Manager</p>
+                            <p>&#160;</p>
+                            <p align="RIGHT"><em>(Chamber Works reserves the right to cancel<br/>the package or change the dates on which it is valid.)</em></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </field>
+    </record>
+    
+    
+    <record id="best_deal.best_deal_8" model="best.deal">
+        <field name="website_published">True</field>
+        <field name="twitter_hashtag">odoo</field>
+        <field name="description"  type="html">
+            <div class="carousel slide oe_small mb16" data-interval="10000" id="myCarousel3">
+                <div class="carousel-inner">
+                    <div class="item oe_img_bg active" style="background-image: url(/website/static/src/img/banner/orange_red.jpg);">
+                        <div class="container">
+                            <div class="row content">
+                                <div class="carousel-img hidden-sm hidden-xs mb48 col-md-5 col-md-offset-1 mt16">
+                                    <img alt="Banner Odoo Image" class="img-responsive" src="/website/static/src/img/banner/banner_picture.png" style=""/>
+                                </div>
+                                <div class="carousel-content col-sm-12 col-md-5 mt32" style="text-align: center; color: white;">
+                                    <h2>3 Days and 2 Nights </h2>
+                                    <h4>Lorem <i>Lorem ipsum dolor sit amet</i></h4>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
 
-<div class="container">
-<div class="row">
-<div class="col-md-12 text-center mb8 mt0">
-<h2>Course Summary</h2>
-</div>
+            <section class="mb16 oe_dark">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center mb8 mt0">
+                            <h2>Package Summary</h2>
+                        </div>
 
-<div class="col-md-12 mt16 mb0">
-<p><span style="text-align: -webkit-center; ">This course is dedicated to&nbsp;developers who need to grasp knowledge of the <strong>business applications development </strong>process. This course is for new developers or for IT professionals eager to learn more about technical aspects.</span></p>
-</div>
-</div>
-</div>
-
-<div class="container">
-<div class="row">
-<div class="col-md-12 text-center mt0 mb16">
-<h2>What you will learn?</h2>
-</div>
-
-<div class="col-md-4">
-<div class="panel panel-info">
-<div class="panel-heading text-center">
-<h2 style="margin: 0">Day 1</h2>
-
-<p class="text-muted" style="margin: 0">Introduction to Javascript</p>
-</div>
-
-<ul class="list-group"><li class="list-group-item">Hello World</li>
-	<li class="list-group-item">Variables &amp; Operators</li>
-	<li class="list-group-item">Dive into Strings</li>
-	<li class="list-group-item">Functions</li>
-	<li class="list-group-item">Loops</li>
-	<li class="list-group-item">Arrays</li>
-</ul><div class="panel-footer text-center">
-<p class="text-muted"><i>You will be able to develop simple dynamic components in HTML pages.</i></p>
-</div>
-</div>
-</div>
-
-<div class="col-md-4">
-<div class="panel panel-info">
-<div class="panel-heading text-center">
-<h2 style="margin: 0">Day 2</h2>
-
-<p class="text-muted" style="margin: 0">Odoo Web Client</p>
-</div>
-
-<ul class="list-group"><li class="list-group-item">Introduction to JQuery</li>
-	<li class="list-group-item">Advanced JQuery</li>
-	<li class="list-group-item">Underscore</li>
-	<li class="list-group-item">Introduction to QWeb</li>
-	<li class="list-group-item">Controlers and Views</li>
-	<li class="list-group-item">Bootstrap CSS</li>
-	<li class="list-group-item">Calling the ORM</li>
-</ul><div class="panel-footer text-center">
-<p class="text-muted"><i>You will be able to create dynamic page interacting with the ORM.</i></p>
-</div>
-</div>
-</div>
-
-<div class="col-md-4">
-<div class="panel panel-info">
-<div class="panel-heading text-center">
-<h2 style="margin: 0">Day 3</h2>
-
-<p class="text-muted" style="margin: 0">Building a Full Application</p>
-</div>
-
-<ul class="list-group"><li class="list-group-item">Modules</li>
-	<li class="list-group-item">Python Objects</li>
-	<li class="list-group-item">Report Engine</li>
-	<li class="list-group-item">Workflows</li>
-	<li class="list-group-item">Training Center Module</li>
-	<li class="list-group-item">Integrated Help</li>
-	<li class="list-group-item">How to Debug</li>
-</ul><div class="panel-footer text-center">
-<p class="text-muted"><i>You will be able to develop a full application with backend and user interface.</i></p>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-<div class="container">
-<div class="row">
-<div class="col-md-12 text-center mb16 mt0">
-<h2>Requirements</h2>
-</div>
-
-<div class="col-md-12 mb16 mt16">
-<p><strong>Objectives:</strong></p>
-
-<p><strong>Having attended this course, participants should be able to:</strong></p>
-
-<ul><li>Understand the development concepts and architecture;</li>
-	<li>Install and administer your own server;</li>
-	<li>Develop a new module for a particular application.</li>
-</ul><p></p>
-
-<p><strong>Our prices include:</strong></p>
-
-<ul><li>drinks and lunch;</li>
-	<li>training material.</li>
-</ul><p></p>
-
-<p><strong>Requirements:</strong></p>
-
-<ul><li>Bring your own laptop.</li>
-	<li>Participants are expected to have some knowledge in programming.&nbsp;A basic knowledge of the Python programming is recommended.</li>
-	<li>Participants preferably have a functional knowledge of our software (see Functional Training).</li>
-</ul><p></p>
-
-<p>To get more information, visit the <a href="http://openerp.com/">Odoo Official Website</a>.</p>
-</div>
-</div>
-</div>
-</div>
-
-
-<div class="container oe_dark">
-<div class="row">
-<div class="col-md-12">
-<h1 class="text-center">Read Great Contents</h1>
-
-<h3 class="text-muted text-center">What do people&nbsp;say about this course?</h3>
-</div>
-
-<div class="mt16 mb32 col-md-6">
-<blockquote>
-<p>I did not expect such a great learning experience. I feel like I can develop anything now.</p>
-<small>John Doe, CEO</small></blockquote>
-</div>
-
-<div class="mt16 mb32 col-md-6">
-<blockquote>
-<p>This course help me build my first application within a month. Definetly worth its price.</p>
-<small>John Doe, CEO</small></blockquote>
-</div>
-</div>
-</div>
-]]></field>        </record>
-
-        <record id="base.res_partner_3" model="res.partner">
-            <field name="website_published">True</field>
-        </record>
-        <record id="best_deal.best_deal_1" model="best.deal">
-            <field name="website_published">True</field>
-            <field name="twitter_hashtag">odoo</field>
-            <field name="description"><![CDATA[
-<div class="carousel slide oe_small mb16" data-interval="10000" id="myCarousel3">
-    <div class="carousel-inner">
-        <div class="item oe_img_bg active" style="background-image: url(/website/static/src/img/banner/orange_red.jpg);">
-            <div class="container">
-                <div class="row content">
-                    <div class="carousel-img hidden-sm hidden-xs mb48 col-md-5 col-md-offset-1 mt16">
-                        <img alt="Banner Odoo Image" class="img-responsive" src="/website/static/src/img/banner/banner_picture.png" style=""/>
-                    </div>
-                    <div class="carousel-content col-sm-12 col-md-5 mt32" style="text-align: center; color: white;">
-                        <h2>5 Intensive Days</h2>
-                        <h4>to learn technical aspects</h4>
+                        <div class="col-md-12 mt16 mb0">
+                            <p><span style="text-align: -webkit-center; ">Pro at laoreet inermis graecis, sed ne ullum menandri. Te hinc munere similique nam. His et vidit facer volutpat. In sumo ullum nihil vim, ea pro illud platonem efficiantur. Cu usu ludus recusabo omittantur, usu omnes reprimique an. His ut mucius aliquip theophrastus, in pri nemore noluisse lucilius, alia possit iudicabit ex cum. Duo ei veri reprimique, ea iriure blandit nam.
+                            </span></p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
+            </section>
+            <section class="mt16 ">
+                <div class="container ">
+                    <div class="row">
+                        <div class="col-md-12 text-center mt0 mb16">
+                        <h2>What you will experience?</h2>
+                        </div>
 
-<div class="container">
-<div class="row">
-<div class="col-md-12 text-center mb8 mt0">
-<h2>Course Summary</h2>
-</div>
+                        <div class="col-md-4">
+                            <div class="panel panel-info">
+                                <div class="panel-heading text-center">
+                                    <h2 style="margin: 0">Day 1</h2>
 
-<div class="col-md-12 mt16 mb0">
-<p><span style="text-align: -webkit-center; ">This course is dedicated to&nbsp;developers who need to grasp knowledge of the <strong>business applications development </strong>process. This course is for new developers or for IT professionals eager to learn more about technical aspects.</span></p>
-</div>
-</div>
-</div>
+                                    <p class="text-muted" style="margin: 0">Sea in omnes tantas</p>
+                                </div>
 
-<div class="container">
-<div class="row">
-<div class="col-md-12 text-center mt0 mb16">
-<h2>What you will learn?</h2>
-</div>
+                                <ul class="list-group"><li class="list-group-item">natum mollis ei his</li>
+                                    <li class="list-group-item">te vix graeco prodesset</li>
+                                    <li class="list-group-item">Sed partem fierent te</li>
+                                    <li class="list-group-item">An sed stet graece sensibus</li>
+                                    <li class="list-group-item">sed malorum principes at. </li>
+                                    <li class="list-group-item">Ut choro dissentias cum, </li>
+                                    <li class="list-group-item">purto utinam prodesset an quo, </li>
+                                    <li class="list-group-item">eos modus insolens et.</li>
+                                </ul>
+                                <div class="panel-footer text-center">
+                                    <p class="text-muted"><i>Pri quot populo consequuntur at, ne mea tota appetere, eam ea alia populo. Ipsum nulla eam id, graece explicari cu mea. Id has populo nostro, at vis possit facilisi. Qui et expetenda signiferumque, in mundi tollit dicunt quo. An vim porro omittam, ne regione feugiat vim, ea eam commodo ponderum.
+                                    </i></p>
+                                </div>
+                            </div>
+                        </div>
 
-<div class="col-md-4">
-<div class="panel panel-info">
-<div class="panel-heading text-center">
-<h2 style="margin: 0">Day 1</h2>
+                        <div class="col-md-4">
+                            <div class="panel panel-info">
+                                <div class="panel-heading text-center">
+                                    <h2 style="margin: 0">Day 2</h2>
 
-<p class="text-muted" style="margin: 0">Introduction to Javascript</p>
-</div>
+                                    <p class="text-muted" style="margin: 0">Per ne modus percipitur
+                                    </p>
+                                </div>
 
-<ul class="list-group"><li class="list-group-item">Hello World</li>
-	<li class="list-group-item">Variables &amp; Operators</li>
-	<li class="list-group-item">Dive into Strings</li>
-	<li class="list-group-item">Functions</li>
-	<li class="list-group-item">Loops</li>
-	<li class="list-group-item">Arrays</li>
-</ul><div class="panel-footer text-center">
-<p class="text-muted"><i>You will be able to develop simple dynamic components in HTML pages.</i></p>
-</div>
-</div>
-</div>
+                                <ul class="list-group"><li class="list-group-item">no pro ipsum utamur</li>
+                                    <li class="list-group-item">no omnis legere sit</li>
+                                    <li class="list-group-item">Ut mea solum meliore</li>
+                                    <li class="list-group-item">soluta voluptua mea ad.</li>
+                                    <li class="list-group-item">Eos ad possim feugait.</li>
+                                    <li class="list-group-item">Ex has melius regione vituperatoribus</li>
+                                    <li class="list-group-item">fabulas offendit tractatos eum et.</li>
+                                    <li class="list-group-item">Ne usu numquam delenit conceptam.</li>
+                                </ul>
+                                <div class="panel-footer text-center">
+                                    <p class="text-muted"><i>Mel inimicus liberavisse ne, et nec quod legimus erroribus. Alia qualisque efficiantur ne pri, et nihil labore facete nam, iudico minimum pertinax ex mea. Id referrentur definitiones his. Postea appareat suavitate te mea, ut quo graeci salutandi. Pri postea omnium necessitatibus te. Ornatus senserit eam an, ne affert vocibus mel, pro ad elit suavitate.
+                                    </i></p>
+                                </div>
+                            </div>
+                        </div>
 
-<div class="col-md-4">
-<div class="panel panel-info">
-<div class="panel-heading text-center">
-<h2 style="margin: 0">Day 2</h2>
+                        <div class="col-md-4">
+                            <div class="panel panel-info">
+                                <div class="panel-heading text-center">
+                                    <h2 style="margin: 0">Day 3</h2>
 
-<p class="text-muted" style="margin: 0">Odoo Web Client</p>
-</div>
+                                    <p class="text-muted" style="margin: 0">Est lorem probatus scribentur id
+                                    </p>
+                                </div>
 
-<ul class="list-group"><li class="list-group-item">Introduction to JQuery</li>
-	<li class="list-group-item">Advanced JQuery</li>
-	<li class="list-group-item">Underscore</li>
-	<li class="list-group-item">Introduction to QWeb</li>
-	<li class="list-group-item">Controlers and Views</li>
-	<li class="list-group-item">Bootstrap CSS</li>
-	<li class="list-group-item">Calling the ORM</li>
-</ul><div class="panel-footer text-center">
-<p class="text-muted"><i>You will be able to create dynamic page interacting with the ORM.</i></p>
-</div>
-</div>
-</div>
-
-<div class="col-md-4">
-<div class="panel panel-info">
-<div class="panel-heading text-center">
-<h2 style="margin: 0">Day 3</h2>
-
-<p class="text-muted" style="margin: 0">Building a Full Application</p>
-</div>
-
-<ul class="list-group"><li class="list-group-item">Modules</li>
-	<li class="list-group-item">Python Objects</li>
-	<li class="list-group-item">Report Engine</li>
-	<li class="list-group-item">Workflows</li>
-	<li class="list-group-item">Training Center Module</li>
-	<li class="list-group-item">Integrated Help</li>
-	<li class="list-group-item">How to Debug</li>
-</ul><div class="panel-footer text-center">
-<p class="text-muted"><i>You will be able to develop a full application with backend and user interface.</i></p>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-<div class="container">
-<div class="row">
-<div class="col-md-12 text-center mb16 mt0">
-<h2>Requirements</h2>
-</div>
-
-<div class="col-md-12 mb16 mt16">
-<p><strong>Objectives:</strong></p>
-
-<p><strong>Having attended this course, participants should be able to:</strong></p>
-
-<ul><li>Understand the development concepts and architecture;</li>
-	<li>Install and administer your own server;</li>
-	<li>Develop a new module for a particular application.</li>
-</ul><p></p>
-
-<p><strong>Our prices include:</strong></p>
-
-<ul><li>drinks and lunch;</li>
-	<li>training material.</li>
-</ul><p></p>
-
-<p><strong>Requirements:</strong></p>
-
-<ul><li>Bring your own laptop.</li>
-	<li>Participants are expected to have some knowledge in programming.&nbsp;A basic knowledge of the Python programming is recommended.</li>
-	<li>Participants preferably have a functional knowledge of our software (see Functional Training).</li>
-</ul><p></p>
-
-<p>To get more information, visit the <a href="http://openerp.com/">Odoo Official Website</a>.</p>
-</div>
-</div>
-</div>
-</div>
-
-
-<div class="container oe_dark">
-<div class="row">
-<div class="col-md-12">
-<h1 class="text-center">Read Great Contents</h1>
-
-<h3 class="text-muted text-center">What do people&nbsp;say about this course?</h3>
-</div>
-
-<div class="mt16 mb32 col-md-6">
-<blockquote>
-<p>I did not expect such a great learning experience. I feel like I can develop anything now.</p>
-<small>John Doe, CEO</small></blockquote>
-</div>
-
-<div class="mt16 mb32 col-md-6">
-<blockquote>
-<p>This course help me build my first application within a month. Definetly worth its price.</p>
-<small>John Doe, CEO</small></blockquote>
-</div>
-</div>
-</div>
-]]></field>
-        </record>
-
-        <record id="base.res_partner_4" model="res.partner">
-            <field name="website_published">True</field>
-        </record>
-        <record id="best_deal.best_deal_2" model="best.deal">
-            <field name="website_published">True</field>
-            <field name="twitter_hashtag">odoo</field>
-        </record>
-
-        <record id="base.res_partner_2" model="res.partner">
-            <field name="website_published">True</field>
-        </record>
-        <record id="base.res_partner_address_4" model="res.partner">
-            <field name="website_published">True</field>
-        </record>
-        <record id="best_deal.best_deal_3" model="best.deal">
-            <field name="website_published">True</field>
-            <field name="twitter_hashtag">odoo</field>
-            <field name="description"><![CDATA[
-<div class="carousel slide oe_small mb16" data-interval="10000" id="myCarousel3">
-    <div class="carousel-inner">
-        <div class="item oe_img_bg active" style="background-image: url(/website/static/src/img/banner/orange_red.jpg);">
-            <div class="container">
-                <div class="row content">
-                    <div class="carousel-img hidden-sm hidden-xs mb48 col-md-5 col-md-offset-1 mt16">
-                        <img alt="Banner Odoo Image" class="img-responsive" src="/website/static/src/img/banner/banner_picture.png" style=""/>
-                    </div>
-                    <div class="carousel-content col-sm-12 col-md-5 mt32" style="text-align: center; color: white;">
-                        <h2>5 Intensive Days</h2>
-                        <h4>to learn <i>business applications development</i></h4>
+                                <ul class="list-group"><li class="list-group-item">placerat sapientem ei has.</li>
+                                    <li class="list-group-item">Modus fierent tractatos nam ad. </li>
+                                    <li class="list-group-item">Soleat cetero philosophia sit ea, </li>
+                                    <li class="list-group-item">vix ei alia nostrud. </li>
+                                    <li class="list-group-item">Eam et tota atqui zril, </li>
+                                    <li class="list-group-item">an possim aliquip dissentias vel. </li>
+                                    <li class="list-group-item">His platonem senserit persecuti et, </li>
+                                    <li class="list-group-item">pri omnium voluptatum no, </li>
+                                    <li class="list-group-item">per ut verear aliquip denique.</li>
+                                </ul>
+                                <div class="panel-footer text-center">
+                                    <p class="text-muted"><i>Eum at bonorum constituam scripserit. Dico erat cu per, vel hinc wisi ea. Mucius vocent his ut, id brute probatus concludaturque ius. Vel elit semper aperiri ut. Oportere electram qualisque ut per, sed in assentior efficiendi referrentur, ullum voluptua qualisque qui ne.
+                                    </i></p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
+            </section>
+            <section class="mb16 oe_dark">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center mb16 mt0">
+                            <h2>Requirements</h2>
+                        </div>
 
-<div class="container">
-<div class="row">
-<div class="col-md-12 text-center mb8 mt0">
-<h2>Course Summary</h2>
-</div>
+                        <div class="col-md-12 mb16 mt16">
+                            <p><strong>Cu vel labore consetetur.
+                            :</strong></p>
 
-<div class="col-md-12 mt16 mb0">
-<p><span style="text-align: -webkit-center; ">This course is dedicated to&nbsp;developers who need to grasp knowledge of the <strong>business applications development </strong>process. This course is for new developers or for IT professionals eager to learn more about technical aspects.</span></p>
-</div>
-</div>
-</div>
+                            <p><strong> Ea erant quaeque vivendum vix, mei ut minim inermis adipisci:</strong></p>
 
-<div class="container">
-<div class="row">
-<div class="col-md-12 text-center mt0 mb16">
-<h2>What you will learn?</h2>
-</div>
+                            <ul><li>Est an ludus concludaturque, nam meliore tibique an. </li>
+                            <li>Te nec dico ocurreret concludaturque, insolens aliquando duo ex. </li>
+                            <li>Ad causae hendrerit urbanitas ius.</li>
+                            </ul><p></p>
 
-<div class="col-md-4">
-<div class="panel panel-info">
-<div class="panel-heading text-center">
-<h2 style="margin: 0">Day 1</h2>
+                            <p><strong>Our package include:</strong></p>
 
-<p class="text-muted" style="margin: 0">Introduction to Javascript</p>
-</div>
+                            <ul>
+                                <li>breakfast</li>
+                                <li>lunch;</li>
+                            <li>dinner</li>
+                            </ul><p></p>
 
-<ul class="list-group"><li class="list-group-item">Hello World</li>
-	<li class="list-group-item">Variables &amp; Operators</li>
-	<li class="list-group-item">Dive into Strings</li>
-	<li class="list-group-item">Functions</li>
-	<li class="list-group-item">Loops</li>
-	<li class="list-group-item">Arrays</li>
-</ul><div class="panel-footer text-center">
-<p class="text-muted"><i>You will be able to develop simple dynamic components in HTML pages.</i></p>
-</div>
-</div>
-</div>
+                            <p>To get more information, visit the <a href="https://www.odoo.com/">Odoo Official Website</a>.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="mt16">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1 class="text-center">Read Great Contents</h1>
 
-<div class="col-md-4">
-<div class="panel panel-info">
-<div class="panel-heading text-center">
-<h2 style="margin: 0">Day 2</h2>
+                            <h3 class="text-muted text-center">What do people&#160;say about this resort?</h3>
+                        </div>
 
-<p class="text-muted" style="margin: 0">Odoo Web Client</p>
-</div>
+                        <div class="mt16 mb32 col-md-6">
+                            <blockquote>
+                            <p>I did not expect such a great experience.</p>
+                            <small>John Doe, CEO</small></blockquote>
+                        </div>
 
-<ul class="list-group"><li class="list-group-item">Introduction to JQuery</li>
-	<li class="list-group-item">Advanced JQuery</li>
-	<li class="list-group-item">Underscore</li>
-	<li class="list-group-item">Introduction to QWeb</li>
-	<li class="list-group-item">Controlers and Views</li>
-	<li class="list-group-item">Bootstrap CSS</li>
-	<li class="list-group-item">Calling the ORM</li>
-</ul><div class="panel-footer text-center">
-<p class="text-muted"><i>You will be able to create dynamic page interacting with the ORM.</i></p>
-</div>
-</div>
-</div>
+                        <div class="mt16 mb32 col-md-6">
+                            <blockquote>
+                            <p>Definetly worth its price.</p>
+                            <small>John Doe, CEO</small></blockquote>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </field>
+    </record>
 
-<div class="col-md-4">
-<div class="panel panel-info">
-<div class="panel-heading text-center">
-<h2 style="margin: 0">Day 3</h2>
-
-<p class="text-muted" style="margin: 0">Building a Full Application</p>
-</div>
-
-<ul class="list-group"><li class="list-group-item">Modules</li>
-	<li class="list-group-item">Python Objects</li>
-	<li class="list-group-item">Report Engine</li>
-	<li class="list-group-item">Workflows</li>
-	<li class="list-group-item">Training Center Module</li>
-	<li class="list-group-item">Integrated Help</li>
-	<li class="list-group-item">How to Debug</li>
-</ul><div class="panel-footer text-center">
-<p class="text-muted"><i>You will be able to develop a full application with backend and user interface.</i></p>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-<div class="container">
-<div class="row">
-<div class="col-md-12 text-center mb16 mt0">
-<h2>Requirements</h2>
-</div>
-
-<div class="col-md-12 mb16 mt16">
-<p><strong>Objectives:</strong></p>
-
-<p><strong>Having attended this course, participants should be able to:</strong></p>
-
-<ul><li>Understand the development concepts and architecture;</li>
-	<li>Install and administer your own server;</li>
-	<li>Develop a new module for a particular application.</li>
-</ul><p></p>
-
-<p><strong>Our prices include:</strong></p>
-
-<ul><li>drinks and lunch;</li>
-	<li>training material.</li>
-</ul><p></p>
-
-<p><strong>Requirements:</strong></p>
-
-<ul><li>Bring your own laptop.</li>
-	<li>Participants are expected to have some knowledge in programming.&nbsp;A basic knowledge of the Python programming is recommended.</li>
-	<li>Participants preferably have a functional knowledge of our software (see Functional Training).</li>
-</ul><p></p>
-
-<p>To get more information, visit the <a href="https://www.odoo.com/">Odoo Official Website</a>.</p>
-</div>
-</div>
-</div>
-</div>
-
-
-<div class="container oe_dark">
-<div class="row">
-<div class="col-md-12">
-<h1 class="text-center">Read Great Contents</h1>
-
-<h3 class="text-muted text-center">What do people&nbsp;say about this course?</h3>
-</div>
-
-<div class="mt16 mb32 col-md-6">
-<blockquote>
-<p>I did not expect such a great learning experience. I feel like I can develop anything now.</p>
-<small>John Doe, CEO</small></blockquote>
-</div>
-
-<div class="mt16 mb32 col-md-6">
-<blockquote>
-<p>This course help me build my first application within a month. Definetly worth its price.</p>
-<small>John Doe, CEO</small></blockquote>
-</div>
-</div>
-</div>
-]]></field>
-        </record>
-
-    </data>
+</data>
 </openerp>
+
+
