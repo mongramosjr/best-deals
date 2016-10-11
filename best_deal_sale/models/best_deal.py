@@ -29,7 +29,15 @@ from openerp.osv import fields as old_fields
 
 class BestDeal(models.Model):
     _inherit = 'best.deal'
+    
+    @api.multi
+    @api.depends('best_deal_coupon_ids')
+    def _prices(self):
+        for deal in self:
+            promo_price = min(float(coupon.price) for coupon in deal.best_deal_coupon_ids)
 
+    price = fields.Float(compute='_prices', string='Price')
+    
     best_deal_coupon_ids = fields.One2many(
         'best.deal.coupon', 'best_deal_id', string='Deal Coupon',
         default=lambda rec: rec._default_coupons(), copy=True)

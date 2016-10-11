@@ -28,9 +28,17 @@ from openerp import SUPERUSER_ID
 from openerp.addons.website.models.website import slug
 
 
+class BestDealStyle(models.Model):
+    _name = "best.deal.style"
+    name = fields.Char('Style Name', required=True)
+    html_class = fields.Char('HTML Classes')
+    
+
 class BestDeal(models.Model):
     _name = 'best.deal'
     _inherit = ['best.deal', 'website.seo.metadata', 'website.published.mixin']
+
+    website_style_ids = fields.Many2many('best.deal.style', string='Styles')
 
     twitter_hashtag = fields.Char('Twitter Hashtag', default=lambda self: self._default_hashtag())
     website_published = fields.Boolean(track_visibility='onchange')

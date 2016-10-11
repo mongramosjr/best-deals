@@ -23,6 +23,7 @@
 
 import babel.dates
 import time
+import random
 import re
 import werkzeug.urls
 from datetime import datetime, timedelta
@@ -33,6 +34,155 @@ from openerp import tools, SUPERUSER_ID
 from openerp.addons.website.models.website import slug
 from openerp.http import request
 from openerp.tools.translate import _
+
+
+DPP = 20 # Deals Per Page
+DPR = 4  # Deals Per Row
+
+# Derived from Odoo website_sale module. 
+# Copyright: (C) 2004-2015 Odoo SA. (www.odoo.com)
+# License: LGPL-3+
+class display_grid_compute(object):
+    def __init__(self):
+        self.grid = {}
+
+    def _check_place(self, posx, posy, sizex, sizey):
+        res = True
+        for y in range(sizey):
+            for x in range(sizex):
+                if posx+x>=DPR:
+                    res = False
+                    break
+                row = self.grid.setdefault(posy+y, {})
+                if row.setdefault(posx+x) is not None:
+                    res = False
+                    break
+            for x in range(DPR):
+                self.grid[posy+y].setdefault(x, None)
+        return res
+        
+    def _auto_website_size(self, catalog_length=0):
+        
+        website_size = {} 
+        count_floor, count_remainder = divmod(catalog_length, 10)
+        counter = 0
+
+        while counter < count_floor:
+            website_size.update(self._website_size(10, counter))
+            counter = counter + 1
+        else:
+            website_size.update(self._website_size(count_remainder, count_floor))
+            
+        return website_size
+        
+        
+    def _website_size(self, p_len=1, counter=0):
+        
+        website_size = {}
+        auto_size_index = 10 * counter
+        
+        if p_len == 1:
+            website_size[1 + auto_size_index] = {'website_size_x':4, 'website_size_y':4}
+        elif p_len == 2:
+            website_size[1 + auto_size_index] = {'website_size_x':2, 'website_size_y':2}
+            website_size[2 + auto_size_index] = {'website_size_x':2, 'website_size_y':2}
+        elif p_len == 3:
+            website_size[1 + auto_size_index] = {'website_size_x':2, 'website_size_y':2}
+            website_size[2 + auto_size_index] = {'website_size_x':2, 'website_size_y':2}
+            website_size[3 + auto_size_index] = {'website_size_x':4, 'website_size_y':4}
+        elif p_len == 4:
+            p_idx = random.randint(1, 2)
+            website_size[p_idx + auto_size_index] = {'website_size_x':3, 'website_size_y':3}
+        elif p_len == 5:
+            p_idx = random.randint(1, 3)
+            website_size[p_idx + auto_size_index] = {'website_size_x':2, 'website_size_y':2}     
+        elif p_len == 6:
+            website_size[1 + auto_size_index] = {'website_size_x':2, 'website_size_y':2}
+            website_size[2 + auto_size_index] = {'website_size_x':2, 'website_size_y':2}
+        elif p_len == 7:
+            website_size[1 + auto_size_index] = {'website_size_x':2, 'website_size_y':2}
+            website_size[2 + auto_size_index] = {'website_size_x':2, 'website_size_y':2}
+            p_idx = random.randint(3, 5)
+            website_size[p_idx + auto_size_index] = {'website_size_x':2, 'website_size_y':2}
+        elif p_len == 8:
+            p_idx = random.randint(1, 2)
+            website_size[p_idx + auto_size_index] = {'website_size_x':3, 'website_size_y':3}
+        elif p_len == 9:
+            p_idx = random.randint(1, 2)
+            website_size[p_idx + auto_size_index] = {'website_size_x':3, 'website_size_y':3}
+            p_idx = random.randint(5, 7)
+            website_size[p_idx + auto_size_index] = {'website_size_x':2, 'website_size_y':2}
+        elif p_len == 10:
+            p_idx = random.randint(1, 3)
+            website_size[p_idx + auto_size_index] = {'website_size_x':2, 'website_size_y':2}
+            p_idx = random.randint(6, 8)
+            website_size[p_idx + auto_size_index] = {'website_size_x':2, 'website_size_y':2}
+            
+        return website_size
+
+    def process(self, catalogs, dpp=DPP):
+        # Compute deals positions on the grid
+        minpos = 0
+        index = 0
+        maxy = 0
+        
+        catalog_grid = {}
+        
+        website_size = self._auto_website_size(len(catalogs))
+        
+        i = 1
+        for p in catalogs:
+            catalog_grid[p.id] = {'catalog': p, 'website_size_x':1, 'website_size_y':1 }
+            if i in website_size:
+                catalog_grid[p.id].update(website_size[i])
+            i = i + 1
+        
+        for p_grid in catalog_grid.values():
+            x = min(max(p_grid['website_size_x'], 1), DPR)
+            y = min(max(p_grid['website_size_y'], 1), DPR)
+            if index>=dpp:
+                x = y = 1
+
+            pos = minpos
+            while not self._check_place(pos%DPR, pos/DPR, x, y):
+                pos += 1
+            # if 21st products (index 20) and the last line is full (DPR products in it), break
+            # (pos + 1.0) / DPR is the line where the product would be inserted
+            # maxy is the number of existing lines
+            # + 1.0 is because pos begins at 0, thus pos 20 is actually the 21st block
+            # and to force python to not round the division operation
+            if index >= dpp and ((pos + 1.0) / DPR) > maxy:
+                break
+
+            if x==1 and y==1:   # simple heuristic for CPU optimization
+                minpos = pos/DPR
+
+            for y2 in range(y):
+                for x2 in range(x):
+                    self.grid[(pos/DPR)+y2][(pos%DPR)+x2] = False
+            self.grid[pos/DPR][pos%DPR] = {
+                'catalog': p_grid['catalog'], 'x':x, 'y': y,
+                'class': " ".join(map(lambda x: x.html_class or '', p_grid['catalog'].website_style_ids))
+            }
+            if index<=dpp:
+                maxy=max(maxy,y+(pos/DPR))
+            index += 1
+
+        # Format grid according to HTML needs
+        rows = self.grid.items()
+        rows.sort()
+        rows = map(lambda x: x[1], rows)
+        for col in range(len(rows)):
+            cols = rows[col].items()
+            cols.sort()
+            x += len(cols)
+            rows[col] = [c for c in map(lambda x: x[1], cols) if c != False]
+
+        return rows
+
+        # TODO keep with input type hidden
+
+
 
 
 class website_best_deal(http.Controller):
@@ -103,7 +253,7 @@ class website_best_deal(http.Controller):
 
         if searches["country_state"] != 'all':
             current_country_state = country_state_obj.browse(cr, uid, int(searches['country_state']), context=context)
-            domain_search["country_state"] = [("state_id", "=", int(searches["country_state"]))]
+            domain_search["country_state"] = ['|', ("state_id", "=", int(searches["country_state"])), ("state_id", "=", False)]
             
         if searches["country"] != 'all' and searches["country"] != 'online':
             current_country = country_obj.browse(cr, uid, int(searches['country']), context=context)
@@ -153,11 +303,11 @@ class website_best_deal(http.Controller):
         country_states = best_deal_obj.read_group(
             request.cr, request.uid, domain, ["id", "state_id"],
             groupby="state_id", orderby="state_id", context=request.context)
-        country_state_id_count = best_deal_obj.search(request.cr, request.uid, domain,
+        state_id_count = best_deal_obj.search(request.cr, request.uid, domain,
                                             count=True, context=request.context)
         country_states.insert(0, {
-            'country_state_id_count': country_state_id_count,
-            'country_state_id': ("all", _("All States/Provinces"))
+            'state_id_count': state_id_count,
+            'state_id': ("all", _("All States/Provinces"))
         })
 
         step = 8  # Number of deals per page
@@ -192,6 +342,8 @@ class website_best_deal(http.Controller):
             'current_country_state': current_country_state,
             'current_type': current_type,
             'best_deal_ids': best_deal_ids,
+            'grid_best_deal_ids': display_grid_compute().process(best_deal_ids, step),
+            'rows': DPR,
             'dates': dates,
             'types': types,
             'countries': countries,
