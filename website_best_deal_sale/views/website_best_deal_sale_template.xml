@@ -8,7 +8,7 @@
   </xpath>
 </template>
 
-<template id="index" inherit_id="website_best_deal.index" name="Deal's Coupon">
+<template id="deals_list_view" inherit_id="website_best_deal.deals_list_view" name="Deal's Coupon">
     <xpath expr="//li[@t-foreach='best_deal_ids']/div/h4" position="before">
         <t t-if="best_deal.state in ['draft', 'confirm'] and best_deal.best_deal_coupon_ids">
             <span t-if="best_deal.coupons_availability == 'limited' and not best_deal.coupons_available" class="label label-danger pull-right">Sold Out</span>

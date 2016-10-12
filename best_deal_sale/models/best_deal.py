@@ -34,9 +34,9 @@ class BestDeal(models.Model):
     @api.depends('best_deal_coupon_ids')
     def _prices(self):
         for deal in self:
-            promo_price = min(float(coupon.price) for coupon in deal.best_deal_coupon_ids)
+            deal.price = min(float(coupon.price) for coupon in deal.best_deal_coupon_ids)
 
-    price = fields.Float(compute='_prices', string='Price')
+    price = fields.Float(compute='_prices', string='Price', store=True)
     
     best_deal_coupon_ids = fields.One2many(
         'best.deal.coupon', 'best_deal_id', string='Deal Coupon',

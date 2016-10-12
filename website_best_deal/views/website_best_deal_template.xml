@@ -42,42 +42,21 @@
                     </t>
                 </div>
             </div>
-            <div class="row mt32 mb32">
-                <div class="col-md-9" id="middle_column">
+            <div class="row mt32">
+                <div id="deals_grid" class="col-md-12">
                     <div class="text-center text-muted" t-if="not best_deal_ids">
                       <h1>No deal found</h1>
                       <t groups="base.group_website_publisher">
                           <p groups="best_deal.group_best_deal_manager">Use the top menu <i>'Content'</i> to create your first deal.</p>
                       </t>
                     </div>
-                    <ul class="media-list">
-                        <li t-foreach="best_deal_ids" t-as="best_deal" class="media">
-                            <div itemscope="itemscope" itemtype="http://schema.org/Deal" class="media-body">
-                                <h4 class="media-heading">
-                                    <a itemprop="url" t-att-class="best_deal.state == 'done' and 'text-success'" t-attf-href="/bestdeal/#{ slug(best_deal) }/#{(not best_deal.menu_id) and 'booking' or ''}"><span itemprop="name" t-field="best_deal.name"> </span></a>
-                                    <small t-if="not best_deal.address_id" class="label label-info">Online</small>
-                                    <small t-if="not best_deal.website_published" class="label label-danger">not published</small>
-                                </h4>
-                                <div>
-                                    <t t-if="best_deal.partner_id">
-                                        Provided by: <span t-field="best_deal.partner_id"> </span>
-                                    </t>
-                                </div>
-                                <div>
-                                    <i class="fa fa-clock-o"></i> <span itemprop="startDate" t-field="best_deal.with_context(tz=best_deal.date_tz).date_begin" t-field-options='{"hide_seconds":"True"}'> </span> <i>to</i> <span itemprop="endDate" t-field="best_deal.with_context(tz=best_deal.date_tz).date_end" t-field-options='{"hide_seconds":"True"}'> </span>
-                                </div>
-                                <div itemprop="location" t-field="best_deal.address_id" t-field-options='{
-                                    "widget": "contact",
-                                    "fields": ["city"]
-                                    }'/>
-                                <div class="text-muted" t-if="best_deal.best_deal_type_id">
-                                    <i class="fa fa-tag"></i> <span t-field="best_deal.best_deal_type_id"/>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
+                    <div id="bestdeals_display">
+                        <t t-call="website_best_deal.deals_list_view"/>
+                    </div>
                 </div>
-                <div class="col-md-3 oe_structure" id="right_column">
+            </div>
+            <div class="row mt32">
+                <div class="col-md-12oe_structure" id="right_column">
                 </div>
             </div>
         </div>
@@ -161,15 +140,15 @@
 </template>
 
 <template id="best_deal_left_column" customize_show="True" inherit_id="website_best_deal.index" name="Filters">
-    <xpath expr="//div[@id='middle_column']" position="attributes">
-        <attribute name="class">col-md-6</attribute>
+    <xpath expr="//div[@id='deals_grid']" position="attributes">
+        <attribute name="class">col-md-9</attribute>
     </xpath>
-    <xpath expr="//div[@id='middle_column']" position="before">
-        <div class="col-md-3 css_noprint" id="left_column">
+    <xpath expr="//div[@id='deals_grid']" position="before">
+        <div class="col-md-3 mb32 css_noprint" id="left_column">
             <ul class="nav nav-pills nav-stacked">
                 <t t-foreach="dates" t-as="date">
                     <li t-att-class="searches.get('date') == date[0] and 'active' or ''" t-if="date[3] or (date[0] in ('old','all'))">
-                        <a t-attf-href="/bestdeal?{{ keep_query('country', 'type', date=date[0]) }}"><t t-esc="date[1]"/>
+                        <a t-attf-href="/bestdeal?{{ keep_query('country', 'country_state', 'type', date=date[0]) }}"><t t-esc="date[1]"/>
                             <span t-if="date[3]" class="badge pull-right"><t t-esc="date[3]"/></span>
                         </a>
                     </li>
@@ -185,7 +164,7 @@
             <t t-foreach="types" t-as="type">
                 <li t-if="type['best_deal_type_id']"
                     t-att-class="searches.get('type') == str(type['best_deal_type_id'] and type['best_deal_type_id'][0]) and 'active' or ''">
-                    <a t-attf-href="/bestdeal?{{ keep_query('country', 'date', type=type['best_deal_type_id'][0]) }}"><t t-esc="type['best_deal_type_id'][1]"/>
+                    <a t-attf-href="/bestdeal?{{ keep_query('country', 'country_state', 'date', type=type['best_deal_type_id'][0]) }}"><t t-esc="type['best_deal_type_id'][1]"/>
                         <span class="badge pull-right"><t t-esc="type['best_deal_type_id_count']"/></span>
                     </a>
                 </li>
@@ -199,12 +178,12 @@
         <ul class="nav nav-pills nav-stacked mt32">
             <t t-foreach="countries" t-as="country">
                 <li t-if="country['country_id']" t-att-class="searches.get('country') == str(country['country_id'] and country['country_id'][0]) and 'active' or ''">
-                    <a t-attf-href="/bestdeal?{{ keep_query('type', 'date', country=country['country_id'][0]) }}"><t t-esc="country['country_id'][1]"/>
+                    <a t-attf-href="/bestdeal?{{ keep_query('type', 'date', 'country_state', country=country['country_id'][0]) }}"><t t-esc="country['country_id'][1]"/>
                         <span class="badge pull-right"><t t-esc="country['country_id_count']"/></span>
                     </a>
                 </li>
                 <li t-if="not country['country_id']" t-att-class="searches.get('country') == 'online' and 'active' or ''">
-                    <a t-attf-href="/bestdeal?{{ keep_query('type', 'date', country='online') }}">
+                    <a t-attf-href="/bestdeal?{{ keep_query('type', 'date', 'country_state', country='online') }}">
                         <span>Online Deals</span>
                         <span class="badge pull-right"><t t-esc="country['country_id_count']"/></span>
                     </a>
@@ -219,13 +198,123 @@
         <ul class="nav nav-pills nav-stacked mt32">
             <t t-foreach="country_states" t-as="country_state">
                 <li t-if="country_state['state_id']" t-att-class="searches.get('country_state') == str(country_state['state_id'] and country_state['state_id'][0]) and 'active' or ''">
-                    <a t-attf-href="/bestdeal?{{ keep_query('type', 'date', country,  country_state=country_state['state_id_id'][0]) }}"><t t-esc="country_state['state_id'][1]"/>
-                        <span class="badge pull-right"><t t-esc="country_state['country_state_id_count']"/></span>
+                    <a t-attf-href="/bestdeal?{{ keep_query('type', 'date', 'country',  country_state=country_state['state_id'][0]) }}">
+                        <t t-esc="country_state['state_id'][1]"/>
+                        <span class="badge pull-right"><t t-esc="country_state['state_id_count']"/></span>
                     </a>
                 </li>
             </t>
         </ul>
     </xpath>
+</template>
+
+
+<!-- Deals List View -->
+<template id="deals_list_view" name="Deals List View">
+    <ul class="media-list">
+        <li t-foreach="best_deal_ids" t-as="best_deal" class="media">
+            <div itemscope="itemscope" itemtype="http://schema.org/Deal" class="media-body">
+                <h4 class="media-heading">
+                    <a itemprop="url" t-att-class="best_deal.state == 'done' and 'text-success'" t-attf-href="/bestdeal/#{ slug(best_deal) }/#{(not best_deal.menu_id) and 'booking' or ''}"><span itemprop="name" t-field="best_deal.name"> </span></a>
+                    <small t-if="not best_deal.address_id" class="label label-info">Online</small>
+                    <small t-if="not best_deal.website_published" class="label label-danger">not published</small>
+                </h4>
+                <div>
+                    <t t-if="best_deal.partner_id">
+                        Provided by: <span t-field="best_deal.partner_id"> </span>
+                    </t>
+                </div>
+                <div>
+                    <i class="fa fa-clock-o"></i> <span itemprop="startDate" t-field="best_deal.with_context(tz=best_deal.date_tz).date_begin" t-field-options='{"hide_seconds":"True"}'> </span> <i>to</i> <span itemprop="endDate" t-field="best_deal.with_context(tz=best_deal.date_tz).date_end" t-field-options='{"hide_seconds":"True"}'> </span>
+                </div>
+                <div itemprop="location" t-field="best_deal.address_id" t-field-options='{
+                    "widget": "contact",
+                    "fields": ["city"]
+                    }'/>
+                <div class="text-muted" t-if="best_deal.best_deal_type_id">
+                    <i class="fa fa-tag"></i> <span t-field="best_deal.best_deal_type_id"/>
+                </div>
+            </div>
+        </li>
+    </ul>
+</template>
+
+
+<!-- Deals Grid View -->
+<template id="deals_grid_view" name="Deals Grid View">
+    <table width="100%">
+        <tbody>
+          <tr t-ignore="true">
+            <td t-foreach="range(0,rows)" t-as="row" t-attf-width="#{100/rows}%"></td>
+          </tr>
+          <tr t-foreach="grid_best_deal_ids" t-as="tr_best_deals">
+            <t t-foreach="tr_best_deals" t-as="td_best_deal">
+              <t t-if="td_best_deal">
+              <t t-set="best_deal" t-value="td_best_deal['catalog']"/>
+              <td t-att-colspan="td_best_deal['x'] != 1 and td_best_deal['x']"
+                  t-att-rowspan="td_best_deal['y'] != 1 and td_best_deal['y']"
+                  t-attf-class="bd_deal bd_grid bd-height-#{td_best_deal['y']*2} #{ td_best_deal['class'] }">
+
+                  <div class="bd_deal_cart" t-att-data-publish="best_deal.website_published and 'on' or 'off'">
+                    <t t-set="deal_image_big" t-value="td_best_deal['x']+td_best_deal['y'] > 2"/>
+                    <t t-call="website_best_deal.deals_item"/>
+                  </div>
+
+              </td>
+              </t>
+              <td t-if="not td_best_deal" class="bd-height-2"/>
+            </t>
+          </tr>
+        </tbody>
+      </table>
+    
+</template>
+
+<!-- Deals Grid View Switch -->
+<template id="deals_grid_switch" inherit_id="website_best_deal.index" active="False" customize_show="True" name="Grid View">
+    <xpath expr="//div[@id='bestdeals_display']//t[@t-call='website_best_deal.deals_list_view']" position="attributes">
+        <attribute name="t-call">website_best_deal.deals_grid_view</attribute>
+    </xpath>
+</template>
+
+
+<!-- Deal item used by /bestdeals grid view -->
+
+<template id="deals_item" name="Deals item">
+  <form action="/shop/cart/update" method="post">
+  <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+  <div itemscope="itemscope" itemtype="http://schema.org/Product">
+  <div class="ribbon-wrapper">
+    <div class="ribbon btn btn-danger">Sale</div>
+  </div>
+  <div class="bd_deal_image">
+      <a t-attf-href="/bestdeal/#{ slug(best_deal) }/#{(not best_deal.menu_id) and 'booking' or ''}" 
+        itemprop="url">
+            <!-- #{None if deal_image_big else ", \"resize\": \"400x300\""} -->
+          <span itemprop="image" t-field="best_deal.image_wide" t-field-options='{"widget": "image"}' t-att-alt="best_deal.name"/>
+      </a>
+  </div>
+  
+  <!-- Publish Button Here -->
+  
+  <section>
+      <h5><strong><a itemprop="name" 
+      t-attf-href="/bestdeal/#{ slug(best_deal) }/#{(not best_deal.menu_id) and 'booking' or ''}"
+      t-field="best_deal.name"/></strong></h5>
+      <div itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" class="deal_price">
+          <b>
+              <span t-field="best_deal.price" style="white-space: nowrap;"  t-field-options='{
+                   "widget": "monetary",
+                   "display_currency": "website.currency_id"
+               }'>
+              </span>
+              <span itemprop="price" style="display:none;" t-esc="best_deal.price"/>
+              <span itemprop="priceCurrency" style="display:none;" t-esc="website.currency_id.name"/>
+          </b>
+      </div>
+  </section>
+  </div>
+  </form>
 </template>
 
 <template id="layout">

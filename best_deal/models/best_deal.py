@@ -200,7 +200,7 @@ class BestDeal(models.Model):
     
     #image
     image = fields.Binary("Image", attachment=True,
-        help="This field holds the image used as image for the deal, limited to 1440x1080px.")
+        help="This field holds the image used as image for the deal, limited to 1280x960px.")
         
     image_icon = fields.Binary("Icon image", attachment=True,
         help="Medium-sized image of the deal. It is automatically "\

@@ -105,7 +105,7 @@ class display_grid_compute(object):
             p_idx = random.randint(3, 5)
             website_size[p_idx + auto_size_index] = {'website_size_x':2, 'website_size_y':2}
         elif p_len == 8:
-            p_idx = random.randint(1, 2)
+            p_idx = random.randint(1, 5)
             website_size[p_idx + auto_size_index] = {'website_size_x':3, 'website_size_y':3}
         elif p_len == 9:
             p_idx = random.randint(1, 2)
@@ -126,12 +126,14 @@ class display_grid_compute(object):
         index = 0
         maxy = 0
         
+        catalogs_rand_sorted = catalogs
+        
         catalog_grid = {}
         
-        website_size = self._auto_website_size(len(catalogs))
+        website_size = self._auto_website_size(len(catalogs_rand_sorted))
         
         i = 1
-        for p in catalogs:
+        for p in catalogs_rand_sorted:
             catalog_grid[p.id] = {'catalog': p, 'website_size_x':1, 'website_size_y':1 }
             if i in website_size:
                 catalog_grid[p.id].update(website_size[i])
