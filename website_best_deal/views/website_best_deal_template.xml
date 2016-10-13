@@ -5,6 +5,7 @@
 <template id="best_deal_script" inherit_id="website.assets_frontend" name="Country Deals Snippet Script">
     <xpath expr="/t" position="inside">
         <link rel="stylesheet" href="/website_best_deal/static/src/css/website_best_deal.css"/>
+        <link rel="stylesheet" type="text/less" href="/website_best_deal/static/src/css/website_best_deal_variables.less" t-ignore="true"/>
         <script type="text/javascript" src="/website_best_deal/static/src/js/website_geolocation.js"></script>
         <script type="text/javascript" src="/website_best_deal/static/src/js/website_best_deal.js"></script>
     </xpath>

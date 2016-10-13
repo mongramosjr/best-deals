@@ -75,8 +75,8 @@
 }
 .bd_deal section {
   position: absolute;
-  left: 0;
-  right: 0;
+  left: 4px;
+  right: 4px;
   bottom: 0;
   overflow: hidden;
   padding: 0 15px 24px 10px;
