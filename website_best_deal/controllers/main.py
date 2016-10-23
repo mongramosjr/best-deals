@@ -20,7 +20,7 @@
 #   limitations under the License.
 ##############################################################################
 
-
+import logging
 import babel.dates
 import time
 import random
@@ -35,9 +35,10 @@ from openerp.addons.website.models.website import slug
 from openerp.http import request
 from openerp.tools.translate import _
 
+_logger = logging.getLogger(__name__)
 
-DPP = 20 # Deals Per Page
-DPR = 4  # Deals Per Row
+IPP = 20 # Deals Per Page
+IPR = 4  # Deals Per Row
 
 # Derived from Odoo website_sale module. 
 # Copyright: (C) 2004-2015 Odoo SA. (www.odoo.com)
@@ -46,21 +47,6 @@ class display_grid_compute(object):
     def __init__(self):
         self.grid = {}
 
-    def _check_place(self, posx, posy, sizex, sizey):
-        res = True
-        for y in range(sizey):
-            for x in range(sizex):
-                if posx+x>=DPR:
-                    res = False
-                    break
-                row = self.grid.setdefault(posy+y, {})
-                if row.setdefault(posx+x) is not None:
-                    res = False
-                    break
-            for x in range(DPR):
-                self.grid[posy+y].setdefault(x, None)
-        return res
-        
     def _auto_website_size(self, catalog_length=0):
         
         website_size = {} 
@@ -82,7 +68,7 @@ class display_grid_compute(object):
         auto_size_index = 10 * counter
         
         if p_len == 1:
-            website_size[1 + auto_size_index] = {'website_size_x':4, 'website_size_y':4}
+            website_size[1 + auto_size_index] = {'website_size_x':4, 'website_size_y':3}
         elif p_len == 2:
             website_size[1 + auto_size_index] = {'website_size_x':2, 'website_size_y':2}
             website_size[2 + auto_size_index] = {'website_size_x':2, 'website_size_y':2}
@@ -94,19 +80,34 @@ class display_grid_compute(object):
             p_idx = random.randint(1, 2)
             website_size[p_idx + auto_size_index] = {'website_size_x':3, 'website_size_y':3}
         elif p_len == 5:
-            p_idx = random.randint(1, 3)
-            website_size[p_idx + auto_size_index] = {'website_size_x':2, 'website_size_y':2}     
+            
+            p_idx = random.randint(1,3)
+            website_size[p_idx + auto_size_index] = {'website_size_x':2, 'website_size_y':2}
+            
+            #alternative
+            #website_size[p_idx + auto_size_index] = {'website_size_x':4, 'website_size_y':3}
+            
         elif p_len == 6:
-            website_size[1 + auto_size_index] = {'website_size_x':2, 'website_size_y':2}
-            website_size[2 + auto_size_index] = {'website_size_x':2, 'website_size_y':2}
+            selected_t = random.randint(1,2)
+            if selected_t == 1:
+                website_size[1 + auto_size_index] = {'website_size_x':2, 'website_size_y':2}
+                website_size[2 + auto_size_index] = {'website_size_x':2, 'website_size_y':2}
+            else:
+                website_size[5 + auto_size_index] = {'website_size_x':2, 'website_size_y':2}
+                website_size[6 + auto_size_index] = {'website_size_x':2, 'website_size_y':2}
         elif p_len == 7:
             website_size[1 + auto_size_index] = {'website_size_x':2, 'website_size_y':2}
             website_size[2 + auto_size_index] = {'website_size_x':2, 'website_size_y':2}
             p_idx = random.randint(3, 5)
             website_size[p_idx + auto_size_index] = {'website_size_x':2, 'website_size_y':2}
         elif p_len == 8:
-            p_idx = random.randint(1, 5)
-            website_size[p_idx + auto_size_index] = {'website_size_x':3, 'website_size_y':3}
+            selected_t = random.randint(1,2)
+            if selected_t == 1:
+                p_idx = random.randint(1, 2)
+                website_size[p_idx + auto_size_index] = {'website_size_x':3, 'website_size_y':3}
+            else:
+                p_idx = random.randint(5, 6)
+                website_size[p_idx + auto_size_index] = {'website_size_x':3, 'website_size_y':3}
         elif p_len == 9:
             p_idx = random.randint(1, 2)
             website_size[p_idx + auto_size_index] = {'website_size_x':3, 'website_size_y':3}
@@ -120,65 +121,94 @@ class display_grid_compute(object):
             
         return website_size
 
-    def process(self, catalogs, dpp=DPP):
+    def _check_place(self, posx, posy, sizex, sizey):
+        res = True
+        for y in range(sizey):
+            for x in range(sizex):
+                if posx+x>=IPR:
+                    res = False
+                    break
+                row = self.grid.setdefault(posy+y, {})
+                if row.setdefault(posx+x) is not None:
+                    res = False
+                    break
+            for x in range(IPR):
+                self.grid[posy+y].setdefault(x, None)
+        return res
+        
+    def process(self, catalogs, ipp=IPP, srandom=False):
         # Compute deals positions on the grid
         minpos = 0
         index = 0
         maxy = 0
         
-        catalogs_rand_sorted = catalogs
+        _logger.error('MONGGG A "%r"', catalogs)
         
-        catalog_grid = {}
+        if srandom :
+            catalogs_rand_sorted = catalogs
+        else:
+            catalogs_rand_sorted = catalogs
+            
+        catalog_grid = []
         
         website_size = self._auto_website_size(len(catalogs_rand_sorted))
         
+        _logger.error('MONGGG 0 "%r"', website_size)
+        
         i = 1
         for p in catalogs_rand_sorted:
-            catalog_grid[p.id] = {'catalog': p, 'website_size_x':1, 'website_size_y':1 }
+            cpos = i - 1
+            catalog_grid.append({'catalog': p, 'website_size_x':1, 'website_size_y':1, 'cid': p.id })
             if i in website_size:
-                catalog_grid[p.id].update(website_size[i])
+                catalog_grid[cpos].update(website_size[i])
             i = i + 1
         
-        for p_grid in catalog_grid.values():
-            x = min(max(p_grid['website_size_x'], 1), DPR)
-            y = min(max(p_grid['website_size_y'], 1), DPR)
-            if index>=dpp:
+        _logger.error('MONGGG 0.1 "%r"', catalog_grid)
+        
+        for p_grid in catalog_grid:
+            x = min(max(p_grid['website_size_x'], 1), IPR)
+            y = min(max(p_grid['website_size_y'], 1), IPR)
+            if index>=ipp:
                 x = y = 1
 
             pos = minpos
-            while not self._check_place(pos%DPR, pos/DPR, x, y):
+            while not self._check_place(pos%IPR, pos/IPR, x, y):
                 pos += 1
-            # if 21st products (index 20) and the last line is full (DPR products in it), break
-            # (pos + 1.0) / DPR is the line where the product would be inserted
+            # if 21st products (index 20) and the last line is full (IPR products in it), break
+            # (pos + 1.0) / IPR is the line where the product would be inserted
             # maxy is the number of existing lines
             # + 1.0 is because pos begins at 0, thus pos 20 is actually the 21st block
             # and to force python to not round the division operation
-            if index >= dpp and ((pos + 1.0) / DPR) > maxy:
+            if index >= ipp and ((pos + 1.0) / IPR) > maxy:
                 break
 
             if x==1 and y==1:   # simple heuristic for CPU optimization
-                minpos = pos/DPR
+                minpos = pos/IPR
 
             for y2 in range(y):
                 for x2 in range(x):
-                    self.grid[(pos/DPR)+y2][(pos%DPR)+x2] = False
-            self.grid[pos/DPR][pos%DPR] = {
-                'catalog': p_grid['catalog'], 'x':x, 'y': y,
+                    self.grid[(pos/IPR)+y2][(pos%IPR)+x2] = False
+            self.grid[pos/IPR][pos%IPR] = {
+                'catalog': p_grid['catalog'], 'x':x, 'y': y, 'cid': p_grid['cid'],
                 'class': " ".join(map(lambda x: x.html_class or '', p_grid['catalog'].website_style_ids))
             }
-            if index<=dpp:
-                maxy=max(maxy,y+(pos/DPR))
+            if index<=ipp:
+                maxy=max(maxy,y+(pos/IPR))
             index += 1
+        
+        _logger.error('MONGGG 1 "%r"', self.grid.items())
 
         # Format grid according to HTML needs
         rows = self.grid.items()
         rows.sort()
         rows = map(lambda x: x[1], rows)
+        _logger.error('MONGGG 2 "%r"', rows)
         for col in range(len(rows)):
             cols = rows[col].items()
             cols.sort()
             x += len(cols)
             rows[col] = [c for c in map(lambda x: x[1], cols) if c != False]
+        _logger.error('MONGGG 3 "%r"', rows)
 
         return rows
 
@@ -201,6 +231,7 @@ class website_best_deal(http.Controller):
         searches.setdefault('type', 'all')
         searches.setdefault('country', 'all')
         searches.setdefault('country_state', 'all')
+        searches.setdefault('ipp', IPP)
 
         domain_search = {}
 
@@ -312,7 +343,7 @@ class website_best_deal(http.Controller):
             'state_id': ("all", _("All States/Provinces"))
         })
 
-        step = 8  # Number of deals per page
+        step = 'ipp' in searches and int(searches['ipp']) or IPP  # Number of deals per page
         best_deal_count = best_deal_obj.search(
             request.cr, request.uid, dom_without("none"), count=True,
             context=request.context)
@@ -345,7 +376,7 @@ class website_best_deal(http.Controller):
             'current_type': current_type,
             'best_deal_ids': best_deal_ids,
             'grid_best_deal_ids': display_grid_compute().process(best_deal_ids, step),
-            'rows': DPR,
+            'rows': IPR,
             'dates': dates,
             'types': types,
             'countries': countries,
