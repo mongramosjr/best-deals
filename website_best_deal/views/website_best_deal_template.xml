@@ -292,7 +292,7 @@
       <a t-attf-href="/bestdeal/#{ slug(best_deal) }/#{(not best_deal.menu_id) and 'booking' or ''}" 
         itemprop="url">
             <!-- #{None if deal_image_big else ", \"resize\": \"400x300\""} -->
-          <span itemprop="image" t-field="best_deal.image_wide" t-field-options='{"widget": "image"}' t-att-alt="best_deal.name"/>
+          <span itemprop="image" t-field="best_deal.image" t-field-options='{"widget": "image"}' t-att-alt="best_deal.name"/>
       </a>
   </div>
   
