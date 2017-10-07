@@ -11,7 +11,7 @@
     </xpath>
 </template>
 
-<template id="assets_editor" inherit_id="website.assets_editor" name="Deal Editor" groups="best_deal.group_best_deal_manager">
+<template id="assets_editor" inherit_id="website.assets_editor" name="Deal Editor" >
     <xpath expr="." position="inside">
         <script type="text/javascript" src="/website_best_deal/static/src/js/website_best_deal.editor.js"></script>
         <script type="text/javascript" src="/website_best_deal/static/src/js/website.tour.best_deal.js"></script>
@@ -298,22 +298,14 @@
   
   <!-- Publish Button Here -->
   
-  <section>
-      <h5><strong><a itemprop="name" 
-      t-attf-href="/bestdeal/#{ slug(best_deal) }/#{(not best_deal.menu_id) and 'booking' or ''}"
-      t-field="best_deal.name"/></strong></h5>
-      <div itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" class="deal_price">
-          <b>
-              <span t-field="best_deal.price" style="white-space: nowrap;"  t-field-options='{
-                   "widget": "monetary",
-                   "display_currency": "website.currency_id"
-               }'>
-              </span>
-              <span itemprop="price" style="display:none;" t-esc="best_deal.price"/>
-              <span itemprop="priceCurrency" style="display:none;" t-esc="website.currency_id.name"/>
-          </b>
-      </div>
-  </section>
+    <section id="deal_label">
+        <h5>
+            <strong><a itemprop="name" 
+              t-attf-href="/bestdeal/#{ slug(best_deal) }/#{(not best_deal.menu_id) and 'booking' or ''}"
+              t-field="best_deal.name"/>
+            </strong>
+        </h5>
+    </section>
   </div>
   </form>
 </template>
@@ -792,9 +784,9 @@
 
 
 <!-- User Navbar -->
-<template id="content_new_best_deal" inherit_id="website.user_navbar" groups="best_deal.group_best_deal_manager">
-    <xpath expr="//ul[@id='oe_systray']/li/ul[@class='dropdown-menu oe_content_menu']" position="inside">
-         <li><a href="#" data-action="new_best_deal">New Deal</a></li>
+<template id="content_new_best_deal" inherit_id="website.user_navbar">
+    <xpath expr="//div[@id='o_website_add_page_modal']//ul" position="inside">
+        <li groups="best_deal.group_best_deal_manager"><a href="#" data-action="new_best_deal"><i class="fa fa-glass"/><p>New Deal</p></a></li>
     </xpath>
 </template>
 </data>

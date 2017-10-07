@@ -21,19 +21,19 @@
 ##############################################################################
 
 import logging
-import babel.dates
 import time
 import random
+
+
+import babel.dates
 import re
-import werkzeug.urls
+import werkzeug
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 
-from openerp import http
-from openerp import tools, SUPERUSER_ID
-from openerp.addons.website.models.website import slug
-from openerp.http import request
-from openerp.tools.translate import _
+from odoo import tools, fields, http, _
+from odoo.addons.website.models.website import slug
+from odoo.http import request
 
 _logger = logging.getLogger(__name__)
 
@@ -142,7 +142,7 @@ class display_grid_compute(object):
         index = 0
         maxy = 0
         
-        _logger.error('MONGGG A "%r"', catalogs)
+        #_logger.error('MONGGG A "%r"', catalogs)
         
         if srandom :
             catalogs_rand_sorted = catalogs
@@ -153,7 +153,7 @@ class display_grid_compute(object):
         
         website_size = self._auto_website_size(len(catalogs_rand_sorted))
         
-        _logger.error('MONGGG 0 "%r"', website_size)
+        #_logger.error('MONGGG 0 "%r"', website_size)
         
         i = 1
         for p in catalogs_rand_sorted:
@@ -163,7 +163,7 @@ class display_grid_compute(object):
                 catalog_grid[cpos].update(website_size[i])
             i = i + 1
         
-        _logger.error('MONGGG 0.1 "%r"', catalog_grid)
+        #_logger.error('MONGGG 0.1 "%r"', catalog_grid)
         
         for p_grid in catalog_grid:
             x = min(max(p_grid['website_size_x'], 1), IPR)
@@ -196,7 +196,7 @@ class display_grid_compute(object):
                 maxy=max(maxy,y+(pos/IPR))
             index += 1
         
-        _logger.error('MONGGG 1 "%r"', self.grid.items())
+        #_logger.error('MONGGG 1 "%r"', self.grid.items())
 
         # Format grid according to HTML needs
         rows = self.grid.items()
@@ -208,7 +208,8 @@ class display_grid_compute(object):
             cols.sort()
             x += len(cols)
             rows[col] = [c for c in map(lambda x: x[1], cols) if c != False]
-        _logger.error('MONGGG 3 "%r"', rows)
+        
+        #_logger.error('MONGGG 3 "%r"', rows)
 
         return rows
 
@@ -217,29 +218,30 @@ class display_grid_compute(object):
 
 
 
-class website_best_deal(http.Controller):
+class WebsiteBestDealController(http.Controller):
     @http.route(['/bestdeal', '/bestdeal/page/<int:page>', '/bestdeals', '/bestdeals/page/<int:page>'], type='http', auth="public", website=True)
     def bestdeals(self, page=1, **searches):
-        cr, uid, context = request.cr, request.uid, request.context
-        best_deal_obj = request.registry['best.deal']
-        best_deal_type_obj = request.registry['best.deal.type']
-        country_obj = request.registry['res.country']
-        country_state_obj = request.registry['res.country.state']
         
-
+        BestDeal = request.env['best.deal']
+        BestDealType = request.env['best.deal.type']
+        Country = request.env['res.country']
+        CountryState = request.env['res.country.state']
+        
         searches.setdefault('date', 'all')
         searches.setdefault('type', 'all')
         searches.setdefault('country', 'all')
+        
         searches.setdefault('country_state', 'all')
         searches.setdefault('ipp', IPP)
 
         domain_search = {}
-
+        
         def sdn(date):
-            return date.replace(hour=23, minute=59, second=59).strftime(tools.DEFAULT_SERVER_DATETIME_FORMAT)
+            return fields.Datetime.to_string(date.replace(hour=23, minute=59, second=59))
 
         def sd(date):
-            return date.strftime(tools.DEFAULT_SERVER_DATETIME_FORMAT)
+            return fields.Datetime.to_string(date)
+            
         today = datetime.today()
         dates = [
             ['all', _('Next Deals'), [("date_end", ">", sd(today))], 0],
@@ -267,6 +269,8 @@ class website_best_deal(http.Controller):
                 ("date_end", "<", today.strftime('%Y-%m-%d 00:00:00'))],
                 0],
         ]
+        
+        
 
         # search domains
         # TDE note: WTF ???
@@ -281,15 +285,15 @@ class website_best_deal(http.Controller):
                 if date[0] != 'all':
                     current_date = date[1]
         if searches["type"] != 'all':
-            current_type = best_deal_type_obj.browse(cr, uid, int(searches['type']), context=context)
+            current_type = BestDealType.browse(int(searches['type']))
             domain_search["type"] = [("best_deal_type_id", "=", int(searches["type"]))]
-
+            
         if searches["country_state"] != 'all':
-            current_country_state = country_state_obj.browse(cr, uid, int(searches['country_state']), context=context)
+            current_country_state = CountryState.browse(int(searches['country_state']))
             domain_search["country_state"] = ['|', ("state_id", "=", int(searches["country_state"])), ("state_id", "=", False)]
             
         if searches["country"] != 'all' and searches["country"] != 'online':
-            current_country = country_obj.browse(cr, uid, int(searches['country']), context=context)
+            current_country = Country.browse(int(searches['country']))
             domain_search["country"] = ['|', ("country_id", "=", int(searches["country"])), ("country_id", "=", False)]
         elif searches["country"] == 'online':
             domain_search["country"] = [("country_id", "=", False)]
@@ -304,54 +308,39 @@ class website_best_deal(http.Controller):
         # count by domains without self search
         for date in dates:
             if date[0] != 'old':
-                date[3] = best_deal_obj.search(
-                    request.cr, request.uid, dom_without('date') + date[2],
-                    count=True, context=request.context)
+                date[3] = BestDeal.search_count(dom_without('date') + date[2])
 
         domain = dom_without('type')
-        types = best_deal_obj.read_group(
-            request.cr, request.uid, domain, ["id", "best_deal_type_id"], groupby="best_deal_type_id",
-            orderby="best_deal_type_id", context=request.context)
-        type_count = best_deal_obj.search(request.cr, request.uid, domain,
-                                      count=True, context=request.context)
+        types = BestDeal.read_group(domain, ["id", "best_deal_type_id"], groupby=["best_deal_type_id"], orderby="best_deal_type_id")
         types.insert(0, {
-            'best_deal_type_id_count': type_count,
+            'best_deal_type_id_count': sum([int(type['best_deal_type_id_count']) for type in types]),
             'best_deal_type_id': ("all", _("All Categories"))
         })
 
         #country
         domain = dom_without('country')
-        countries = best_deal_obj.read_group(
-            request.cr, request.uid, domain, ["id", "country_id"],
-            groupby="country_id", orderby="country_id", context=request.context)
-        country_id_count = best_deal_obj.search(request.cr, request.uid, domain,
-                                            count=True, context=request.context)
+        countries = BestDeal.read_group(domain, ["id", "country_id"], groupby="country_id", orderby="country_id")
         countries.insert(0, {
-            'country_id_count': country_id_count,
+            'country_id_count': sum([int(country['country_id_count']) for country in countries]),
             'country_id': ("all", _("All Countries"))
         })
+
         
         #state
         domain = dom_without('country_state')
-        country_states = best_deal_obj.read_group(
-            request.cr, request.uid, domain, ["id", "state_id"],
-            groupby="state_id", orderby="state_id", context=request.context)
-        state_id_count = best_deal_obj.search(request.cr, request.uid, domain,
-                                            count=True, context=request.context)
+        country_states = BestDeal.read_group(domain, ["id", "state_id"], groupby="state_id", orderby="state_id")
         country_states.insert(0, {
-            'state_id_count': state_id_count,
+            'state_id_count': sum([int(country_state['state_id_count']) for country_state in country_states]),
             'state_id': ("all", _("All States/Provinces"))
         })
 
         step = 'ipp' in searches and int(searches['ipp']) or IPP  # Number of deals per page
-        best_deal_count = best_deal_obj.search(
-            request.cr, request.uid, dom_without("none"), count=True,
-            context=request.context)
+        best_deal_count = BestDeal.search_count(dom_without("none"))
         pager = request.website.pager(
             url="/bestdeal",
             url_args={
-                'date': searches.get('date'), 
-                'type': searches.get('type'), 
+                'date': searches.get('date'),
+                'type': searches.get('type'),
                 'country': searches.get('country'),
                 'country_state': searches.get('country_state')
                 },
@@ -363,30 +352,25 @@ class website_best_deal(http.Controller):
         order = 'website_published desc, date_begin'
         if searches.get('date', 'all') == 'old':
             order = 'website_published desc, date_begin desc'
-        obj_ids = best_deal_obj.search(
-            request.cr, request.uid, dom_without("none"), limit=step,
-            offset=pager['offset'], order=order, context=request.context)
-        best_deal_ids = best_deal_obj.browse(request.cr, request.uid, obj_ids,
-                                      context=request.context)
-
+        best_deal_ids = BestDeal.search(dom_without("none"), limit=step, offset=pager['offset'], order=order)
+        
         values = {
-            'current_date': current_date,
-            'current_country': current_country,
-            'current_country_state': current_country_state,
-            'current_type': current_type,
-            'best_deal_ids': best_deal_ids,
             'grid_best_deal_ids': display_grid_compute().process(best_deal_ids, step),
             'rows': IPR,
+            
+            'current_date': current_date,
+            'current_country': current_country,
+            'current_type': current_type,
+            'best_deal_ids': best_deal_ids,  # best_deal_ids used in website_best_deal_track so we keep name as it is
             'dates': dates,
             'types': types,
             'countries': countries,
-            'country_states': country_states,
             'pager': pager,
             'searches': searches,
             'search_path': "?%s" % werkzeug.url_encode(searches),
         }
 
-        return request.website.render("website_best_deal.index", values)
+        return request.render("website_best_deal.index", values)
 
     @http.route(['/bestdeal/<model("best.deal"):best_deal>/page/<path:page>'], type='http', auth="public", website=True)
     def bestdeal_page(self, best_deal, page, **post):
@@ -406,7 +390,7 @@ class website_best_deal(http.Controller):
             values['from_template'] = 'website_best_deal.default_page'  # .strip('website_best_deal.')
             page = 'website.page_404'
 
-        return request.website.render(page, values)
+        return request.render(page, values)
 
     @http.route(['/bestdeal/<model("best.deal"):best_deal>'], type='http', auth="public", website=True)
     def bestdeal(self, best_deal, **post):
@@ -424,75 +408,70 @@ class website_best_deal(http.Controller):
             'best_deal': best_deal,
             'main_object': best_deal,
             'range': range,
+            'registrable': best_deal._is_deal_registrable()
         }
-        return request.website.render("website_best_deal.best_deal_description_full", values)
+        return request.render("website_best_deal.best_deal_description_full", values)
 
     @http.route('/bestdeal/add_bestdeal', type='http', auth="user", methods=['POST'], website=True)
     def add_bestdeal(self, best_deal_name="New Deal", **kwargs):
-        return self._add_bestdeal(best_deal_name, request.context, **kwargs)
+        best_deal = self._add_bestdeal(best_deal_name, request.context)
+        return request.redirect("/bestdeal/%s/booking?enable_editor=1" % slug(best_deal))
 
-    def _add_bestdeal(self, best_deal_name=None, context={}, **kwargs):
+    def _add_bestdeal(self, best_deal_name=None, context=None, **kwargs):
         if not best_deal_name:
             best_deal_name = _("New Deal")
-        Best_Deal = request.registry.get('best.deal')
         date_begin = datetime.today() + timedelta(days=(14))
         vals = {
             'name': best_deal_name,
-            'date_begin': date_begin.strftime('%Y-%m-%d'),
-            'date_end': (date_begin + timedelta(days=(1))).strftime('%Y-%m-%d'),
+            'date_begin': fields.Date.to_string(date_begin),
+            'date_end': fields.Date.to_string((date_begin + timedelta(days=(1)))),
             'coupons_available': 1000,
         }
-        best_deal_id = Best_Deal.create(request.cr, request.uid, vals, context=context)
-        best_deal = Best_Deal.browse(request.cr, request.uid, best_deal_id, context=context)
-        return request.redirect("/bestdeal/%s/booking?enable_editor=1" % slug(best_deal))
+        return request.env['best.deal'].with_context(context or {}).create(vals)
 
     def get_formated_date(self, best_deal):
-        context = request.context
-        start_date = datetime.strptime(best_deal.date_begin, tools.DEFAULT_SERVER_DATETIME_FORMAT).date()
-        end_date = datetime.strptime(best_deal.date_end, tools.DEFAULT_SERVER_DATETIME_FORMAT).date()
-        month = babel.dates.get_month_names('abbreviated', locale=context.get('lang', 'en_US'))[start_date.month]
-        return _('%(month)s %(start_day)s%(end_day)s') % {
-            'month': month,
-            'start_day': start_date.strftime("%e"),
-            'end_day': (end_date != start_date and ("-"+end_date.strftime("%e")) or "")
-        }
+        start_date = fields.Datetime.from_string(best_deal.date_begin).date()
+        end_date = fields.Datetime.from_string(best_deal.date_end).date()
+        month = babel.dates.get_month_names('abbreviated', locale=best_deal.env.context.get('lang') or 'en_US')[start_date.month]
+        return ('%s %s%s') % (month, start_date.strftime("%e"), (end_date != start_date and ("-" + end_date.strftime("%e")) or ""))
+
 
     @http.route('/bestdeal/get_country_best_deal_list', type='http', auth='public', website=True)
     def get_country_best_deals(self, **post):
-        cr, uid, context, best_deal_ids = request.cr, request.uid, request.context, []
-        country_obj = request.registry['res.country']
-        best_deal_obj = request.registry['best.deal']
+        BestDeal = request.env['best.deal']
         country_code = request.session['geoip'].get('country_code')
         result = {'best_deals': [], 'country': False}
+        best_deals = None
         if country_code:
-            country_ids = country_obj.search(cr, uid, [('code', '=', country_code)], context=context)
-            best_deal_ids = best_deal_obj.search(cr, uid, ['|', ('address_id', '=', None), ('country_id.code', '=', country_code), ('date_begin', '>=', time.strftime('%Y-%m-%d 00:00:00')), ('state', '=', 'confirm')], order="date_begin", context=context)
-        if not best_deal_ids:
-            best_deal_ids = best_deal_obj.search(cr, uid, [('date_begin', '>=', time.strftime('%Y-%m-%d 00:00:00')), ('state', '=', 'confirm')], order="date_begin", context=context)
-        for best_deal in best_deal_obj.browse(cr, uid, best_deal_ids, context=context)[:6]:
+            country = request.env['res.country'].search([('code', '=', country_code)], limit=1)
+            best_deals = BestDeal.search(['|', ('address_id', '=', None), ('country_id.code', '=', country_code), ('date_begin', '>=', '%s 00:00:00' % fields.Date.today()), ('state', '=', 'confirm')], order="date_begin")
+        if not best_deals:
+            best_deals = BestDeal.search([('date_begin', '>=', '%s 00:00:00' % fields.Date.today()), ('state', '=', 'confirm')], order="date_begin")
+        for best_deal in best_deals:
             if country_code and best_deal.country_id.code == country_code:
-                result['country'] = country_obj.browse(cr, uid, country_ids[0], context=context)
+                result['country'] = country
             result['best_deals'].append({
                 "date": self.get_formated_date(best_deal),
                 "best_deal": best_deal,
                 "url": best_deal.website_url})
-        return request.website.render("website_best_deal.country_best_deals_list", result)
+        return request.render("website_best_deal.country_best_deals_list", result)
 
     def _process_coupons_details(self, data):
         nb_booking = int(data.get('nb_booking-0', 0))
         if nb_booking:
             return [{'id': 0, 'name': 'Subscription', 'quantity': nb_booking, 'price': 0}]
         return []
-
+        
     @http.route(['/bestdeal/<model("best.deal"):best_deal>/booking/new'], type='json', auth="public", methods=['POST'], website=True)
     def booking_new(self, best_deal, **post):
         coupons = self._process_coupons_details(post)
         if not coupons:
-            return request.redirect("/bestdeal/%s" % slug(best_deal))
-        return request.website._render("website_best_deal.booking_customer_details", {'coupons': coupons, 'best_deal': best_deal})
+            return False
+        return request.env['ir.ui.view'].render_template("website_best_deal.booking_customer_details", {'coupons': coupons, 'best_deal': best_deal})
+
 
     def _process_booking_details(self, details):
-        ''' Process data posted from the attendee details form. '''
+        ''' Process data posted from the booking details form. '''
         bookings = {}
         global_values = {}
         for key, value in details.iteritems():
@@ -505,24 +484,18 @@ class website_best_deal(http.Controller):
             for booking in bookings.values():
                 booking[key] = value
         return bookings.values()
-
+        
     @http.route(['/bestdeal/<model("best.deal"):best_deal>/booking/confirm'], type='http', auth="public", methods=['POST'], website=True)
     def booking_confirm(self, best_deal, **post):
-        cr, uid, context = request.cr, request.uid, request.context
-        Booking = request.registry['best.deal.booking']
+        Booking = request.env['best.deal.booking']
         bookings = self._process_booking_details(post)
 
-        booking_ids = []
         for booking in bookings:
             booking['best_deal_id'] = best_deal
-            booking_ids.append(
-                Booking.create(
-                    cr, SUPERUSER_ID,
-                    Booking._prepare_customer_values(cr, uid, booking),
-                    context=context))
+            Booking += Booking.sudo().create(
+                Booking._prepare_customer_values(booking))
 
-        customers = Booking.browse(cr, uid, booking_ids, context=context)
-        return request.website.render("website_best_deal.booking_complete", {
-            'customers': customers,
+        return request.render("website_best_deal.booking_complete", {
+            'customers': Booking,
             'best_deal': best_deal,
         })

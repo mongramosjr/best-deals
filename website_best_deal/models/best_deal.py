@@ -23,9 +23,8 @@
 
 import re
 
-from openerp import models, fields, api, _
-from openerp import SUPERUSER_ID
-from openerp.addons.website.models.website import slug
+from odoo import models, fields, api, _
+from odoo.addons.website.models.website import slug
 
 
 class BestDealStyle(models.Model):
@@ -37,6 +36,9 @@ class BestDealStyle(models.Model):
 class BestDeal(models.Model):
     _name = 'best.deal'
     _inherit = ['best.deal', 'website.seo.metadata', 'website.published.mixin']
+    
+    def _default_hashtag(self):
+        return re.sub("[- \\.\\(\\)\\@\\#\\&]+", "", self.env.user.company_id.name).lower()
 
     website_style_ids = fields.Many2many('best.deal.style', string='Styles')
 
@@ -52,23 +54,23 @@ class BestDeal(models.Model):
         help="Website communication history",
     )
 
-    @api.multi
-    @api.depends('name')
-    def _website_url(self, name, arg):
-        res = super(BestDeal, self)._website_url(name, arg)
-        res.update({(e.id, '/bestdeal/%s' % slug(e)) for e in self})
-        return res
-
-    def _default_hashtag(self):
-        return re.sub("[- \\.\\(\\)\\@\\#\\&]+", "", self.env.user.company_id.name).lower()
-
     show_menu = fields.Boolean('Dedicated Menu', compute='_get_show_menu', inverse='_set_show_menu',
                                help="Creates menus Introduction, Location and Book on the page "
                                     " of the deal on the website.", store=True)
     menu_id = fields.Many2one('website.menu', 'Deal Menu', copy=False)
+    
+    @api.multi
+    @api.depends('name')
+    def _compute_website_url(self):
+        super(BestDeal, self)._compute_website_url()
+        for best_deal in self:
+            if best_deal.id:  # avoid to perform a slug on a not yet saved record in case of an onchange.
+                best_deal.website_url = '/bestdeal/%s' % slug(best_deal)
 
-    @api.one
+    @api.multi
     def _get_new_menu_pages(self):
+        """ Retuns a list of tuple ('Page name', 'relative page url') for the deal """
+        self.ensure_one()
         todo = [
             (_('Introduction'), 'website_best_deal.template_intro'),
             (_('Location'), 'website_best_deal.template_location')
@@ -79,41 +81,45 @@ class BestDeal(models.Model):
             newpath = self.env['website'].new_page(complete_name, path, ispage=False)
             url = "/bestdeal/" + slug(self) + "/page/" + newpath
             result.append((name, url))
-        result.append((_('Booking'), '/bestdeal/%s/booking' % slug(self)))
+        result.append((_('Register'), '/bestdeal/%s/booking' % slug(self)))
         return result
-
-    @api.one
+        
+    @api.multi
     def _set_show_menu(self):
-        if self.menu_id and not self.show_menu:
-            self.menu_id.unlink()
-        elif self.show_menu and not self.menu_id:
-            root_menu = self.env['website.menu'].create({'name': self.name})
-            to_create_menus = self._get_new_menu_pages()[0]  # TDE CHECK api.one -> returns a list with one item ?
-            seq = 0
-            for name, url in to_create_menus:
-                self.env['website.menu'].create({
-                    'name': name,
-                    'url': url,
-                    'parent_id': root_menu.id,
-                    'sequence': seq,
-                })
-                seq += 1
-            self.menu_id = root_menu
+        for best_deal in self:
+            if best_deal.menu_id and not best_deal.show_menu:
+                best_deal.menu_id.unlink()
+            elif best_deal.show_menu and not best_deal.menu_id:
+                root_menu = self.env['website.menu'].create({'name': best_deal.name})
+                to_create_menus = best_deal._get_new_menu_pages()
+                seq = 0
+                for name, url in to_create_menus:
+                    self.env['website.menu'].create({
+                        'name': name,
+                        'url': url,
+                        'parent_id': root_menu.id,
+                        'sequence': seq,
+                    })
+                    seq += 1
+                best_deal.menu_id = root_menu
 
-    @api.one
+    @api.multi
     def _get_show_menu(self):
-        self.show_menu = bool(self.menu_id)
+        for best_deal in self:
+            best_deal.show_menu = bool(best_deal.menu_id)
 
-    def google_map_img(self, cr, uid, ids, zoom=8, width=298, height=298, context=None):
-        best_deal = self.browse(cr, uid, ids[0], context=context)
-        if best_deal.address_id:
-            return self.browse(cr, SUPERUSER_ID, ids[0], context=context).address_id.google_map_img()
+    @api.multi
+    def google_map_img(self, zoom=8, width=298, height=298):
+        self.ensure_one()
+        if self.address_id:
+            return self.sudo().address_id.google_map_img(zoom=zoom, width=width, height=height)
         return None
-
-    def google_map_link(self, cr, uid, ids, zoom=8, context=None):
-        best_deal = self.browse(cr, uid, ids[0], context=context)
-        if best_deal.address_id:
-            return self.browse(cr, SUPERUSER_ID, ids[0], context=context).address_id.google_map_link()
+        
+    @api.multi
+    def google_map_link(self, zoom=8):
+        self.ensure_one()
+        if self.address_id:
+            return self.sudo().address_id.google_map_link(zoom=zoom)
         return None
 
     @api.multi
