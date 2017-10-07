@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-<data>
+<odoo>
+    <data>
 
 <template id="theme_customize" inherit_id="website.theme_customize" name="theme_customize 3D2N">
     <xpath expr="div" position="replace">
@@ -195,4 +195,4 @@
     </template>
 
 </data>
-</openerp>
+</odoo>
