@@ -39,7 +39,7 @@
         </record>
 
         <menuitem id="menu_best_deal_configuration" name="Configuration" parent="best_deal_main_menu"
-            sequence="100" groups="base.group_configuration"/>
+            sequence="100" />
         <menuitem name="Deals Types" id="menu_best_deal_type" action="action_best_deal_type" parent="menu_best_deal_configuration"/>
 
         <!-- best.deal.booking actions -->

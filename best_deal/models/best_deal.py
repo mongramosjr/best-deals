@@ -22,8 +22,12 @@
 
 import pytz
 
-from openerp import tools, models, fields, api,  _
-from openerp.exceptions import AccessError, UserError
+from odoo import _, api, fields, models, tools
+from odoo.addons.mail.models.mail_template import format_tz
+from odoo.exceptions import AccessError, UserError, ValidationError
+from odoo.tools.translate import html_translate
+
+from dateutil.relativedelta import relativedelta
 
 from . import best_deal_image
 
@@ -341,7 +345,10 @@ class BestDeal(models.Model):
         for booking in self.booking_ids.filtered(filter_func):
             self.env['mail.template'].browse(template_id).send_mail(booking.id, force_send=force_send)
 
-
+    @api.multi
+    def _is_deal_registrable(self):
+        return True
+        
 class BestDealBooking(models.Model):
     _name = 'best.deal.booking'
     _description = 'Bookings'
@@ -370,7 +377,7 @@ class BestDealBooking(models.Model):
         string='Status', default='draft', readonly=True, copy=False, track_visibility='onchange')
     email = fields.Char(string='Email')
     phone = fields.Char(string='Phone')
-    name = fields.Char(string='Client Name', select=True)
+    name = fields.Char(string='Client Name', index=True)
 
     @api.one
     @api.constrains('best_deal_id', 'state')

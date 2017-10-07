@@ -21,7 +21,7 @@
 ##############################################################################
 
 
-from openerp import api, fields, models, tools
+from odoo import api, fields, models, tools
 
 class BestDealConfigSettings(models.TransientModel):
     _name='best.deal.config.settings'
@@ -45,10 +45,15 @@ class BestDealConfigSettings(models.TransientModel):
             ], "Email Scheduling",
             help='You will be able to configure emails, and to schedule them to be automatically sent to the customers on booking',
             implied_group='best_deal.group_email_scheduling')
+            
+    @api.multi
+    def set_default_auto_confirmation(self):
+        if self.env.user._is_admin() or self.env['res.users'].has_group('best_deal.group_best_deal_manager'):
+            IrValues = self.env['ir.values'].sudo()
+        else:
+            IrValues = self.env['ir.values']
+        IrValues.set_default('best_deal.config.settings', 'auto_confirmation', self.auto_confirmation)
 
-    def set_default_auto_confirmation(self, cr, uid, ids, context=None):
-        config_value = self.browse(cr, uid, ids, context=context).auto_confirmation
-        self.pool.get('ir.values').set_default(cr, uid, 'best.deal.config.settings', 'auto_confirmation', config_value)
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

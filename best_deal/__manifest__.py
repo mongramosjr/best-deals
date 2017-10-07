@@ -39,7 +39,7 @@ Key Features
 * Manage your discounts and promotional coupons
 * Use emails to automatically confirm and send confirmation of purchased deals and promotional coupons
 """,
-    'depends': ['base_setup', 'mail', 'marketing', 'web_tip'],
+    'depends': ['base_setup', 'mail', 'report'],
     'data': [
 
         'security/best_deal_security.xml',
@@ -51,7 +51,7 @@ Key Features
         'report/best_deal_templates.xml',
         'report/best_deal_reports.xml',
         'data/best_deal_data.xml',
-        'data/best_deal_data_tip.xml',
+        # 'data/best_deal_data_tip.xml',
         'views/best_deal_config_settings_view.xml',
         'views/best_deal_templates.xml',
         'data/email_template_data.xml',

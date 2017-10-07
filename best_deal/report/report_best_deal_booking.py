@@ -20,8 +20,8 @@
 #   limitations under the License.
 ##############################################################################
 
-from openerp import models, fields
-from openerp import tools
+from odoo import api, models, fields
+from odoo import tools
 
 
 class ReportBestDealBooking(models.Model):
@@ -45,13 +45,9 @@ class ReportBestDealBooking(models.Model):
     user_id = fields.Many2one('res.users', 'Deal Responsible', readonly=True)
     name_booking = fields.Char('Customer / Contact Name', readonly=True)
     company_id = fields.Many2one('res.company', 'Company', readonly=True)
-
-    def init(self, cr):
-        """Initialize the sql view for the deal booking """
-        tools.drop_view_if_exists(cr, 'report_best_deal_booking')
-
-        # TOFIX this request won't select deals that have no booking
-        cr.execute(""" CREATE VIEW report_best_deal_booking AS (
+    
+    def _select(self):
+        return """
             SELECT
                 e.id::varchar || '/' || coalesce(r.id::varchar,'') AS id,
                 e.id AS best_deal_id,
@@ -69,10 +65,17 @@ class ReportBestDealBooking(models.Model):
                 e.coupons_max AS coupons_max,
                 e.state AS best_deal_state,
                 r.state AS booking_state
+        """
+        
+    def _from(self):
+        return """
             FROM
                 best_deal e
                 LEFT JOIN best_deal_booking r ON (e.id=r.best_deal_id)
-
+        """
+        
+    def _group_by(self):
+        return """
             GROUP BY
                 best_deal_id,
                 r.id,
@@ -85,8 +88,16 @@ class ReportBestDealBooking(models.Model):
                 e.company_id,
                 e.coupons_max,
                 name_booking
+        """
+
+    @api.model_cr
+    def init(self):
+        tools.drop_view_if_exists(self.env.cr, self._table)
+        self.env.cr.execute(
+            "CREATE or REPLACE VIEW %s as (%s %s %s)" % (
+                self._table, self._select(), self._from(), self._group_by(),
+            )
         )
-        """)
         
         
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

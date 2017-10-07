@@ -20,8 +20,8 @@
 #   limitations under the License.
 ##############################################################################
 
-import openerp
-from openerp import tools
+import odoo
+from odoo import tools
 
 
 def deal_image_resize_image_banner(base64_source, size=(1280, 960), encoding='base64', filetype=None, avoid_if_small=True):
