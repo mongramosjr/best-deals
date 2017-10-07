@@ -97,5 +97,21 @@
     </xpath>
 </template>
 
+<template id="deals_item" inherit_id="website_best_deal.deals_item">
+    <xpath expr="//section[@id='deal_label']" position="inside">
+        <div itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" class="deal_price">
+            <b>
+                <span t-field="best_deal.price" style="white-space: nowrap;"  t-field-options='{
+                   "widget": "monetary",
+                   "display_currency": "website.currency_id"
+                }'>
+                </span>
+                <span itemprop="price" style="display:none;" t-esc="best_deal.price"/>
+                <span itemprop="priceCurrency" style="display:none;" t-esc="website.currency_id.name"/>
+            </b>
+        </div>
+    </xpath>
+</template>
+
 </data>
 </openerp>
