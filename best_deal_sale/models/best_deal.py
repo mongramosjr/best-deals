@@ -122,7 +122,7 @@ class BestDealCoupon(models.Model):
                                     "not be able to sell coupons anymore. Set 0 to ignore this rule set as unlimited.")
     coupons_reserved = fields.Integer(string='Reserved Coupons', compute='_compute_coupons', store=True)
     coupons_available = fields.Integer(string='Available Coupons', compute='_compute_coupons', store=True)
-    coupons_unconfirmed = fields.Integer(string='Unconfirmed Seat Reservations', compute='_compute_coupons', store=True)
+    coupons_unconfirmed = fields.Integer(string='Unconfirmed Reserved Coupons', compute='_compute_coupons', store=True)
     coupons_used = fields.Integer(compute='_compute_coupons', store=True)
 
     @api.multi

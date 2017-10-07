@@ -218,7 +218,7 @@
                                             <t t-esc="record.coupons_expected.raw_value"> Expected Coupons </t>
                                         </a>
                                         <t t-if="(record.coupons_reserved.raw_value + record.coupons_used.raw_value) > 0 "><br/>
-                                             <t t-esc="record.coupons_reserved.raw_value + record.coupons_used.raw_value"/> Confirmed attendees
+                                             <t t-esc="record.coupons_reserved.raw_value + record.coupons_used.raw_value"/> Confirmed bookings
                                         <a name="action_best_deal_booking_report" type="object" >&#40;stats&#41;</a>
                                         </t>
                                     </h4>

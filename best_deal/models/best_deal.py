@@ -40,6 +40,14 @@ class BestDealType(models.Model):
     default_booking_max = fields.Integer(
         'Default Maximum Bookings', default=0,
         help="It will select this default maximum value when you choose this deal")
+        
+class BestDealCategory(models.Model):
+    """ Best Deal Type of Service"""
+    _name = 'best.deal.category'
+    _description = 'Best Deal Category'
+
+    name = fields.Char('Best Deal Category', required=True, translate=True)
+
 
 
 class BestDeal(models.Model):
@@ -97,7 +105,7 @@ class BestDeal(models.Model):
         string='Maximum Coupons',
         store=True, readonly=True, compute='_compute_coupons')
     coupons_unconfirmed = fields.Integer(
-        string='Unconfirmed Coupons Reservations',
+        string='Unconfirmed Reserved Coupons',
         store=True, readonly=True, compute='_compute_coupons')
     coupons_used = fields.Integer(
         string='Number of Coupons Used',
