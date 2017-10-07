@@ -20,7 +20,7 @@
 #   limitations under the License.
 ##############################################################################
 
-from openerp import api, fields, models, _
+from odoo import api, fields, models, _
 
 
 class SaleOrder(models.Model):
@@ -28,17 +28,14 @@ class SaleOrder(models.Model):
 
     @api.multi
     def action_confirm(self):
+        self.ensure_one()
         res = super(SaleOrder, self).action_confirm()
-        for order in self:
-            redirect_to_best_deal_booking, sales_order_id = any(line.best_deal_id for line in order.order_line), order.id
-            order.order_line._update_bookings(confirm=True)
-        if redirect_to_best_deal_booking:
-            best_deal_context = dict(self.env.context, default_sale_order_id=sales_order_id)
-            return self.env['ir.actions.act_window'].with_context(best_deal_context).for_xml_id('best_deal_sale', 'action_sale_order_best_deal_booking')
-        else:
-            return res
-
-
+        
+        self.order_line._update_bookings(confirm=self.amount_total == 0, cancel_to_draft=False)
+        if any(self.order_line.filtered(lambda line: line.best_deal_id)):
+            return self.env['ir.actions.act_window'].with_context(default_sale_order_id=self.id).for_xml_id('best_deal_sale', 'action_sale_order_best_deal_booking')
+        return res
+        
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
     
@@ -50,15 +47,6 @@ class SaleOrderLine(models.Model):
     best_deal_ok = fields.Boolean(related = 'product_id.best_deal_ok', string='Coupon', readonly=True)
     
 
-    #deprecated
-    @api.v7
-    def _prepare_order_line_invoice_line(self, cr, uid, line, account_id=False, context=None):
-        res = super(SaleOrderLine, self)._prepare_order_line_invoice_line(cr, uid, line, account_id=account_id, context=context)
-        if line.best_deal_id:
-            best_deal = self.pool['best.deal'].read(cr, uid, line.best_deal_id.id, ['name'], context=context)
-            res['name'] = '%s: %s' % (res.get('name', ''), best_deal['name'])
-        return res
-        
     @api.multi
     def _prepare_invoice_line(self, qty):
         self.ensure_one()
@@ -77,42 +65,34 @@ class SaleOrderLine(models.Model):
         self.update(values)
 
     @api.multi
-    def _update_bookings(self, confirm=True, booking_data=None):
+    def _update_bookings(self, confirm=True, cancel_to_draft=False, booking_data=None):
         """ Create or update bookings linked to a sale order line. A sale
         order line has a product_uom_qty attribute that will be the number of
         bookings linked to this line. This method update existing bookings
         and create new one for missing one. """
-        booking_obj = self.env['best.deal.booking']
-        bookings = booking_obj.search([('sale_order_line_id', 'in', self.ids)])
-        for so_line in [l for l in self if l.best_deal_id]:
+        Booking = self.env['best.deal.booking']
+        bookings = Booking.search([('sale_order_line_id', 'in', self.ids)])
+        for so_line in self.filtered('best_deal_id'):
             existing_bookings = bookings.filtered(lambda self: self.sale_order_line_id.id == so_line.id)
             if confirm:
                 existing_bookings.filtered(lambda self: self.state != 'open').confirm_booking()
-            else:
+            if cancel_to_draft:
                 existing_bookings.filtered(lambda self: self.state == 'cancel').do_draft()
-
+            
             for count in range(int(so_line.product_uom_qty) - len(existing_bookings)):
                 booking = {}
                 if booking_data:
                     booking = booking_data.pop()
                 # TDE CHECK: auto confirmation
                 booking['sale_order_line_id'] = so_line
-                self.env['best.deal.booking'].with_context(booking_force_draft=True).create(
-                    booking_obj._prepare_customer_values(booking))
+                Booking.with_context(booking_force_draft=True).create(
+                    Booking._prepare_customer_values(booking))
         return True
 
 
     @api.onchange('best_deal_coupon_id')
     def onchange_best_deal_coupon(self):
         if self.best_deal_coupon_id:
-            self.price_unit = self.best_deal_coupon_id.price or False
-
-    #deprecated
-    @api.v7
-    def onchange_best_deal_coupon_id(self, cr, uid, ids, best_deal_coupon_id=False, context=None):
-        price = best_deal_coupon_id and self.pool["best.deal.coupon"].browse(cr, uid, best_deal_coupon_id, context=context).price or False
-        return {'value': {'price_unit': price}}
-
-
+            self.price_unit = (self.best_deal_id.company_id or self.env.user.company_id).currency_id.compute(self.best_deal_coupon_id.price, self.order_id.currency_id)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

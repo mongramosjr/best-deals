@@ -21,11 +21,9 @@
 ##############################################################################
 
 
-from openerp import models, fields, api, _
-import openerp.addons.decimal_precision as dp
-from openerp.exceptions import UserError
-from openerp.osv import fields as old_fields
-
+from odoo import models, fields, api, _
+import odoo.addons.decimal_precision as dp
+from odoo.exceptions import UserError, ValidationError
 
 class BestDeal(models.Model):
     _inherit = 'best.deal'
@@ -34,85 +32,54 @@ class BestDeal(models.Model):
     @api.depends('best_deal_coupon_ids')
     def _prices(self):
         for deal in self:
-            deal.price = min([float(coupon.price) for coupon in deal.best_deal_coupon_ids])
+            if len(deal.best_deal_coupon_ids) > 0:
+                deal.price = min([float(coupon.price) for coupon in deal.best_deal_coupon_ids])
+            else:
+                deal.price = 0.00
 
     price = fields.Float(compute='_prices', string='Price', store=True)
     
-    best_deal_coupon_ids = fields.One2many(
-        'best.deal.coupon', 'best_deal_id', string='Deal Coupon',
-        default=lambda rec: rec._default_coupons(), copy=True)
-
-    @api.model
     def _default_coupons(self):
-        try:
-            product = self.env.ref('best_deal_sale.product_product_best_deal')
-            return [{
-                'name': _('Coupons'),
-                'product_id': product.id,
-                'price': 0,
-            }]
-        except ValueError:
+        product = self.env.ref('best_deal_sale.product_product_best_deal', raise_if_not_found=False)
+        if not product:
             return self.env['best.deal.coupon']
+        return [{
+            'name': _('Coupons'),
+            'product_id': product.id,
+            'price': 0,
+        }]
+            
+    best_deal_coupon_ids = fields.One2many('best.deal.coupon', 'best_deal_id', string='Deal Coupon',
+        default=lambda self: self._default_coupons(), copy=True)
+            
+    @api.multi
+    def _is_deal_registrable(self):
+        self.ensure_one()
+        if not self.best_deal_coupon_ids:
+            return True
+        return all(self.best_deal_coupon_ids.with_context(active_test=False).mapped(lambda t: t.product_id.active))
 
 
 class BestDealCoupon(models.Model):
     _name = 'best.deal.coupon'
     _description = 'Best Deal Coupon'
+    
+    def _default_product_id(self):
+        return self.env.ref('best_deal_sale.product_product_best_deal', raise_if_not_found=False)
 
     name = fields.Char('Name', required=True, translate=True)
     best_deal_id = fields.Many2one('best.deal', "Deal", required=True, ondelete='cascade')
     product_id = fields.Many2one(
         'product.product', 'Product',
-        required=True, domain=[("best_deal_type_id", "!=", False)],
+        required=True, domain=[("best_deal_ok", "=", True)],
         default=lambda self: self._default_product_id())
     booking_ids = fields.One2many('best.deal.booking', 'best_deal_coupon_id', 'Bookings')
     price = fields.Float('Price', digits=dp.get_precision('Product Price'))
     deadline = fields.Date("Sales End")
-    is_expired = fields.Boolean('Is Expired', compute='_is_expired')
-
-    @api.model
-    def _default_product_id(self):
-        try:
-            product = self.env['ir.model.data'].get_object('best_deal_sale', 'product_product_best_deal')
-            return product.id
-        except ValueError:
-            return False
-
-    @api.one
-    @api.depends('deadline')
-    def _is_expired(self):
-        if self.deadline:
-            current_date = fields.Date.context_today(self.with_context({'tz': self.best_deal_id.date_tz}))
-            self.is_expired = self.deadline < current_date
-        else:
-            self.is_expired = False
-
-    # FIXME non-stored fields wont ends up in _columns (and thus _all_columns), which forbid them
-    #       to be used in qweb views. Waiting a fix, we create an old function field directly.
-    """
-    price_reduce = fields.Float("Price Reduce", compute="_get_price_reduce", store=False,
-                                digits=dp.get_precision('Product Price'))
-    @api.one
-    @api.depends('price', 'product_id.lst_price', 'product_id.price')
-    def _get_price_reduce(self):
-        product = self.product_id
-        discount = product.lst_price and (product.lst_price - product.price) / product.lst_price or 0.0
-        self.price_reduce = (1.0 - discount) * self.price
-    """
-    @api.v7
-    def _get_price_reduce(self, cr, uid, ids, field_name, arg, context=None):
-        res = dict.fromkeys(ids, 0.0)
-        for coupon in self.browse(cr, uid, ids, context=context):
-            product = coupon.product_id
-            discount = product.lst_price and (product.lst_price - product.price) / product.lst_price or 0.0
-            res[coupon.id] = (1.0 - discount) * coupon.price
-        return res
-
-    _columns = {
-        'price_reduce': old_fields.function(_get_price_reduce, type='float', string='Price Reduce',
-                                            digits_compute=dp.get_precision('Product Price')),
-    }
-
+    is_expired = fields.Boolean('Is Expired', compute='_compute_is_expired')
+    
+    price_reduce = fields.Float(string="Price Reduce", compute="_compute_price_reduce", digits=dp.get_precision('Product Price'))
+    price_reduce_taxinc = fields.Float(compute='_get_price_reduce_tax', string='Price Reduce Tax inc')
     # coupons fields
     coupons_availability = fields.Selection(
         [('limited', 'Limited'), ('unlimited', 'Unlimited')],
@@ -124,6 +91,29 @@ class BestDealCoupon(models.Model):
     coupons_available = fields.Integer(string='Available Coupons', compute='_compute_coupons', store=True)
     coupons_unconfirmed = fields.Integer(string='Unconfirmed Reserved Coupons', compute='_compute_coupons', store=True)
     coupons_used = fields.Integer(compute='_compute_coupons', store=True)
+
+    @api.multi
+    def _compute_is_expired(self):
+        for record in self:
+            if record.deadline:
+                current_date = fields.Date.context_today(record.with_context({'tz': record.best_deal_id.date_tz}))
+                record.is_expired = record.deadline < current_date
+            else:
+                record.is_expired = False
+    
+    @api.multi
+    def _compute_price_reduce(self):
+        for record in self:
+            product = record.product_id
+            discount = product.lst_price and (product.lst_price - product.price) / product.lst_price or 0.0
+            record.price_reduce = (1.0 - discount) * record.price
+
+    def _get_price_reduce_tax(self):
+        for record in self:
+            # sudo necessary here since the field is most probably accessed through the website
+            tax_ids = record.sudo().product_id.taxes_id.filtered(lambda r: r.company_id == record.best_deal_id.company_id)
+            taxes = tax_ids.compute_all(record.price_reduce, record.best_deal_id.company_id.currency_id, 1.0, product=record.product_id)
+            record.price_reduce_taxinc = taxes['total_included']
 
     @api.multi
     @api.depends('coupons_max', 'booking_ids.state')
@@ -145,7 +135,7 @@ class BestDealCoupon(models.Model):
                         WHERE best_deal_coupon_id IN %s AND state IN ('draft', 'open', 'done')
                         GROUP BY best_deal_coupon_id, state
                     """
-            self._cr.execute(query, (tuple(self.ids),))
+            self.env.cr.execute(query, (tuple(self.ids),))
             for best_deal_coupon_id, state, num in self._cr.fetchall():
                 coupon = self.browse(best_deal_coupon_id)
                 coupon[state_field[state]] += num
@@ -154,18 +144,17 @@ class BestDealCoupon(models.Model):
             if coupon.coupons_max > 0:
                 coupon.coupons_available = coupon.coupons_max - (coupon.coupons_reserved + coupon.coupons_used)
 
-    @api.one
+    @api.multi
     @api.constrains('booking_ids', 'coupons_max')
-    def _check_coupons_limit(self):
-        if self.coupons_max and self.coupons_available < 0:
-            raise UserError(_('No more available coupons'))
+    def _check_seats_limit(self):
+        for record in self:
+            if record.coupons_max and record.coupons_available < 0:
+                raise ValidationError(_('No more available coupons'))
 
     @api.onchange('product_id')
-    def onchange_product_id(self):
-        price = self.product_id.list_price if self.product_id else 0
-        return {'value': {'price': price}}
-
-
+    def _onchange_product_id(self):
+        self.price = self.product_id.list_price or 0
+        
 class BestDealBooking(models.Model):
     _inherit = 'best.deal.booking'
 
@@ -176,11 +165,12 @@ class BestDealBooking(models.Model):
     sale_order_id = fields.Many2one('sale.order', 'Source Sale Order', ondelete='cascade')
     sale_order_line_id = fields.Many2one('sale.order.line', 'Sale Order Line', ondelete='cascade')
 
-    @api.one
+    @api.multi
     @api.constrains('best_deal_coupon_id', 'state')
     def _check_coupon_coupons_limit(self):
-        if self.best_deal_coupon_id.coupons_max and self.best_deal_coupon_id.coupons_available < 0:
-            raise UserError(_('No more available coupons for this coupon'))
+        for record in self:
+            if record.best_deal_coupon_id.coupons_max and record.best_deal_coupon_id.coupons_available < 0:
+                raise ValidationError(_('No more available coupons for this booking'))
 
     @api.multi
     def _check_auto_confirmation(self):
@@ -190,11 +180,14 @@ class BestDealBooking(models.Model):
             if orders:
                 res = False
         return res
-
+        
     @api.model
     def create(self, vals):
         res = super(BestDealBooking, self).create(vals)
         if res.origin or res.sale_order_id:
+            #res.message_post_with_view('mail.message_origin_link',
+                #values={'self': res, 'origin': res.sale_order_id},
+                #subtype_id=self.env.ref('mail.mt_note').id)
             message = _("The booking has been created for deal %(best_deal_name)s%(coupon)s from sale order %(order)s") % ({
                 'best_deal_name': '<i>%s</i>' % res.best_deal_id.name,
                 'coupon': res.best_deal_coupon_id and _(' with coupon %s') % (('<i>%s</i>') % res.best_deal_coupon_id.name) or '',

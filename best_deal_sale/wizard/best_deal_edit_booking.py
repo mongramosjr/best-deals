@@ -88,7 +88,7 @@ class BestDealBookingEditorLine(models.TransientModel):
     best_deal_coupon_id = fields.Many2one('best.deal.coupon', string='Best Deal Coupon')
     email = fields.Char(string='Email')
     phone = fields.Char(string='Phone')
-    name = fields.Char(string='Name', select=True)
+    name = fields.Char(string='Name', index=True)
 
     @api.one
     def get_booking_data(self):

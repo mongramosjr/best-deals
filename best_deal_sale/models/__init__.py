@@ -20,7 +20,7 @@
 #   limitations under the License.
 ##############################################################################
 
-
+import account_invoice
 import sale_order
 import product
 import best_deal
