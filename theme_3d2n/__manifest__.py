@@ -32,7 +32,8 @@
     'description': 'This theme module is exclusively for 3D2N',
     'depends': ['website_best_deal'],
     'data': [
-        'views/theme.xml',
+        'data/theme_3d2n_data.xml',
+        'views/theme_3d2n_templates.xml',
     ],
     'images': [
         'static/description/3d2n.png'
